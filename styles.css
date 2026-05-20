@@ -733,43 +733,12 @@ body {
 @media (min-width: 768px) {
   .game-layout {
     flex-direction: row;
-  }
-  
-  .qr-panel {
-    flex: 0.8;
+    justify-content: center;
   }
   
   .mini-game {
     flex: 1.5;
   }
-}
-
-.qr-panel {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  border-radius: 28px;
-  padding: 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-  text-align: center;
-}
-
-.qr-placeholder {
-  width: 120px;
-  height: 120px;
-  background: white;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.qr-placeholder svg {
-  width: 60px;
-  height: 60px;
-  color: var(--accent);
 }
 
 /* Mini Game */
@@ -846,22 +815,24 @@ body {
 }
 
 .memory-game {
-  display: flex;
-  flex-wrap: wrap;
+  width: min(100%, 560px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(8px, 1.8vw, 12px);
+  align-items: center;
   justify-content: center;
-  gap: 10px;
 }
 
 .mini-game .container {
-  width: 22%;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   position: relative;
   perspective: 800px;
 }
 
 .mini-game .container::before {
-  content: "";
-  display: block;
-  padding-top: 100%;
+  content: none;
 }
 
 .mini-game .card {
@@ -892,21 +863,18 @@ body {
 
 .mini-game .back {
   transform: rotateY(180deg);
-  background-size: 55%;
+  background-size: 82%;
   background-position: center;
   background-repeat: no-repeat;
-  background-color: rgba(255, 255, 255, 0.85);
+  background-color: rgba(255, 255, 255, 0.92);
 }
 
-/* Card Icons */
-.mini-game [data-card-type="A"] .back { background-image: url("mini games/img/001-watering-can.svg"); }
-.mini-game [data-card-type="B"] .back { background-image: url("mini games/img/002-wellington.svg"); }
-.mini-game [data-card-type="C"] .back { background-image: url("mini games/img/003-rainbow.svg"); }
-.mini-game [data-card-type="D"] .back { background-image: url("mini games/img/004-rabbit.svg"); }
-.mini-game [data-card-type="E"] .back { background-image: url("mini games/img/005-bee.svg"); }
-.mini-game [data-card-type="F"] .back { background-image: url("mini games/img/006-sun.svg"); }
-.mini-game [data-card-type="G"] .back { background-image: url("mini games/img/007-plant.svg"); }
-.mini-game [data-card-type="H"] .back { background-image: url("mini games/img/008-easter-egg.svg"); }
+/* Card Products */
+.mini-game [data-card-type="vanilla"] .back { background-image: url("assets/menu/Vanilla.png"); }
+.mini-game [data-card-type="stroberi"] .back { background-image: url("assets/menu/Stroberi.png"); }
+.mini-game [data-card-type="coklat"] .back { background-image: url("assets/menu/Coklat.png"); }
+.mini-game [data-card-type="durian"] .back { background-image: url("assets/menu/Durian.png"); }
+.mini-game [data-card-type="nangka"] .back { background-image: url("assets/menu/Nangka.png"); }
 
 .mini-game .card.flipped,
 .mini-game .card.solved {
@@ -963,6 +931,8 @@ body {
   border-radius: 32px;
   padding: 24px;
   text-align: center;
+  width: min(100%, 620px);
+  margin: 0 auto;
 }
 
 .share-preview {

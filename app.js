@@ -264,7 +264,7 @@ function navigateWithRules(targetId) {
     } else if (!flowState.qrScanned && (targetId === "game" || targetId === "reward")) {
       alert("📷 Scan QR Code dulu! Klik tombol 'Scan QR' di halaman utama.\n\nQR Code ada di cup es krim Scoopify kamu.");
     } else if (targetId === "reward" && !flowState.gameWon) {
-      alert("Selesaikan mini game dulu dalam 30 detik untuk membuka reward.");
+      alert("Selesaikan mini game dulu dalam 20 detik untuk membuka reward.");
     } else {
       alert("🚫 Belum bisa akses halaman ini. Ikuti alur yang benar ya!");
     }
@@ -353,7 +353,7 @@ function handleQRSuccess() {
   flowState.gameWon = false;
   resetGame();
   updateGameGate();
-  alert("✅ QR Code berhasil di-scan! Kamu sekarang bisa mengakses Mini Game.\n\nSelesaikan game dalam 30 detik untuk membuka reward.");
+  alert("✅ QR Code berhasil di-scan! Kamu sekarang bisa mengakses Mini Game.\n\nSelesaikan game dalam 20 detik untuk membuka reward.");
   
   // Update tampilan tombol navigasi
   updateNavLinksState();
@@ -425,7 +425,7 @@ toGameBtn?.addEventListener("click", () => {
 // Skip Game button
 skipGameBtn?.addEventListener("click", () => {
   if (!flowState.gameWon) {
-    alert("Reward baru terbuka kalau kamu menang sebelum 30 detik.");
+    alert("Reward baru terbuka kalau kamu menang sebelum 20 detik.");
     return;
   }
   navigateWithRules("reward");
@@ -516,14 +516,14 @@ window.addEventListener("touchend", (event) => {
 }, { passive: true });
 
 // ========== MINI GAME MEMORY CARD ==========
-const cardArray = ["A", "A", "B", "B", "C", "C", "D", "D", "E", "E", "F", "F", "G", "G", "H", "H"];
+const cardArray = ["vanilla", "vanilla", "stroberi", "stroberi", "coklat", "coklat", "durian", "durian", "nangka", "nangka"];
 let comparisonArray = [];
 let attempts = 0;
 let clickCount = 0;
 let pairs = 0;
 let totalSeconds = 0;
 let timerId = null;
-const gameTimeLimit = 30;
+const gameTimeLimit = 20;
 
 function setGameGateContent(title, text, canStart) {
   if (gameGateTitle) gameGateTitle.textContent = title;
@@ -566,7 +566,7 @@ function updateGameGate() {
     gameGate.classList.remove("hidden");
     setGameGateContent(
       "Waktu habis",
-      "Kamu belum menyelesaikan game dalam 30 detik. Scan QR produk lain untuk mencoba lagi.",
+      "Kamu belum menyelesaikan game dalam 20 detik. Scan QR produk lain untuk mencoba lagi.",
       false
     );
     return;
@@ -576,7 +576,7 @@ function updateGameGate() {
     gameGate.classList.remove("hidden");
     setGameGateContent(
       "Siap main?",
-      "Cocokkan semua pasangan kartu dalam 30 detik. Tombol mulai hanya bisa dipakai satu kali untuk QR ini.",
+      "Cocokkan semua pasangan kartu dalam 20 detik. Tombol mulai hanya bisa dipakai satu kali untuk QR ini.",
       true
     );
     return;
@@ -702,7 +702,7 @@ function startOneQrGame() {
   flowState.gameWon = false;
   resetGame();
   updateGameGate();
-  if (gameStatus) gameStatus.textContent = "30 detik dimulai. Cocokkan semua kartu!";
+  if (gameStatus) gameStatus.textContent = "20 detik dimulai. Cocokkan semua kartu!";
   startTimer();
 }
 
