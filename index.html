@@ -6,7 +6,7 @@
   <title>Scoopify - Es Krim AI & Gamifikasi</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="theme-happy">
+<body class="theme-happy flow-locked">
   <div class="app" id="app">
     <!-- NAVIGASI DESKTOP (hanya muncul di PC) -->
     <nav class="desktop-nav">
@@ -29,13 +29,13 @@
         <div class="logo">
           <img src="assets/logo/scoopify.png" alt="Scoopify" />
         </div>
-        <p class="intro">AI rekomendasi rasa • Mini game • Filter IG • QR Code unik</p>
+        <p class="intro">AI rekomendasi rasa • Mini game demo • Filter IG • QR Code unik</p>
         <div class="cta-row">
           <button class="primary" data-target="analyzer">✨ Start Experience</button>
           <button class="ghost" id="scanBtn">📷 Scan QR</button>
         </div>
-        <div class="swipe-hint mobile-only">👆 Swipe up untuk mulai</div>
-        <div class="swipe-hint desktop-only">👇 Scroll ke bawah untuk lanjut</div>
+        <div class="swipe-hint mobile-only">Klik Start Experience untuk mulai</div>
+        <div class="swipe-hint desktop-only">Klik Start Experience untuk lanjut</div>
       </div>
     </section>
 
@@ -81,7 +81,7 @@
         <div class="cta-row">
           <button class="primary" id="analyzeBtn">✨ Analyze Mood</button>
         </div>
-        <div class="swipe-hint mobile-only">👆 Swipe up untuk lihat hasil AI</div>
+        <div class="swipe-hint mobile-only">Klik Analyze Mood untuk lihat hasil AI</div>
       </div>
     </section>
 
@@ -107,13 +107,14 @@
               <p class="match" id="resultMatch">Match: 0%</p>
               <p class="note" id="resultNote">Kamu butuh rasa yang lembut dan calming.</p>
               <div class="cta-row">
+                <button class="primary" data-target="flavor">Lihat Detail Rasa</button>
                 <button class="primary" id="orderBtn" data-target="welcome">Back to Home</button>
                 <button class="ghost" id="tryAgainBtn" data-target="analyzer">Try Again</button>
               </div>
             </div>
           </div>
         </div>
-        <div class="swipe-hint mobile-only">👆 Swipe up untuk detail rasa</div>
+        <div class="swipe-hint mobile-only">Klik Try Again atau lanjut lewat hasil rekomendasi</div>
       </div>
     </section>
 
@@ -134,7 +135,7 @@
             <button class="primary" id="toGameBtn" data-target="game">Play Mini Game</button>
           </div>
         </div>
-        <div class="swipe-hint mobile-only">👆 Swipe up untuk mini game</div>
+        <div class="swipe-hint mobile-only">Klik Play Mini Game untuk lanjut</div>
       </div>
     </section>
 
@@ -148,7 +149,7 @@
         <div class="mini-game">
           <div class="mini-game-header">
             <h3>🧠 Memory Card Game</h3>
-            <button class="ghost small" id="resetGame" disabled>1x per QR</button>
+            <button class="ghost small" id="resetGame">Reset Demo</button>
           </div>
           <ul class="stats">
             <li id="stars">⭐ ⭐ ⭐</li>
@@ -162,21 +163,21 @@
             </li>
             <li>
               <p>Limit</p>
-              <p><span id="countdown">20</span>s</p>
+              <p><span id="countdown">15</span>s</p>
             </li>
           </ul>
           <div class="game-gate" id="gameGate">
-            <h3 id="gameGateTitle">Game terkunci</h3>
-            <p id="gameGateText">Scan QR pada cup Scoopify untuk membuka mini game. Setiap QR hanya punya satu kesempatan main.</p>
-            <button class="primary" id="startGameBtn" disabled>Mulai Game</button>
+            <h3 id="gameGateTitle">Demo Mode</h3>
+            <p id="gameGateText">Cocokkan semua pasangan kartu dalam 15 detik untuk membuka reward.</p>
+            <button class="primary" id="startGameBtn">Mulai Game</button>
           </div>
           <div id="memory-game" class="memory-game"></div>
           <p class="game-status" id="gameStatus">Cocokkan kartu mood dengan rasa!</p>
           <div class="cta-row">
-            <button class="ghost" id="skipGameBtn" data-target="reward" disabled>Lanjut Reward</button>
+            <button class="ghost" id="skipGameBtn" data-target="reward">Lewati ke Filter IG</button>
           </div>
         </div>
-        <div class="swipe-hint mobile-only">👆 Swipe up untuk reward & share</div>
+        <div class="swipe-hint mobile-only">Menang dulu untuk membuka reward & share</div>
       </div>
     </section>
 
@@ -196,7 +197,7 @@
             <div class="camera-shell">
               <video id="cameraVideo" playsinline autoplay muted></video>
               <canvas id="cameraCanvas"></canvas>
-              <div class="frame-overlay" id="frameOverlay">Frame IG</div>
+              <div class="frame-overlay" id="frameOverlay"></div>
             </div>
             <div class="share-buttons">
               <button class="primary" id="openFilterBtn">📸 Buka Kamera</button>

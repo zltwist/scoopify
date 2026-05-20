@@ -56,14 +56,20 @@ const moodProfiles = {
   },
 };
 
+const gameDemoMode = true;
+
+function hasGameTicket() {
+  return gameDemoMode || flowState.qrScanned;
+}
+
 // STATE UNTUK FLOW (Fleksibel)
 let flowState = {
   analyzed: false,      // Sudah analyze mood?
-  qrScanned: false,     // Sudah scan QR?
+  qrScanned: gameDemoMode, // Demo mode membuka game tanpa scan QR
   gameTokenUsed: false, // Satu QR hanya bisa mulai game satu kali
   gameStarted: false,
   gameFinished: false,
-  gameLocked: true,
+  gameLocked: false,
   gameWon: false,
   lastMoodResult: null, // Menyimpan hasil mood terakhir
 };
@@ -152,13 +158,20 @@ function calculateMatch(values) {
   return Math.min(98, Math.max(60, balance));
 }
 
+function setBodyTheme(theme, extraClass = "") {
+  const shouldLockFlow = document.body.classList.contains("flow-locked");
+  document.body.className = [theme, extraClass, shouldLockFlow ? "flow-locked" : ""]
+    .filter(Boolean)
+    .join(" ");
+}
+
 function applySliderPreview(changedSlider) {
   if (!analyzeBtn) return;
   const values = readSliderValues();
   const moodKey = calculateMood(values);
   const profile = moodProfiles[moodKey] || moodProfiles.relaxed;
 
-  document.body.className = `${profile.theme} mood-preview`;
+  setBodyTheme(profile.theme, "mood-preview");
 
   sliders.forEach((slider) => {
     const row = slider.input?.closest(".range-row");
@@ -199,7 +212,7 @@ function applyMoodResult(values) {
   if (detailFlavorName) detailFlavorName.textContent = profile.flavor;
   if (detailDescription) detailDescription.textContent = profile.description;
 
-  document.body.className = profile.theme;
+  setBodyTheme(profile.theme);
   
   // Simpan hasil mood
   flowState.lastMoodResult = { moodKey, profile, match };
@@ -210,7 +223,10 @@ function applyMoodResult(values) {
 function scrollToSection(sectionId) {
   const section = document.getElementById(sectionId);
   if (section) {
-    section.scrollIntoView({ behavior: "smooth", block: "start" });
+    document.querySelectorAll(".screen").forEach((screen) => {
+      screen.classList.toggle("active-screen", screen.id === sectionId);
+    });
+    window.scrollTo({ top: 0, behavior: "auto" });
   }
 }
 
@@ -230,7 +246,7 @@ function getMaxAllowedIndex() {
   // Reward hanya dibuka setelah game selesai menang
   if (flowState.gameWon) return sectionOrder.length - 1;
   // Setelah scan QR, akses sampai game
-  if (flowState.qrScanned) return sectionOrder.indexOf("game");
+  if (hasGameTicket()) return sectionOrder.indexOf("game");
   // Jika sudah analyze, bisa sampai flavor
   if (flowState.analyzed) return sectionOrder.indexOf("flavor");
   // Belum apa-apa, cuma bisa welcome & analyzer
@@ -251,8 +267,8 @@ function canNavigate(targetId) {
   // Flavor hanya jika sudah analyze
   if (targetId === "flavor") return flowState.analyzed;
   
-  if (targetId === "game") return flowState.qrScanned;
-  if (targetId === "reward") return flowState.gameWon;
+  if (targetId === "game") return hasGameTicket();
+  if (targetId === "reward") return flowState.gameWon || hasGameTicket();
   
   return targetIndex <= maxAllowed;
 }
@@ -261,10 +277,10 @@ function navigateWithRules(targetId) {
   if (!canNavigate(targetId)) {
     if (!flowState.analyzed && (targetId === "result" || targetId === "flavor")) {
       alert("✨ Selesaikan Mood Analyzer dulu ya! Geser slider dan klik 'Analyze Mood'.\n\nAtau scan QR untuk langsung main game!");
-    } else if (!flowState.qrScanned && (targetId === "game" || targetId === "reward")) {
-      alert("📷 Scan QR Code dulu! Klik tombol 'Scan QR' di halaman utama.\n\nQR Code ada di cup es krim Scoopify kamu.");
-    } else if (targetId === "reward" && !flowState.gameWon) {
-      alert("Selesaikan mini game dulu dalam 20 detik untuk membuka reward.");
+    } else if (!hasGameTicket() && (targetId === "game" || targetId === "reward")) {
+      alert("📷 Scan tiket QR dulu! Klik tombol 'Scan QR' di halaman utama.\n\nTiket QR ada di cup es krim Scoopify kamu.");
+    } else if (targetId === "reward" && !hasGameTicket()) {
+      alert("Scan tiket QR dulu untuk membuka filter IG.");
     } else {
       alert("🚫 Belum bisa akses halaman ini. Ikuti alur yang benar ya!");
     }
@@ -344,7 +360,7 @@ function stopQRScanner() {
 }
 
 function handleQRSuccess() {
-  // QR scan BERHASIL - tidak perlu syarat apapun!
+  // Tiket QR berhasil dipindai.
   flowState.qrScanned = true;
   flowState.gameTokenUsed = false;
   flowState.gameStarted = false;
@@ -353,7 +369,7 @@ function handleQRSuccess() {
   flowState.gameWon = false;
   resetGame();
   updateGameGate();
-  alert("✅ QR Code berhasil di-scan! Kamu sekarang bisa mengakses Mini Game.\n\nSelesaikan game dalam 20 detik untuk membuka reward.");
+  alert("✅ Tiket QR berhasil di-scan! Kamu sekarang bisa mengakses Mini Game.\n\nSelesaikan game dalam 15 detik untuk membuka reward.");
   
   // Update tampilan tombol navigasi
   updateNavLinksState();
@@ -415,8 +431,8 @@ orderBtn?.addEventListener("click", () => {
 // To Game button (di halaman flavor)
 const toGameBtn = document.getElementById("toGameBtn");
 toGameBtn?.addEventListener("click", () => {
-  if (!flowState.qrScanned) {
-    alert("📷 Scan QR Code dulu! Klik tombol 'Scan QR' di halaman utama.\n\nQR Code ada di cup es krim Scoopify kamu.");
+  if (!hasGameTicket()) {
+    alert("📷 Scan tiket QR dulu! Klik tombol 'Scan QR' di halaman utama.\n\nTiket QR ada di cup es krim Scoopify kamu.");
     return;
   }
   navigateWithRules("game");
@@ -424,8 +440,8 @@ toGameBtn?.addEventListener("click", () => {
 
 // Skip Game button
 skipGameBtn?.addEventListener("click", () => {
-  if (!flowState.gameWon) {
-    alert("Reward baru terbuka kalau kamu menang sebelum 20 detik.");
+  if (!hasGameTicket()) {
+    alert("Scan tiket QR dulu untuk membuka filter IG.");
     return;
   }
   navigateWithRules("reward");
@@ -523,7 +539,7 @@ let clickCount = 0;
 let pairs = 0;
 let totalSeconds = 0;
 let timerId = null;
-const gameTimeLimit = 20;
+const gameTimeLimit = 15;
 
 function setGameGateContent(title, text, canStart) {
   if (gameGateTitle) gameGateTitle.textContent = title;
@@ -531,14 +547,50 @@ function setGameGateContent(title, text, canStart) {
   if (startGameBtn) startGameBtn.disabled = !canStart;
 }
 
+function syncGameModeLabels() {
+  if (resetGameBtn) {
+    resetGameBtn.textContent = gameDemoMode ? "Reset Demo" : "1x per Tiket";
+    resetGameBtn.disabled = !gameDemoMode;
+  }
+  if (skipGameBtn) {
+    skipGameBtn.textContent = "Lewati ke Filter IG";
+    skipGameBtn.disabled = !hasGameTicket();
+  }
+
+  if (gameDemoMode) {
+    setGameGateContent(
+      "Demo Mode",
+      "Cocokkan semua pasangan kartu dalam 15 detik untuk membuka reward.",
+      true
+    );
+    return;
+  }
+
+  setGameGateContent(
+    "Game terkunci",
+    "Scan tiket QR pada cup Scoopify untuk membuka mini game. Setiap tiket hanya punya satu kesempatan main.",
+    false
+  );
+}
+
 function updateGameGate() {
   if (!gameGate) return;
+
+  if (gameDemoMode && !flowState.gameStarted && !flowState.gameFinished) {
+    gameGate.classList.remove("hidden");
+    setGameGateContent(
+      "Demo Mode",
+      "Cocokkan semua pasangan kartu dalam 15 detik untuk membuka reward.",
+      true
+    );
+    return;
+  }
 
   if (!flowState.qrScanned) {
     gameGate.classList.remove("hidden");
     setGameGateContent(
       "Game terkunci",
-      "Scan QR pada cup Scoopify untuk membuka mini game. Setiap QR hanya punya satu kesempatan main.",
+      "Scan tiket QR pada cup Scoopify untuk membuka mini game. Setiap tiket hanya punya satu kesempatan main.",
       false
     );
     return;
@@ -554,9 +606,9 @@ function updateGameGate() {
       );
     } else {
       setGameGateContent(
-        "Kesempatan QR sudah selesai",
-        "QR ini sudah dipakai. Scan QR produk lain untuk membuka kesempatan game baru.",
-        false
+        gameDemoMode ? "Waktu habis" : "Kesempatan QR sudah selesai",
+        gameDemoMode ? "Kamu belum menyelesaikan game dalam 15 detik. Reset demo untuk mencoba lagi." : "Tiket ini sudah dipakai. Scan tiket produk lain untuk membuka kesempatan game baru.",
+        gameDemoMode
       );
     }
     return;
@@ -566,8 +618,8 @@ function updateGameGate() {
     gameGate.classList.remove("hidden");
     setGameGateContent(
       "Waktu habis",
-      "Kamu belum menyelesaikan game dalam 20 detik. Scan QR produk lain untuk mencoba lagi.",
-      false
+      gameDemoMode ? "Kamu belum menyelesaikan game dalam 15 detik. Reset demo untuk mencoba lagi." : "Kamu belum menyelesaikan game dalam 15 detik. Scan tiket produk lain untuk mencoba lagi.",
+      gameDemoMode
     );
     return;
   }
@@ -576,7 +628,7 @@ function updateGameGate() {
     gameGate.classList.remove("hidden");
     setGameGateContent(
       "Siap main?",
-      "Cocokkan semua pasangan kartu dalam 20 detik. Tombol mulai hanya bisa dipakai satu kali untuk QR ini.",
+      gameDemoMode ? "Cocokkan semua pasangan kartu dalam 15 detik." : "Cocokkan semua pasangan kartu dalam 15 detik. Tombol mulai hanya bisa dipakai satu kali untuk tiket ini.",
       true
     );
     return;
@@ -673,36 +725,44 @@ function resetGame() {
   clickCount = 0;
   pairs = 0;
   totalSeconds = 0;
+  if (gameDemoMode) {
+    flowState.qrScanned = true;
+    flowState.gameTokenUsed = false;
+    flowState.gameStarted = false;
+    flowState.gameFinished = false;
+    flowState.gameLocked = false;
+    flowState.gameWon = false;
+  }
   if (attemptsEl) attemptsEl.textContent = "0";
   if (minutesEl) minutesEl.textContent = "00";
   if (secondsEl) secondsEl.textContent = "00";
   if (countdownEl) countdownEl.textContent = String(gameTimeLimit);
-  if (skipGameBtn) skipGameBtn.disabled = true;
+  if (skipGameBtn) skipGameBtn.disabled = !hasGameTicket();
   updateStars();
-  if (gameStatus) gameStatus.textContent = "Scan QR, baca instruksi, lalu mulai game.";
+  if (gameStatus) gameStatus.textContent = gameDemoMode ? "Demo siap. Tekan Mulai Game." : "Scan tiket QR, baca instruksi, lalu mulai game.";
   stopTimer();
   createBoard();
 }
 
 function startOneQrGame() {
-  if (!flowState.qrScanned) {
-    alert("Scan QR Code dulu sebelum mulai game.");
+  if (!hasGameTicket()) {
+    alert("Scan tiket QR dulu sebelum mulai game.");
     return;
   }
 
-  if (flowState.gameTokenUsed || flowState.gameFinished || flowState.gameLocked) {
-    alert("Kesempatan untuk QR ini sudah dipakai. Scan QR produk lain untuk main lagi.");
+  if (!gameDemoMode && (flowState.gameTokenUsed || flowState.gameFinished || flowState.gameLocked)) {
+    alert("Kesempatan untuk tiket ini sudah dipakai. Scan tiket produk lain untuk main lagi.");
     return;
   }
 
-  flowState.gameTokenUsed = true;
+  resetGame();
+  flowState.gameTokenUsed = !gameDemoMode;
   flowState.gameStarted = true;
   flowState.gameFinished = false;
   flowState.gameLocked = false;
   flowState.gameWon = false;
-  resetGame();
   updateGameGate();
-  if (gameStatus) gameStatus.textContent = "20 detik dimulai. Cocokkan semua kartu!";
+  if (gameStatus) gameStatus.textContent = "15 detik dimulai. Cocokkan semua kartu!";
   startTimer();
 }
 
@@ -714,8 +774,8 @@ function failGame() {
   flowState.gameWon = false;
   comparisonArray = [];
   document.querySelectorAll(".flipped").forEach((item) => item.classList.remove("flipped"));
-  if (gameStatus) gameStatus.textContent = "Waktu habis. Kesempatan QR ini gugur.";
-  if (skipGameBtn) skipGameBtn.disabled = true;
+  if (gameStatus) gameStatus.textContent = gameDemoMode ? "Waktu habis. Reset demo untuk mencoba lagi." : "Waktu habis. Kesempatan tiket ini gugur.";
+  if (skipGameBtn) skipGameBtn.disabled = !hasGameTicket();
   updateGameGate();
 }
 
@@ -788,17 +848,146 @@ function handleCardClick(event) {
 
 if (memoryBoard) {
   resetGame();
+  syncGameModeLabels();
   memoryBoard.addEventListener("click", handleCardClick);
   updateGameGate();
 }
 
 if (resetGameBtn) {
   resetGameBtn.addEventListener("click", () => {
-    alert("Game hanya bisa dimulai satu kali per QR code produk.");
+    resetGame();
+    updateGameGate();
   });
 }
 
 startGameBtn?.addEventListener("click", startOneQrGame);
+
+// ========== CAMERA FILTER DEMO ==========
+const cameraVideo = document.getElementById("cameraVideo");
+const cameraCanvas = document.getElementById("cameraCanvas");
+const openFilterBtn = document.getElementById("openFilterBtn");
+const captureBtn = document.getElementById("captureBtn");
+const downloadFrameBtn = document.getElementById("downloadFrameBtn");
+const shareBtn = document.getElementById("shareBtn");
+const cameraShell = cameraVideo?.closest(".camera-shell");
+let filterStream = null;
+let photoCaptured = false;
+
+async function openCameraFilter() {
+  if (!cameraVideo) return;
+
+  try {
+    if (filterStream) {
+      filterStream.getTracks().forEach((track) => track.stop());
+    }
+
+    filterStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "user" },
+      audio: false,
+    });
+    cameraVideo.srcObject = filterStream;
+    await cameraVideo.play();
+    cameraShell?.classList.remove("has-photo");
+    photoCaptured = false;
+  } catch (error) {
+    console.error("Camera filter error:", error);
+    alert("Tidak dapat membuka kamera. Pastikan izin kamera diberikan.");
+  }
+}
+
+function captureFilteredPhoto() {
+  if (!cameraVideo || !cameraCanvas) return false;
+  if (!cameraVideo.videoWidth || !cameraVideo.videoHeight) {
+    alert("Buka kamera dulu sebelum ambil foto.");
+    return false;
+  }
+
+  const context = cameraCanvas.getContext("2d");
+  const width = 1080;
+  const height = 1920;
+  cameraCanvas.width = width;
+  cameraCanvas.height = height;
+
+  const videoRatio = cameraVideo.videoWidth / cameraVideo.videoHeight;
+  const targetRatio = width / height;
+  let sourceWidth = cameraVideo.videoWidth;
+  let sourceHeight = cameraVideo.videoHeight;
+  let sourceX = 0;
+  let sourceY = 0;
+
+  if (videoRatio > targetRatio) {
+    sourceWidth = sourceHeight * targetRatio;
+    sourceX = (cameraVideo.videoWidth - sourceWidth) / 2;
+  } else {
+    sourceHeight = sourceWidth / targetRatio;
+    sourceY = (cameraVideo.videoHeight - sourceHeight) / 2;
+  }
+
+  context.drawImage(cameraVideo, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
+
+  const gradient = context.createLinearGradient(0, 0, width, height);
+  gradient.addColorStop(0, "rgba(255, 107, 107, 0.28)");
+  gradient.addColorStop(0.52, "rgba(255, 214, 165, 0.18)");
+  gradient.addColorStop(1, "rgba(157, 124, 255, 0.28)");
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, width, height);
+
+  const highlight = context.createRadialGradient(width * 0.22, height * 0.18, 0, width * 0.22, height * 0.18, width * 0.46);
+  highlight.addColorStop(0, "rgba(255, 255, 255, 0.22)");
+  highlight.addColorStop(1, "rgba(255, 255, 255, 0)");
+  context.fillStyle = highlight;
+  context.fillRect(0, 0, width, height);
+
+  cameraShell?.classList.add("has-photo");
+  photoCaptured = true;
+  return true;
+}
+
+function getPhotoBlob() {
+  return new Promise((resolve) => {
+    if (!cameraCanvas || !photoCaptured) {
+      resolve(null);
+      return;
+    }
+    cameraCanvas.toBlob(resolve, "image/png");
+  });
+}
+
+async function downloadFilteredPhoto() {
+  if (!photoCaptured && !captureFilteredPhoto()) return;
+  const blob = await getPhotoBlob();
+  if (!blob) return;
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "scoopify-gradient-filter.png";
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+async function shareFilteredPhoto() {
+  if (!photoCaptured && !captureFilteredPhoto()) return;
+  const blob = await getPhotoBlob();
+  if (!blob) return;
+
+  const file = new File([blob], "scoopify-gradient-filter.png", { type: "image/png" });
+  if (navigator.canShare?.({ files: [file] })) {
+    await navigator.share({
+      files: [file],
+      title: "Scoopify",
+      text: "#PlayYourMood",
+    });
+    return;
+  }
+
+  await downloadFilteredPhoto();
+  alert("Browser ini belum mendukung share file langsung. Foto sudah di-download.");
+}
+
+openFilterBtn?.addEventListener("click", openCameraFilter);
+captureBtn?.addEventListener("click", captureFilteredPhoto);
+downloadFrameBtn?.addEventListener("click", downloadFilteredPhoto);
+shareBtn?.addEventListener("click", shareFilteredPhoto);
 
 // ========== VARIANT CAROUSEL ==========
 const variantTrack = document.getElementById("variantTrack");
@@ -827,7 +1016,7 @@ function setActiveVariant(index, applyTheme = false) {
   const activeCard = variantCards[activeVariantIndex];
   const theme = activeCard?.dataset.theme;
   if (applyTheme && theme) {
-    document.body.className = theme;
+    setBodyTheme(theme);
   }
 
   if (changed && activeCard) {
@@ -908,8 +1097,13 @@ updateSliderValues();
 if (analyzeBtn) {
   applyMoodResult(readSliderValues());
 }
+syncGameModeLabels();
 updateNavLinksState();
 setActiveVariant(0, Boolean(variantCards.length));
+if (document.body.classList.contains("flow-locked")) {
+  const initialSection = window.location.hash?.replace("#", "") || "welcome";
+  scrollToSection(canNavigate(initialSection) ? initialSection : "welcome");
+}
 
 // Trigger nav visibility on load
 if (desktopNav && window.innerWidth > 767 && window.scrollY > 40) {
