@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+  <title>Daftar Varian - Scoopify</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="theme-relaxed">
+  <div class="app" id="app">
+    <nav class="desktop-nav">
+      <div class="nav-logo">
+        <img src="assets/logo/scoopify.png" alt="Scoopify" />
+      </div>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">Menu Utama</a>
+        <a class="nav-link active" href="variants.html">Daftar Varian</a>
+        <a class="nav-link" href="chatbot.html">AI Chatbot</a>
+      </div>
+    </nav>
+
+    <section class="screen variants" id="variants">
+      <div class="container">
+        <div class="section-head">
+          <h2>Daftar Varian</h2>
+          <p>Geser kiri atau kanan untuk pilih rasa.</p>
+        </div>
+        <div class="variant-showcase" id="variantShowcase">
+          <button class="variant-arrow" id="variantPrev" aria-label="Varian sebelumnya">&lsaquo;</button>
+          <div class="variant-track" id="variantTrack" tabindex="0" aria-label="Daftar varian Scoopify">
+            <article class="variant-card active" data-theme="theme-relaxed">
+              <img class="variant-product" src="assets/menu/Vanilla.png" alt="Vanilla Lavender" />
+              <h3>Vanilla Lavender</h3>
+              <p class="variant-price">Rp8.000</p>
+            </article>
+            <article class="variant-card" data-theme="theme-excited">
+              <img class="variant-product" src="assets/menu/Stroberi.png" alt="Strawberry Spark" />
+              <h3>Strawberry Spark</h3>
+              <p class="variant-price">Rp8.000</p>
+            </article>
+            <article class="variant-card" data-theme="theme-burnout">
+              <img class="variant-product" src="assets/menu/Coklat.png" alt="Chocolate Boost" />
+              <h3>Chocolate Boost</h3>
+              <p class="variant-price">Rp8.000</p>
+            </article>
+            <article class="variant-card" data-theme="theme-melancholy">
+              <img class="variant-product" src="assets/menu/Durian.png" alt="Durian Memories" />
+              <h3>Durian Memories</h3>
+              <p class="variant-price">Rp8.000</p>
+            </article>
+            <article class="variant-card" data-theme="theme-nostalgic">
+              <img class="variant-product" src="assets/menu/Nangka.png" alt="Nangka Classic" />
+              <h3>Nangka Classic</h3>
+              <p class="variant-price">Rp8.000</p>
+            </article>
+          </div>
+          <button class="variant-arrow" id="variantNext" aria-label="Varian berikutnya">&rsaquo;</button>
+        </div>
+        <div class="variant-dots" id="variantDots" aria-label="Navigasi varian"></div>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+  <title>Scoopify - Es Krim AI & Gamifikasi</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="theme-happy">
+  <div class="app" id="app">
+    <!-- NAVIGASI DESKTOP (hanya muncul di PC) -->
+    <nav class="desktop-nav">
+      <div class="nav-logo">
+        <img src="assets/logo/scoopify.png" alt="Scoopify" />
+      </div>
+      <div class="nav-links">
+        <a class="nav-link active" href="index.html">Menu Utama</a>
+        <a class="nav-link" href="variants.html">Daftar Varian</a>
+        <a class="nav-link" href="chatbot.html">AI Chatbot</a>
+      </div>
+    </nav>
+
+    <!-- HALAMAN 1: WELCOME -->
+    <section class="screen welcome" id="welcome">
+      <div class="floating-icecream">
+        <span>🍦</span><span>🍧</span><span>🍨</span>
+      </div>
+      <div class="container">
+        <div class="logo">
+          <img src="assets/logo/scoopify.png" alt="Scoopify" />
+        </div>
+        <p class="intro">AI rekomendasi rasa • Mini game • Filter IG • QR Code unik</p>
+        <div class="cta-row">
+          <button class="primary" data-target="analyzer">✨ Start Experience</button>
+          <button class="ghost" id="scanBtn">📷 Scan QR</button>
+        </div>
+        <div class="swipe-hint mobile-only">👆 Swipe up untuk mulai</div>
+        <div class="swipe-hint desktop-only">👇 Scroll ke bawah untuk lanjut</div>
+      </div>
+    </section>
+
+    <!-- HALAMAN 2: MOOD ANALYZER -->
+    <section class="screen mood" id="analyzer">
+      <div class="container">
+        <div class="section-head">
+          <h2>🎚️ Mood Analyzer</h2>
+          <p>Geser slider untuk lihat profil mood kamu hari ini.</p>
+        </div>
+        <div class="range-list">
+          <div class="range-row">
+            <div class="range-label">Energy Level</div>
+            <div class="range-emoji">😴 <span>⚡</span></div>
+            <input id="energyRange" type="range" min="0" max="100" value="50" />
+            <div class="range-value" id="energyValue">50</div>
+          </div>
+          <div class="range-row">
+            <div class="range-label">Stress Level</div>
+            <div class="range-emoji">😌 <span>🤯</span></div>
+            <input id="stressRange" type="range" min="0" max="100" value="50" />
+            <div class="range-value" id="stressValue">50</div>
+          </div>
+          <div class="range-row">
+            <div class="range-label">Social Mood</div>
+            <div class="range-emoji">🧍 <span>🎉</span></div>
+            <input id="socialRange" type="range" min="0" max="100" value="50" />
+            <div class="range-value" id="socialValue">50</div>
+          </div>
+          <div class="range-row">
+            <div class="range-label">Emotional State</div>
+            <div class="range-emoji">😭 <span>😍</span></div>
+            <input id="emotionalRange" type="range" min="0" max="100" value="50" />
+            <div class="range-value" id="emotionalValue">50</div>
+          </div>
+          <div class="range-row">
+            <div class="range-label">Adventure Level</div>
+            <div class="range-emoji">🙂 <span>🔥</span></div>
+            <input id="adventureRange" type="range" min="0" max="100" value="50" />
+            <div class="range-value" id="adventureValue">50</div>
+          </div>
+        </div>
+        <div class="cta-row">
+          <button class="primary" id="analyzeBtn">✨ Analyze Mood</button>
+        </div>
+        <div class="swipe-hint mobile-only">👆 Swipe up untuk lihat hasil AI</div>
+      </div>
+    </section>
+
+    <!-- HALAMAN 3: AI RESULT -->
+    <section class="screen recommendation" id="result">
+      <div class="container">
+        <div class="section-head">
+          <h2>🧠 AI Result</h2>
+          <p>Hasil analisa mood kamu hari ini.</p>
+        </div>
+        <div class="mood-result">
+          <h3 id="moodTitle">YOU ARE FEELING RELAXED 🌙</h3>
+          <p id="moodQuote">Take a slow breath and enjoy the calm.</p>
+          <div class="result-card">
+            <div class="result-visual">
+              <img id="resultImage" class="product-png" src="assets/menu/Vanilla.png" alt="Es krim" />
+            </div>
+            <div class="result-text">
+              <p class="flavor" id="resultFlavorName">Vanilla Lavender</p>
+              <div class="match-bar">
+                <div class="match-fill" id="matchFill" style="width: 0%"></div>
+              </div>
+              <p class="match" id="resultMatch">Match: 0%</p>
+              <p class="note" id="resultNote">Kamu butuh rasa yang lembut dan calming.</p>
+              <div class="cta-row">
+                <button class="primary" id="orderBtn" data-target="welcome">Back to Home</button>
+                <button class="ghost" id="tryAgainBtn" data-target="analyzer">Try Again</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swipe-hint mobile-only">👆 Swipe up untuk detail rasa</div>
+      </div>
+    </section>
+
+    <!-- HALAMAN 4: FLAVOR DETAIL -->
+    <section class="screen" id="flavor">
+      <div class="container">
+        <div class="section-head">
+          <h2>🍧 Flavor Detail</h2>
+          <p>Detail rasa yang cocok dengan mood kamu.</p>
+        </div>
+        <div class="flavor-card">
+          <div class="result-visual">
+            <img id="detailImage" class="product-png" src="assets/menu/Vanilla.png" alt="Es krim" />
+          </div>
+          <div class="result-text">
+            <p class="flavor" id="detailFlavorName">Vanilla Lavender</p>
+            <p class="note" id="detailDescription">Rasa lembut dengan sentuhan floral untuk menenangkan mood.</p>
+            <button class="primary" id="toGameBtn" data-target="game">Play Mini Game</button>
+          </div>
+        </div>
+        <div class="swipe-hint mobile-only">👆 Swipe up untuk mini game</div>
+      </div>
+    </section>
+
+    <!-- HALAMAN 5: MINI GAME -->
+    <section class="screen game" id="game">
+      <div class="container">
+        <div class="section-head">
+          <h2>🎮 Mini Game</h2>
+          <p>Mainkan memory game dan dapatkan reward.</p>
+        </div>
+        <div class="mini-game">
+          <div class="mini-game-header">
+            <h3>🧠 Memory Card Game</h3>
+            <button class="ghost small" id="resetGame" disabled>1x per QR</button>
+          </div>
+          <ul class="stats">
+            <li id="stars">⭐ ⭐ ⭐</li>
+            <li>
+              <p>Attempts</p>
+              <p id="attempts">0</p>
+            </li>
+            <li>
+              <p>Time</p>
+              <p><span id="minutes">00</span>:<span id="seconds">00</span></p>
+            </li>
+            <li>
+              <p>Limit</p>
+              <p><span id="countdown">30</span>s</p>
+            </li>
+          </ul>
+          <div class="game-gate" id="gameGate">
+            <h3 id="gameGateTitle">Game terkunci</h3>
+            <p id="gameGateText">Scan QR pada cup Scoopify untuk membuka mini game. Setiap QR hanya punya satu kesempatan main.</p>
+            <button class="primary" id="startGameBtn" disabled>Mulai Game</button>
+          </div>
+          <div id="memory-game" class="memory-game"></div>
+          <p class="game-status" id="gameStatus">Cocokkan kartu mood dengan rasa!</p>
+          <div class="cta-row">
+            <button class="ghost" id="skipGameBtn" data-target="reward" disabled>Lanjut Reward</button>
+          </div>
+        </div>
+        <div class="swipe-hint mobile-only">👆 Swipe up untuk reward & share</div>
+      </div>
+    </section>
+
+    <!-- HALAMAN 6: REWARD + QR + SHARE -->
+    <section class="screen share" id="reward">
+      <div class="container">
+        <div class="section-head">
+          <h2>🎁 Reward & QR</h2>
+          <p>Scan QR dan share momen kamu dengan frame IG.</p>
+        </div>
+        <div class="game-layout">
+          <div class="qr-panel">
+            <div class="qr-box">
+              <div class="qr-placeholder" id="qrPlaceholder">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"></rect>
+                  <path d="M8 7h8M8 12h8M8 17h4"></path>
+                </svg>
+              </div>
+              <p>Scan QR unik di cup kamu</p>
+            </div>
+          </div>
+          <div class="share-card">
+            <div class="share-preview" id="sharePreview">
+              <span>🍦</span> Scoopify
+              <small>#PlayYourMood</small>
+            </div>
+            <div class="camera-shell">
+              <video id="cameraVideo" playsinline autoplay muted></video>
+              <canvas id="cameraCanvas"></canvas>
+              <div class="frame-overlay" id="frameOverlay">Frame IG</div>
+            </div>
+            <div class="share-buttons">
+              <button class="primary" id="openFilterBtn">📸 Buka Kamera</button>
+              <button class="ghost" id="captureBtn">✨ Ambil Foto</button>
+              <button class="ghost" id="downloadFrameBtn">⬇️ Download Hasil</button>
+              <button class="ghost" id="shareBtn">📤 Share to Story</button>
+            </div>
+          </div>
+        </div>
+        <footer class="footer">✨ Scoopify • Play Your Mood, Taste Your Scoop ✨</footer>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
