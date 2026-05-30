@@ -265,9 +265,9 @@ const usedGameTicketsKey = "scoopifyUsedGameTicketsV1";
 const gameTicketAttemptsKey = "scoopifyGameTicketAttemptsV1";
 const maxGameTriesPerTicket = 3;
 const gameRewardChances = [
-  { type: "discount2000", chance: 0.06, title: "Potongan Rp2.000", note: "Langsung kurang bayar Rp2.000 di kasir." },
-  { type: "discount1000", chance: 0.10, title: "Potongan Rp1.000", note: "Langsung kurang bayar Rp1.000 di kasir." },
-  { type: "topping", chance: 0.84, title: "Topping Gratis", note: "Bebas pilih topping yang tersedia." },
+  { type: "discount2000", chance: 0.03, title: "Potongan Rp2.000", note: "Langsung kurang bayar Rp2.000 di kasir." },
+  { type: "discount1000", chance: 0.06, title: "Potongan Rp1.000", note: "Langsung kurang bayar Rp1.000 di kasir." },
+  { type: "topping", chance: 0.91, title: "Topping Gratis", note: "Bebas pilih topping yang tersedia." },
 ];
 const isPhotoboothPage = document.body?.dataset.page === "photobooth";
 
