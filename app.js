@@ -9,6 +9,10 @@ const flavorInventory = {
   taro: true,
 };
 
+const lastVariantThemeKey = "scoopifyLastVariantTheme";
+const lastVariantIndexKey = "scoopifyLastVariantIndex";
+const lastRecommendedFlavorKey = "scoopifyLastRecommendedFlavor";
+
 const menuVariantCandidates = [
   "Coklat + Vanila",
   "Vanila + Taro",
@@ -51,6 +55,42 @@ const flavorImages = {
   coklat: "assets/menu/Coklat.png",
   stroberi: "assets/menu/Stroberi.png",
   taro: "assets/menu/Taro.png",
+};
+
+const flavorThemeMap = {
+  "Vanila": "theme-vanilla",
+  "Vanilla": "theme-vanilla",
+  "Taro": "theme-taro",
+  "Coklat": "theme-choco",
+  "Durian": "theme-durian",
+  "Duren": "theme-durian",
+  "Stroberi": "theme-strawberry",
+  "Nangka": "theme-nangka",
+  "Vanila + Taro": "theme-vanilla-taro",
+  "Vanilla + Taro": "theme-vanilla-taro",
+  "Taro + Coklat": "theme-taro-choco",
+  "Coklat + Taro": "theme-taro-choco",
+  "Coklat + Vanila": "theme-choco-vanilla",
+  "Coklat + Vanilla": "theme-choco-vanilla",
+  "Vanila + Coklat": "theme-vanilla-choco",
+  "Vanilla + Coklat": "theme-vanilla-choco",
+  "Durian + Vanila": "theme-durian-vanilla",
+  "Duren + Vanila": "theme-durian-vanilla",
+  "Durian + Taro": "theme-taro-durian",
+  "Duren + Taro": "theme-taro-durian",
+  "Taro + Duren": "theme-taro-durian",
+  "Durian + Coklat": "theme-durian-choco-vanilla",
+  "Duren + Coklat": "theme-durian-choco-vanilla",
+  "Taro + Vanila + Coklat": "theme-taro-vanilla-choco",
+  "Taro + Vanilla + Coklat": "theme-taro-vanilla-choco",
+  "Taro + Vanila + Duren": "theme-taro-vanilla-durian",
+  "Taro + Vanilla + Durian": "theme-taro-vanilla-durian",
+  "Duren + Coklat + Vanila": "theme-durian-choco-vanilla",
+  "Durian + Coklat + Vanila": "theme-durian-choco-vanilla",
+  "Stroberi + Vanila": "theme-strawberry",
+  "Stroberi + Coklat": "theme-strawberry",
+  "Nangka + Vanila": "theme-nangka",
+  "Nangka + Durian": "theme-nangka",
 };
 
 const moodKnowledgeBase = {
@@ -512,6 +552,63 @@ function setBodyTheme(theme, extraClass = "") {
     .join(" ");
 }
 
+function saveLastVariantSelection(theme, index) {
+  if (!theme) return;
+  try {
+    window.localStorage.setItem(lastVariantThemeKey, theme);
+    if (Number.isInteger(index)) {
+      window.localStorage.setItem(lastVariantIndexKey, String(index));
+    } else {
+      window.localStorage.removeItem(lastVariantIndexKey);
+    }
+  } catch (error) {
+    // Ignore storage failures so the UI still works in private/restricted browsers.
+  }
+}
+
+function saveLastRecommendedFlavor(flavor) {
+  if (!flavor) return;
+  try {
+    window.localStorage.setItem(lastRecommendedFlavorKey, flavor);
+  } catch (error) {
+    // Ignore storage failures so the UI still works in private/restricted browsers.
+  }
+}
+
+function readLastVariantTheme() {
+  try {
+    return window.localStorage.getItem(lastVariantThemeKey) || "";
+  } catch (error) {
+    return "";
+  }
+}
+
+function readLastRecommendedFlavor() {
+  try {
+    return window.localStorage.getItem(lastRecommendedFlavorKey) || "";
+  } catch (error) {
+    return "";
+  }
+}
+
+function readLastVariantIndex() {
+  try {
+    const storedValue = window.localStorage.getItem(lastVariantIndexKey);
+    if (storedValue === null) return -1;
+    const value = Number(storedValue);
+    return Number.isInteger(value) ? value : -1;
+  } catch (error) {
+    return -1;
+  }
+}
+
+const savedVariantTheme = readLastVariantTheme();
+const savedVariantIndex = readLastVariantIndex();
+const savedRecommendedFlavor = readLastRecommendedFlavor();
+if (savedVariantTheme) {
+  setBodyTheme(savedVariantTheme);
+}
+
 function parseFlavorComponents(flavor) {
   return flavor
     .toLowerCase()
@@ -520,6 +617,25 @@ function parseFlavorComponents(flavor) {
     .map((item) => (item === "duren" ? "durian" : item))
     .map((item) => (item === "vanilla" ? "vanila" : item))
     .filter(Boolean);
+}
+
+function extractFlavorTokens(text) {
+  const normalizedText = String(text || "")
+    .toLowerCase()
+    .replace(/strawberry/g, "stroberi")
+    .replace(/durian|duren/g, "durian")
+    .replace(/vanilla|vanila/g, "vanila");
+  return ["durian", "nangka", "vanila", "coklat", "stroberi", "taro"]
+    .filter((flavor) => normalizedText.includes(flavor))
+    .sort();
+}
+
+function isSameFlavorSet(firstFlavor, secondFlavor) {
+  const firstTokens = extractFlavorTokens(firstFlavor);
+  const secondTokens = extractFlavorTokens(secondFlavor);
+  return Boolean(firstTokens.length) &&
+    firstTokens.length === secondTokens.length &&
+    firstTokens.every((token, index) => token === secondTokens[index]);
 }
 
 function hasSoldOutFlavor(flavor) {
@@ -570,6 +686,16 @@ function getFlavorImage(flavor, preferAvailable = true) {
   return flavorImages[firstComponent] || flavorImages.vanila;
 }
 
+function getFlavorTheme(flavor, fallbackTheme = "theme-vanilla") {
+  if (flavorThemeMap[flavor]) return flavorThemeMap[flavor];
+  const normalizedFlavor = parseFlavorComponents(flavor).map((item) => {
+    if (item === "vanila" || item === "vanilla") return "Vanila";
+    if (item === "durian" || item === "duren") return "Duren";
+    return item.charAt(0).toUpperCase() + item.slice(1);
+  }).join(" + ");
+  return flavorThemeMap[normalizedFlavor] || fallbackTheme;
+}
+
 function buildRecommendation(profile) {
   const soldOut = hasSoldOutFlavor(profile.idealFlavor);
   const fallbackAvailable = isFlavorAvailable(profile.fallbackFlavor);
@@ -592,7 +718,7 @@ function buildRecommendation(profile) {
     actionText: "Konfirmasi dan Pesan Sekarang",
     substitutionActionText: "Pesan Varian Alternatif Pilihan AI",
     image: getFlavorImage(selectedFlavor || profile.idealFlavor),
-    theme: profile.theme,
+    theme: getFlavorTheme(selectedFlavor || profile.idealFlavor, profile.theme),
     note: profile.rationale,
     bridge: soldOut
       ? fallbackAvailable
@@ -632,7 +758,8 @@ function applySliderPreview(changedSlider) {
   }, 420);
 }
 
-function applyMoodResult(values) {
+function applyMoodResult(values, options = {}) {
+  const shouldApplyTheme = options.applyTheme !== false;
   const moodKey = calculateMood(values);
   const profile = moodKnowledgeBase[moodKey] || moodKnowledgeBase.bittersweet;
   const recommendation = buildRecommendation(profile);
@@ -672,7 +799,11 @@ function applyMoodResult(values) {
     orderBtn.disabled = recommendation.soldOut;
     orderBtn.classList.toggle("is-disabled", recommendation.soldOut);
   }
-  setBodyTheme(recommendation.theme);
+  if (shouldApplyTheme) {
+    setBodyTheme(recommendation.theme);
+    saveLastVariantSelection(recommendation.theme);
+    saveLastRecommendedFlavor(recommendation.selectedFlavor || recommendation.idealFlavor);
+  }
   
   // Simpan hasil mood
   flowState.lastMoodResult = { moodKey, profile: recommendation, match };
@@ -1088,8 +1219,8 @@ const cardArray = [
   "taro", "taro",
   "coklat", "coklat",
   "durian", "durian",
-  "coklat-vanilla", "coklat-vanilla",
-  "taro-duren", "taro-duren",
+  "stroberi", "stroberi",
+  "nangka", "nangka",
 ];
 let comparisonArray = [];
 let attempts = 0;
@@ -2090,6 +2221,7 @@ const variantDots = document.getElementById("variantDots");
 let activeVariantIndex = 0;
 let lastVariantScrollLeft = 0;
 let variantScrollFrame = null;
+let isRestoringVariant = false;
 
 function setActiveVariant(index, applyTheme = false) {
   if (!variantCards.length) return;
@@ -2109,6 +2241,10 @@ function setActiveVariant(index, applyTheme = false) {
   const theme = activeCard?.dataset.theme;
   if (applyTheme && theme) {
     setBodyTheme(theme);
+    if (!isRestoringVariant) {
+      saveLastVariantSelection(theme, activeVariantIndex);
+      saveLastRecommendedFlavor(activeCard.querySelector("h3")?.textContent || "");
+    }
   }
 
   if (changed && activeCard) {
@@ -2162,6 +2298,8 @@ if (variantDots && variantCards.length) {
 variantPrev?.addEventListener("click", () => scrollVariantTo(activeVariantIndex - 1));
 variantNext?.addEventListener("click", () => scrollVariantTo(activeVariantIndex + 1));
 variantTrack?.addEventListener("scroll", () => {
+  if (isRestoringVariant) return;
+
   const currentScrollLeft = variantTrack.scrollLeft;
   const directionClass = currentScrollLeft > lastVariantScrollLeft ? "swipe-left" : "swipe-right";
   lastVariantScrollLeft = currentScrollLeft;
@@ -2189,11 +2327,37 @@ normalizeHomeCopy();
 configureLikertMoodUi();
 updateSliderValues();
 if (analyzeBtn) {
-  applyMoodResult(readSliderValues());
+  applyMoodResult(readSliderValues(), { applyTheme: false });
 }
 syncGameModeLabels();
 updateNavLinksState();
-setActiveVariant(0, Boolean(variantCards.length));
+const initialVariantIndexByFlavor = variantCards.findIndex((card) => (
+  isSameFlavorSet(card.querySelector("h3")?.textContent, savedRecommendedFlavor)
+));
+const initialVariantIndexByTheme = variantCards.findIndex((card) => card.dataset.theme === savedVariantTheme);
+const initialVariantIndex = initialVariantIndexByFlavor >= 0
+  ? initialVariantIndexByFlavor
+  : savedVariantIndex >= 0 && savedVariantIndex < variantCards.length
+    ? savedVariantIndex
+    : initialVariantIndexByTheme;
+const initialActiveVariantIndex = initialVariantIndex >= 0 ? initialVariantIndex : 0;
+isRestoringVariant = initialVariantIndex >= 0;
+setActiveVariant(initialActiveVariantIndex, Boolean(variantCards.length));
+if (variantTrack && initialVariantIndex >= 0) {
+  window.requestAnimationFrame(() => {
+    variantCards[initialActiveVariantIndex]?.scrollIntoView({
+      behavior: "auto",
+      inline: "center",
+      block: "nearest",
+    });
+    window.setTimeout(() => {
+      isRestoringVariant = false;
+      setActiveVariant(initialActiveVariantIndex, true);
+    }, 250);
+  });
+} else {
+  isRestoringVariant = false;
+}
 if (document.body.classList.contains("flow-locked")) {
   const initialSection = window.location.hash?.replace("#", "") || "welcome";
   scrollToSection(canNavigate(initialSection) ? initialSection : "welcome");
