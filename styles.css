@@ -276,6 +276,8 @@ body {
 }
 
 .home-menu-card {
+  --text-strong: #2a1c38;
+  --muted: #65586f;
   min-height: 128px;
   border-radius: 18px;
   padding: 14px;
@@ -625,18 +627,31 @@ body {
 }
 
 /* Mood Result */
+.recommendation {
+  --text-strong: #2a1c38;
+  --muted: #62566d;
+}
+
+.recommendation .section-head h2,
 .mood-result h3 {
   text-align: center;
+  color: var(--text-strong);
+}
+
+.mood-result h3 {
   font-size: clamp(24px, 4vw, 36px);
   line-height: 1.08;
   max-width: 760px;
   margin: 0 auto 10px;
-  color: var(--text-strong);
 }
 
+.recommendation .section-head p,
 .mood-result > p {
   text-align: center;
   color: var(--muted);
+}
+
+.mood-result > p {
   max-width: 760px;
   margin: 0 auto 22px;
   line-height: 1.5;
@@ -646,6 +661,8 @@ body {
 
 /* Result Card */
 .result-card {
+  --text-strong: #2a1c38;
+  --muted: #62566d;
   background: var(--surface);
   backdrop-filter: blur(12px);
   border-radius: 24px;
