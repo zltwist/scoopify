@@ -22,6 +22,7 @@ const menuVariantCandidates = [
   "Vanila + Coklat",
   "Taro + Coklat",
   "Durian + Coklat",
+  "Duren + Coklat",
   "Durian",
   "Vanila",
   "Taro",
@@ -57,6 +58,45 @@ const flavorImages = {
   taro: "assets/menu/Taro.png",
 };
 
+const variantImages = {
+  "vanila": "assets/menu/Vanilla.png",
+  "vanilla": "assets/menu/Vanilla.png",
+  "taro": "assets/menu/Taro.png",
+  "coklat": "assets/menu/Coklat.png",
+  "durian": "assets/menu/Durian.png",
+  "duren": "assets/menu/Durian.png",
+  "stroberi": "assets/menu/Stroberi.png",
+  "nangka": "assets/menu/Nangka.png",
+  "vanila+taro": "assets/menu/Vanilla Taro.png",
+  "vanilla+taro": "assets/menu/Vanilla Taro.png",
+  "taro+coklat": "assets/menu/Taro Coklat.png",
+  "coklat+taro": "assets/menu/Taro Coklat.png",
+  "coklat+vanila": "assets/menu/Coklat Vanilla.png",
+  "coklat+vanilla": "assets/menu/Coklat Vanilla.png",
+  "vanila+coklat": "assets/menu/Vanilla Coklat.png",
+  "vanilla+coklat": "assets/menu/Vanilla Coklat.png",
+  "durian+vanila": "assets/menu/Duren Vanilla.png",
+  "durian+vanilla": "assets/menu/Duren Vanilla.png",
+  "duren+vanila": "assets/menu/Duren Vanilla.png",
+  "duren+vanilla": "assets/menu/Duren Vanilla.png",
+  "taro+durian": "assets/menu/Taro Duren.png",
+  "durian+taro": "assets/menu/Taro Duren.png",
+  "taro+duren": "assets/menu/Taro Duren.png",
+  "duren+taro": "assets/menu/Taro Duren.png",
+  "durian+coklat": "assets/menu/Duren Coklat.png",
+  "duren+coklat": "assets/menu/Duren Coklat.png",
+  "taro+vanila+coklat": "assets/menu/Taro Vanilla Coklat.png",
+  "taro+vanilla+coklat": "assets/menu/Taro Vanilla Coklat.png",
+  "taro+vanila+durian": "assets/menu/Taro Vanilla Duren.png",
+  "taro+vanilla+durian": "assets/menu/Taro Vanilla Duren.png",
+  "taro+vanila+duren": "assets/menu/Taro Vanilla Duren.png",
+  "taro+vanilla+duren": "assets/menu/Taro Vanilla Duren.png",
+  "durian+coklat+vanila": "assets/menu/Duren Coklat Vanilla.png",
+  "durian+coklat+vanilla": "assets/menu/Duren Coklat Vanilla.png",
+  "duren+coklat+vanila": "assets/menu/Duren Coklat Vanilla.png",
+  "duren+coklat+vanilla": "assets/menu/Duren Coklat Vanilla.png",
+};
+
 const flavorThemeMap = {
   "Vanila": "theme-vanilla",
   "Vanilla": "theme-vanilla",
@@ -79,8 +119,8 @@ const flavorThemeMap = {
   "Durian + Taro": "theme-taro-durian",
   "Duren + Taro": "theme-taro-durian",
   "Taro + Duren": "theme-taro-durian",
-  "Durian + Coklat": "theme-durian-choco-vanilla",
-  "Duren + Coklat": "theme-durian-choco-vanilla",
+  "Durian + Coklat": "theme-durian-choco",
+  "Duren + Coklat": "theme-durian-choco",
   "Taro + Vanila + Coklat": "theme-taro-vanilla-choco",
   "Taro + Vanilla + Coklat": "theme-taro-vanilla-choco",
   "Taro + Vanila + Duren": "theme-taro-vanilla-durian",
@@ -647,6 +687,15 @@ function isFlavorAvailable(flavor) {
   return Boolean(components.length) && components.every((item) => flavorInventory[item] !== false);
 }
 
+function getVariantImageKey(flavor) {
+  return String(flavor || "")
+    .toLowerCase()
+    .split("+")
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .join("+");
+}
+
 function scoreAlternativeFlavor(candidate, idealFlavor, fallbackFlavor) {
   const candidateComponents = parseFlavorComponents(candidate);
   const idealComponents = parseFlavorComponents(idealFlavor);
@@ -680,6 +729,9 @@ function findAvailableAlternative(idealFlavor, fallbackFlavor) {
 }
 
 function getFlavorImage(flavor, preferAvailable = true) {
+  const exactVariantImage = variantImages[getVariantImageKey(flavor)];
+  if (exactVariantImage) return exactVariantImage;
+
   const components = parseFlavorComponents(flavor);
   const availableComponent = components.find((item) => flavorInventory[item] !== false);
   const firstComponent = preferAvailable ? availableComponent || components[0] : components[0] || availableComponent;

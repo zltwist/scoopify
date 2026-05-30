@@ -3233,6 +3233,13 @@ body[data-page="photobooth"] .ghost:hover {
   --muted: #5d5470;
   --text-strong: #261d3a;
 }
+.theme-durian-choco {
+  --bg-grad: linear-gradient(135deg, #ffe071, #9a6042 58%, #633a28);
+  --accent: #8d4f2e;
+  --text: #3d2816;
+  --muted: #6d5138;
+  --text-strong: #2d1b10;
+}
 .theme-taro-vanilla-choco {
   --bg-grad: linear-gradient(135deg, #d2b9f4, #f2d39c 52%, #9b6142);
   --accent: #8f65b8;
