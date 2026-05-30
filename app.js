@@ -999,7 +999,9 @@ async function startQRScanner() {
           if (detector) {
             const codes = await detector.detect(video);
             qrValue = codes?.[0]?.rawValue || "";
-          } else {
+          }
+
+          if (!qrValue && hasJsQrFallback) {
             fallbackCanvas.width = video.videoWidth;
             fallbackCanvas.height = video.videoHeight;
             fallbackContext.drawImage(video, 0, 0, fallbackCanvas.width, fallbackCanvas.height);
