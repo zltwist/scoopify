@@ -1425,6 +1425,15 @@ function updateStars() {
   }
 }
 
+function updateStars() {
+  if (!starsEl) return;
+  const remainingTries = hasGameTicket() ? getRemainingGameTries() : maxGameTriesPerTicket;
+  starsEl.textContent = Array.from(
+    { length: maxGameTriesPerTicket },
+    (_, index) => (index < remainingTries ? "♥" : "♡")
+  ).join(" ");
+}
+
 function updateTimer() {
   totalSeconds += 1;
   const minutes = Math.floor(totalSeconds / 60);
@@ -1455,7 +1464,6 @@ function flipCard(element) {
 
 function recordAttempts() {
   attempts += 1;
-  if (attemptsEl) attemptsEl.textContent = String(lives);
   updateStars();
 }
 
@@ -1494,7 +1502,7 @@ function resetGame() {
   flowState.gameFinished = false;
   flowState.gameLocked = false;
   flowState.gameWon = false;
-  if (attemptsEl) attemptsEl.textContent = String(lives);
+  if (attemptsEl) attemptsEl.textContent = String(hasGameTicket() ? getRemainingGameTries() : maxGameTriesPerTicket);
   if (minutesEl) minutesEl.textContent = "00";
   if (secondsEl) secondsEl.textContent = "00";
   if (countdownEl) countdownEl.textContent = String(gameTimeLimit);
@@ -1529,7 +1537,9 @@ function startOneQrGame() {
   flowState.gameWon = false;
   updateGameGate();
   const currentTry = getGameTicketAttempts(ticketToken);
-  if (gameStatus) gameStatus.textContent = `Ronde ${currentTry}/${maxGameTriesPerTicket}. 30 detik dimulai, nyawa 3.`;
+  if (attemptsEl) attemptsEl.textContent = String(getRemainingGameTries(ticketToken));
+  updateStars();
+  if (gameStatus) gameStatus.textContent = `Ronde ${currentTry}/${maxGameTriesPerTicket}. 30 detik dimulai. Salah tebak bebas.`;
   startTimer();
 }
 
@@ -1569,7 +1579,7 @@ function showWinMessageLegacy() {
     <div class="message-box">
       <h3>🎉 Congrats!</h3>
       <p>Kamu menemukan semua pasangan kartu.</p>
-      <p>Nyawa tersisa: ${lives}</p>
+      <p>Kesempatan tersisa: ${getRemainingGameTries()}</p>
       <p>Time: ${minutesEl?.textContent || "00"}:${secondsEl?.textContent || "00"}</p>
       <p>🎁 Kamu mendapat TOPPING GRATIS!</p>
       <button id="closeWin">OK</button>
@@ -1680,16 +1690,9 @@ function handleCardClick(event) {
 
   setTimeout(() => {
     document.querySelectorAll(".flipped").forEach((item) => item.classList.remove("flipped"));
-    lives = Math.max(0, lives - 1);
-    if (attemptsEl) attemptsEl.textContent = String(lives);
-    updateStars();
     comparisonArray = [];
     clickCount = 0;
-    if (lives <= 0) {
-      failGame("Nyawa habis");
-      return;
-    }
-    if (gameStatus) gameStatus.textContent = `Belum cocok. Sisa nyawa ${lives}.`;
+    if (gameStatus) gameStatus.textContent = "Belum cocok. Coba lagi, waktunya masih jalan.";
   }, 800);
 }
 
