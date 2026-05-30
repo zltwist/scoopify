@@ -1312,7 +1312,7 @@ let clickCount = 0;
 let pairs = 0;
 let totalSeconds = 0;
 let timerId = null;
-const gameTimeLimit = 30;
+const gameTimeLimit = 15;
 
 function setGameGateContent(title, text, canStart) {
   if (gameGateTitle) gameGateTitle.textContent = title;
@@ -1388,7 +1388,7 @@ function updateGameGate() {
     const remainingTries = getRemainingGameTries();
     setGameGateContent(
       "Siap main?",
-      `Cocokkan kartu dalam 30 detik. Kesempatan tiket ini: ${remainingTries}/${maxGameTriesPerTicket}.`,
+      `Cocokkan kartu dalam ${gameTimeLimit} detik. Kesempatan tiket ini: ${remainingTries}/${maxGameTriesPerTicket}.`,
       remainingTries > 0
     );
     if (startGameBtn) startGameBtn.textContent = remainingTries === maxGameTriesPerTicket ? "Mulai Game" : "Coba Lagi";
@@ -1539,7 +1539,7 @@ function startOneQrGame() {
   const currentTry = getGameTicketAttempts(ticketToken);
   if (attemptsEl) attemptsEl.textContent = String(getRemainingGameTries(ticketToken));
   updateStars();
-  if (gameStatus) gameStatus.textContent = `Ronde ${currentTry}/${maxGameTriesPerTicket}. 30 detik dimulai. Salah tebak bebas.`;
+  if (gameStatus) gameStatus.textContent = `Ronde ${currentTry}/${maxGameTriesPerTicket}. ${gameTimeLimit} detik dimulai. Salah tebak bebas.`;
   startTimer();
 }
 
