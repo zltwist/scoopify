@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 560">
-  <rect width="420" height="560" rx="42" fill="#efe3ff"/>
-  <circle cx="210" cy="185" r="126" fill="#9c70da"/>
-  <circle cx="130" cy="242" r="54" fill="#b58be9"/>
-  <circle cx="210" cy="250" r="66" fill="#a97ee4"/>
-  <circle cx="292" cy="240" r="54" fill="#8b5dcc"/>
-  <path d="M126 292h168l-66 210c-5 18-31 18-36 0z" fill="#d99b48"/>
-  <text x="210" y="72" text-anchor="middle" font-family="Arial" font-size="38" font-weight="700" fill="#5d348f">TARO</text>
-</svg>

@@ -50,7 +50,7 @@ const flavorImages = {
   vanilla: "assets/menu/Vanilla.png",
   coklat: "assets/menu/Coklat.png",
   stroberi: "assets/menu/Stroberi.png",
-  taro: "assets/menu/Taro.svg",
+  taro: "assets/menu/Taro.png",
 };
 
 const moodKnowledgeBase = {
@@ -181,14 +181,52 @@ const moodKnowledgeBase = {
 };
 
 const photoboothUnlockKey = "scoopifyPhotoboothPremiumUnlocked";
+const usedGameTicketsKey = "scoopifyUsedGameTicketsV1";
+const gameRewardChances = [
+  { type: "discount2000", chance: 0.06, title: "Potongan Rp2.000", note: "Langsung kurang bayar Rp2.000 di kasir." },
+  { type: "discount1000", chance: 0.10, title: "Potongan Rp1.000", note: "Langsung kurang bayar Rp1.000 di kasir." },
+  { type: "topping", chance: 0.84, title: "Topping Gratis", note: "Bebas pilih topping yang tersedia." },
+];
 const isPhotoboothPage = document.body?.dataset.page === "photobooth";
 
 function hasGameTicket() {
   return flowState.qrScanned;
 }
 
+function extractTicketToken(ticketValue = "") {
+  const rawValue = String(ticketValue || "").trim();
+  if (!rawValue) return "";
+
+  try {
+    const parsedUrl = new URL(rawValue, window.location.href);
+    return parsedUrl.searchParams.get("ticket") || rawValue;
+  } catch {
+    return rawValue;
+  }
+}
+
 function getTicketFromUrl() {
   return new URLSearchParams(window.location.search).get("ticket");
+}
+
+function readUsedGameTickets() {
+  try {
+    return JSON.parse(window.localStorage?.getItem(usedGameTicketsKey) || "[]");
+  } catch {
+    return [];
+  }
+}
+
+function isGameTicketUsed(ticketToken) {
+  if (!ticketToken) return false;
+  return readUsedGameTickets().includes(ticketToken);
+}
+
+function markGameTicketUsed(ticketToken) {
+  if (!ticketToken) return;
+  const tickets = new Set(readUsedGameTickets());
+  tickets.add(ticketToken);
+  window.localStorage?.setItem(usedGameTicketsKey, JSON.stringify([...tickets]));
 }
 
 function hasPhotoboothPremiumAccess() {
@@ -197,17 +235,19 @@ function hasPhotoboothPremiumAccess() {
 
 if (getTicketFromUrl()) {
   window.localStorage?.setItem(photoboothUnlockKey, "true");
+  window.localStorage?.setItem("scoopifyLastQrTicket", extractTicketToken(getTicketFromUrl()));
 }
 
 // STATE UNTUK FLOW (Fleksibel)
 let flowState = {
   analyzed: false,      // Sudah analyze mood?
-  qrScanned: Boolean(getTicketFromUrl()), // QR URL membuka game
+  qrScanned: Boolean(getTicketFromUrl()) && !isGameTicketUsed(extractTicketToken(getTicketFromUrl())), // QR URL membuka game
   gameTokenUsed: false, // Satu QR hanya bisa mulai game satu kali
   gameStarted: false,
   gameFinished: false,
   gameLocked: false,
   gameWon: false,
+  lastReward: null,
   lastMoodResult: null, // Menyimpan hasil mood terakhir
 };
 
@@ -831,11 +871,19 @@ function stopQRScanner() {
 
 function handleQRSuccess(ticketValue = "") {
   // Tiket QR berhasil dipindai.
-  flowState.qrScanned = true;
-  if (ticketValue) {
-    window.localStorage?.setItem("scoopifyLastQrTicket", ticketValue);
-  }
+  const ticketToken = extractTicketToken(ticketValue);
+  if (ticketToken) window.localStorage?.setItem("scoopifyLastQrTicket", ticketToken);
   window.localStorage?.setItem(photoboothUnlockKey, "true");
+
+  if (!isPhotoboothPage && isGameTicketUsed(ticketToken)) {
+    flowState.qrScanned = false;
+    updateGameGate();
+    updateNavLinksState();
+    alert("QR ini sudah pernah dipakai untuk mini game. Photobooth tetap bisa digunakan dengan QR yang sama.");
+    return;
+  }
+
+  flowState.qrScanned = true;
   flowState.gameTokenUsed = false;
   flowState.gameStarted = false;
   flowState.gameFinished = false;
@@ -1092,8 +1140,8 @@ function updateGameGate() {
     gameGate.classList.remove("hidden");
     if (flowState.gameWon) {
       setGameGateContent(
-        "Topping terbuka",
-        "Kamu menang. Bebas pilih topping yang tersedia.",
+        "Reward terbuka",
+        flowState.lastReward ? `Kamu menang: ${flowState.lastReward.title}.` : "Kamu menang. Ambil reward di kasir.",
         false
       );
     } else {
@@ -1242,6 +1290,16 @@ function startOneQrGame() {
     return;
   }
 
+  const ticketToken = extractTicketToken(window.localStorage?.getItem("scoopifyLastQrTicket") || getTicketFromUrl());
+  if (isGameTicketUsed(ticketToken)) {
+    flowState.qrScanned = false;
+    updateGameGate();
+    updateNavLinksState();
+    alert("QR ini sudah pernah dipakai untuk mini game. Photobooth tetap bisa digunakan.");
+    return;
+  }
+
+  markGameTicketUsed(ticketToken);
   resetGame();
   flowState.gameTokenUsed = true;
   flowState.gameStarted = true;
@@ -1266,7 +1324,7 @@ function failGame(reason = "Waktu habis") {
   updateGameGate();
 }
 
-function showWinMessage() {
+function showWinMessageLegacy() {
   flowState.gameStarted = false;
   flowState.gameFinished = true;
   flowState.gameLocked = false;
@@ -1294,6 +1352,60 @@ function showWinMessage() {
     </div>
   `;
   document.body.appendChild(overlay);
+  overlay.querySelector("#closeWin").addEventListener("click", () => {
+    overlay.remove();
+    updateGameGate();
+  });
+}
+
+function pickGameReward() {
+  const roll = Math.random();
+  let cursor = 0;
+  for (const reward of gameRewardChances) {
+    cursor += reward.chance;
+    if (roll < cursor) return reward;
+  }
+  return gameRewardChances[gameRewardChances.length - 1];
+}
+
+function showWinMessage() {
+  flowState.gameStarted = false;
+  flowState.gameFinished = true;
+  flowState.gameLocked = false;
+  flowState.gameWon = true;
+  const reward = pickGameReward();
+  flowState.lastReward = reward;
+  if (skipGameBtn) skipGameBtn.disabled = false;
+  updateNavLinksState();
+  updateGameGate();
+
+  const overlay = document.createElement("div");
+  overlay.className = "game-over";
+  overlay.innerHTML = `
+    <div class="message-box reward-box">
+      <h3>Yeay, menang!</h3>
+      <div class="reward-roulette" aria-label="Roulette reward">
+        <span>Rp1.000</span>
+        <span>Topping</span>
+        <span>Rp2.000</span>
+      </div>
+      <p class="reward-result" id="rewardResult">Memutar reward...</p>
+      <p class="reward-note" id="rewardNote">Tunggu sebentar ya.</p>
+      <button id="closeWin">OK</button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  window.setTimeout(() => {
+    overlay.querySelector(".reward-roulette")?.classList.add("done");
+    const result = overlay.querySelector("#rewardResult");
+    const note = overlay.querySelector("#rewardNote");
+    if (result) result.textContent = reward.title;
+    if (note) note.textContent = reward.note;
+    if (gameStatus) gameStatus.textContent = `Menang. Reward: ${reward.title}.`;
+    updateGameGate();
+  }, 1200);
+
   overlay.querySelector("#closeWin").addEventListener("click", () => {
     overlay.remove();
     updateGameGate();
@@ -1328,7 +1440,7 @@ function handleCardClick(event) {
     if (pairs === cardArray.length / 2) {
       stopTimer();
       if (gameStatus) gameStatus.textContent = "🎉 Kamu dapat reward topping tambahan!";
-      if (gameStatus) gameStatus.textContent = "Menang. Bebas pilih topping yang tersedia.";
+      if (gameStatus) gameStatus.textContent = "Menang. Roulette reward dimulai.";
       showWinMessage();
     }
     return;
@@ -1446,11 +1558,18 @@ function setBoothFinished(nextFinished) {
   document.querySelector(".booth-export-row")?.classList.toggle("is-visible", boothFinished);
   finishBoothBtn?.toggleAttribute("disabled", boothShots.length < boothLayout || boothFinished);
   finishBoothBtn?.classList.toggle("is-disabled", boothShots.length < boothLayout || boothFinished);
+  updateCaptureButtonState();
 }
 
 function markBoothDirty() {
   photoCaptured = false;
   setBoothFinished(false);
+}
+
+function updateCaptureButtonState() {
+  const isFull = boothShots.length >= boothLayout;
+  captureBtn?.toggleAttribute("disabled", boothCapturing || isFull || boothFinished);
+  captureBtn?.classList.toggle("is-disabled", boothCapturing || isFull || boothFinished);
 }
 
 async function openCameraFilter() {
@@ -1645,7 +1764,7 @@ function updateBoothTakeProgress(remaining = Math.max(0, boothLayout - boothShot
   if (captureBtnText) {
     captureBtnText.textContent = remaining
       ? `Ambil Foto ${nextShot}/${boothLayout}`
-      : `Foto Lengkap ${boothLayout}/${boothLayout}`;
+      : `Foto lengkap ${boothLayout}/${boothLayout}`;
   }
 
   if (boothTakeProgress) {
@@ -1705,15 +1824,12 @@ function captureFilteredPhoto() {
     cameraShell?.classList.remove("has-photo");
   }
   if (boothShots.length >= boothLayout) {
-    if (boothLayout === 1) {
-      finishBooth();
-    } else {
-      finishBoothBtn?.removeAttribute("disabled");
-      finishBoothBtn?.classList.remove("is-disabled");
-    }
-    setBoothMobileStep("result");
+    cameraShell?.classList.remove("has-photo");
+    finishBoothBtn?.removeAttribute("disabled");
+    finishBoothBtn?.classList.remove("is-disabled");
   }
   updateBoothStatus();
+  updateCaptureButtonState();
   return true;
 }
 
@@ -1746,7 +1862,7 @@ async function captureBoothWithCountdown() {
     captureFilteredPhoto();
   } finally {
     boothCapturing = false;
-    captureBtn?.removeAttribute("disabled");
+    updateCaptureButtonState();
   }
 }
 
@@ -1756,7 +1872,6 @@ function updateBoothStatus() {
   updateBoothTakeProgress(remaining);
   if (boothFinished) {
     if (boothProgressText) boothProgressText.textContent = `Finish ${boothLayout}/${boothLayout}`;
-    if (captureBtnText) captureBtnText.textContent = `Finish ${boothLayout}/${boothLayout}`;
     boothStatus.textContent = `Hasil ${boothLayout} foto sudah finish. Silakan download atau share.`;
   } else {
     boothStatus.textContent = remaining
@@ -1764,6 +1879,7 @@ function updateBoothStatus() {
       : `Foto lengkap. Tekan Finish untuk membuka download dan share.`;
   }
   renderShotTray();
+  updateCaptureButtonState();
 }
 
 function resetBooth() {
@@ -1784,9 +1900,7 @@ function retakeLastBoothShot() {
   markBoothDirty();
   if (boothShots.length) {
     renderBoothCanvas();
-    if (boothShots.length < boothLayout) {
-      cameraShell?.classList.remove("has-photo");
-    }
+    cameraShell?.classList.remove("has-photo");
   } else {
     cameraShell?.classList.remove("has-photo");
   }
@@ -1806,9 +1920,7 @@ function setBoothLayout(nextLayout) {
   });
   if (boothShots.length) {
     renderBoothCanvas();
-    if (boothShots.length < boothLayout) {
-      cameraShell?.classList.remove("has-photo");
-    }
+    cameraShell?.classList.remove("has-photo");
   } else {
     cameraShell?.classList.remove("has-photo");
   }
@@ -1854,9 +1966,7 @@ function setBoothFrame(nextFrame) {
   });
   if (boothShots.length) {
     renderBoothCanvas();
-    if (boothShots.length < boothLayout) {
-      cameraShell?.classList.remove("has-photo");
-    }
+    cameraShell?.classList.remove("has-photo");
   }
   updateBoothStatus();
 }
@@ -1870,9 +1980,7 @@ function setBoothFilter(nextFilter) {
   if (boothShots.length) {
     markBoothDirty();
     renderBoothCanvas();
-    if (boothShots.length < boothLayout) {
-      cameraShell?.classList.remove("has-photo");
-    }
+    cameraShell?.classList.remove("has-photo");
     renderShotTray();
     updateBoothStatus();
   }
@@ -1887,6 +1995,7 @@ function finishBooth() {
   photoCaptured = true;
   setBoothFinished(true);
   updateBoothStatus();
+  setBoothMobileStep("result");
 }
 
 function getPhotoBlob() {
