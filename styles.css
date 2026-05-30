@@ -246,11 +246,13 @@ body {
 }
 
 .tagline {
-  font-size: 28px;
+  font-size: clamp(24px, 5vw, 40px);
   font-weight: 700;
-  margin-bottom: 12px;
+  margin: -6px auto 8px;
   color: var(--text-strong);
   text-align: center;
+  line-height: 1.08;
+  animation: homeEnter 0.55s ease 0.04s both;
 }
 
 .intro {
@@ -262,7 +264,7 @@ body {
   line-height: 1.5;
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   font-weight: 800;
-  animation: homeEnter 0.55s ease 0.08s both;
+  animation: homeEnter 0.55s ease 0.12s both;
 }
 
 .home-menu-grid {
@@ -1494,6 +1496,7 @@ body {
 }
 
 .photobooth-page .booth-shutter,
+.photobooth-page .booth-camera-actions,
 .photobooth-page .booth-settings {
   animation: boothEnterUp 0.5s ease 0.36s both;
 }
@@ -1747,6 +1750,22 @@ body {
   display: block;
 }
 
+.camera-shell.has-photo {
+  width: min(100%, 360px);
+  aspect-ratio: var(--booth-output-ratio, 9 / 16);
+  max-height: min(72vh, 640px);
+}
+
+.camera-shell.has-photo[data-layout="3"] {
+  width: min(100%, 190px);
+  max-height: min(72vh, 570px);
+}
+
+.camera-shell.has-photo[data-layout="6"] {
+  width: min(100%, 300px);
+  max-height: min(72vh, 540px);
+}
+
 .booth-shutter {
   width: min(100%, 360px);
   min-height: 58px;
@@ -1809,6 +1828,18 @@ body {
 
 .take-dot.done {
   background: #3f9b5b;
+}
+
+.booth-camera-actions {
+  width: min(100%, 360px);
+  margin: -2px auto 14px;
+  align-items: center;
+}
+
+.booth-camera-actions .ghost,
+.booth-camera-actions .primary {
+  flex: 1 1 130px;
+  min-height: 44px;
 }
 
 .booth-shutter:hover {
@@ -1935,6 +1966,8 @@ body {
 
 .shot-tray {
   min-height: 100%;
+  max-height: 680px;
+  overflow: auto;
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.62);
   border: 1px solid rgba(255, 255, 255, 0.72);
@@ -1957,8 +1990,8 @@ body {
 
 .booth-frame-preview {
   position: relative;
-  width: min(100%, 340px);
-  aspect-ratio: 9 / 16;
+  width: min(100%, 300px);
+  aspect-ratio: var(--booth-output-ratio, 9 / 16);
   margin: 0 auto;
   overflow: hidden;
   border-radius: 14px;
@@ -1977,24 +2010,25 @@ body {
   opacity: 0.82;
 }
 
-.frame-title,
-.frame-tag {
+.booth-frame-preview[data-layout="3"] {
+  width: min(100%, 190px);
+}
+
+.booth-frame-preview[data-layout="6"] {
+  width: min(100%, 260px);
+}
+
+.frame-logo {
   position: absolute;
-  left: 18px;
-  right: 18px;
-  color: #fff;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-  letter-spacing: 0;
 }
 
-.frame-title {
-  top: 18px;
-  font-size: 22px;
-}
-
-.frame-tag {
-  bottom: 18px;
-  font-size: 12px;
+.frame-logo {
+  top: -8px;
+  right: -10px;
+  left: auto;
+  width: 132px;
+  height: auto;
+  filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.3));
 }
 
 .share-buttons {
@@ -2006,6 +2040,14 @@ body {
 
 .booth-action-row {
   align-items: center;
+}
+
+.booth-export-row {
+  display: none;
+}
+
+.booth-export-row.is-visible {
+  display: flex;
 }
 
 .finish-action:disabled,
@@ -2162,8 +2204,7 @@ body {
 
   body[data-page="photobooth"].booth-step-camera .photobooth-page .share-preview,
   body[data-page="photobooth"].booth-step-camera .booth-layout-switcher,
-  body[data-page="photobooth"].booth-step-camera .booth-camera-panel,
-  body[data-page="photobooth"].booth-step-camera .booth-action-row {
+  body[data-page="photobooth"].booth-step-camera .booth-camera-panel {
     display: flex;
   }
 
@@ -2181,6 +2222,10 @@ body {
     display: flex;
   }
 
+  body[data-page="photobooth"].booth-step-result .booth-export-row:not(.is-visible) {
+    display: none;
+  }
+
   body[data-page="photobooth"].booth-step-result .shot-tray {
     display: block;
   }
@@ -2188,6 +2233,7 @@ body {
   .camera-panel-head,
   .camera-shell,
   .booth-shutter,
+  .booth-camera-actions,
   .booth-settings {
     width: 100%;
   }
@@ -2216,6 +2262,11 @@ body {
     max-height: none;
     margin-bottom: 10px;
     border-radius: 18px;
+  }
+
+  .camera-shell.has-photo {
+    width: min(100%, 300px);
+    aspect-ratio: var(--booth-output-ratio, 9 / 16);
   }
 
   .booth-shutter {

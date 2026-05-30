@@ -713,8 +713,8 @@ let qrScanFrameId = null;
 async function startQRScanner() {
   if (qrScannerActive) return;
 
-  if (!("BarcodeDetector" in window)) {
-    alert("Browser ini belum mendukung pemindaian QR langsung. Coba buka lewat Chrome/Edge terbaru.");
+  if (!navigator.mediaDevices?.getUserMedia) {
+    alert("Kamera tidak bisa dibuka dari browser ini. Jalankan web lewat localhost atau HTTPS, lalu buka di Chrome/Edge terbaru.");
     return;
   }
   
@@ -728,7 +728,7 @@ async function startQRScanner() {
       <div class="scan-area"></div>
     </div>
     <button class="close-scanner" id="closeScannerBtn">Tutup Kamera</button>
-    <p style="color:white; margin-top:20px; text-align:center;">Arahkan QR Code ke tengah layar</p>
+    <p id="qrScannerHint" style="color:white; margin-top:20px; text-align:center;">Arahkan QR Code ke tengah layar</p>
   `;
   document.body.appendChild(overlay);
   
@@ -737,20 +737,56 @@ async function startQRScanner() {
   
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" }
+      video: {
+        facingMode: { ideal: "environment" },
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+      },
+      audio: false,
     });
     currentStream = stream;
     video.srcObject = stream;
     await video.play();
     qrScannerActive = true;
 
-    const detector = new BarcodeDetector({ formats: ["qr_code"] });
+    const fallbackCanvas = document.createElement("canvas");
+    const fallbackContext = fallbackCanvas.getContext("2d", { willReadFrequently: true });
+    const hasJsQrFallback = typeof window.jsQR === "function";
+    let detector = null;
+
+    if ("BarcodeDetector" in window) {
+      try {
+        detector = new BarcodeDetector({ formats: ["qr_code"] });
+      } catch (detectorError) {
+        console.warn("BarcodeDetector unavailable:", detectorError);
+      }
+    }
+
+    if (!detector && !hasJsQrFallback) {
+      alert("Scanner QR belum siap. Refresh halaman lalu coba lagi.");
+      stopQRScanner();
+      return;
+    }
+
     const scanLoop = async () => {
       if (!qrScannerActive) return;
       try {
         if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
-          const codes = await detector.detect(video);
-          const qrValue = codes?.[0]?.rawValue || "";
+          let qrValue = "";
+          if (detector) {
+            const codes = await detector.detect(video);
+            qrValue = codes?.[0]?.rawValue || "";
+          } else {
+            fallbackCanvas.width = video.videoWidth;
+            fallbackCanvas.height = video.videoHeight;
+            fallbackContext.drawImage(video, 0, 0, fallbackCanvas.width, fallbackCanvas.height);
+            const frame = fallbackContext.getImageData(0, 0, fallbackCanvas.width, fallbackCanvas.height);
+            const code = window.jsQR(frame.data, frame.width, frame.height, {
+              inversionAttempts: "attemptBoth",
+            });
+            qrValue = code?.data || "";
+          }
+
           if (qrValue) {
             handleQRSuccess(qrValue);
             stopQRScanner();
@@ -767,7 +803,10 @@ async function startQRScanner() {
     
   } catch (error) {
     console.error("Camera error:", error);
-    alert("Tidak dapat mengakses kamera. Pastikan izin kamera diberikan.");
+    const reason = location.protocol === "file:"
+      ? "Buka web lewat localhost, bukan langsung dari file HTML, supaya izin kamera aktif."
+      : "Pastikan izin kamera diberikan dan kamera tidak sedang dipakai aplikasi lain.";
+    alert(`Tidak dapat mengakses kamera. ${reason}`);
     stopQRScanner();
   }
   
@@ -1404,6 +1443,7 @@ function setBoothFinished(nextFinished) {
   document.querySelectorAll(".booth-export").forEach((button) => {
     button.hidden = !boothFinished;
   });
+  document.querySelector(".booth-export-row")?.classList.toggle("is-visible", boothFinished);
   finishBoothBtn?.toggleAttribute("disabled", boothShots.length < boothLayout || boothFinished);
   finishBoothBtn?.classList.toggle("is-disabled", boothShots.length < boothLayout || boothFinished);
 }
@@ -1488,12 +1528,18 @@ function drawBoothFrame(context, width, height) {
   context.fillStyle = colors.accent;
   context.fillRect(0, 0, width, topBand);
   context.fillRect(0, height - bottomBand, width, bottomBand);
-  context.fillStyle = colors.text;
-  context.textAlign = "center";
-  context.font = `700 ${Math.max(16, width * 0.05)}px Arial`;
-  context.fillText("SCOOPIFY PHOTOBOOTH", width / 2, topBand * 0.68);
-  context.font = `700 ${Math.max(14, width * 0.036)}px Arial`;
-  context.fillText("#PlayYourMood", width / 2, height - bottomBand * 0.38);
+}
+
+function getBoothOutputSize(layout = boothLayout) {
+  if (layout === 1) {
+    return { width: 900, height: 1200, ratio: "3 / 4" };
+  }
+
+  if (layout === 3) {
+    return { width: 720, height: 2160, ratio: "2 / 6" };
+  }
+
+  return { width: 1080, height: 1920, ratio: "9 / 16" };
 }
 
 function getSlotRects(width, height, count) {
@@ -1507,9 +1553,10 @@ function getSlotRects(width, height, count) {
   if (count === 1) {
     const slotWidth = usableWidth;
     const slotHeight = slotWidth * 0.75;
+    const slotY = header + (usableHeight - slotHeight) / 2 - usableHeight * 0.09;
     return [{
       x: margin,
-      y: header + (usableHeight - slotHeight) / 2,
+      y: slotY,
       w: slotWidth,
       h: slotHeight,
     }];
@@ -1571,10 +1618,13 @@ function renderShotTray() {
   const item = document.createElement("div");
   item.className = "booth-frame-preview";
   item.dataset.filled = String(boothShots.length > 0);
+  item.dataset.layout = String(boothLayout);
 
   const previewCanvas = document.createElement("canvas");
-  previewCanvas.width = 360;
-  previewCanvas.height = 640;
+  const previewSize = getBoothOutputSize();
+  item.style.aspectRatio = previewSize.ratio;
+  previewCanvas.width = previewSize.width;
+  previewCanvas.height = previewSize.height;
   previewCanvas.setAttribute("aria-label", "Preview sementara dengan frame aktif");
   drawBoothComposition(previewCanvas.getContext("2d"), previewCanvas.width, previewCanvas.height);
 
@@ -1618,13 +1668,14 @@ function renderBoothCanvas() {
   }
 
   const context = cameraCanvas.getContext("2d");
-  const width = 1080;
-  const height = 1920;
+  const { width, height, ratio } = getBoothOutputSize();
   cameraCanvas.width = width;
   cameraCanvas.height = height;
 
   drawBoothComposition(context, width, height);
 
+  if (cameraShell) cameraShell.dataset.layout = String(boothLayout);
+  cameraShell?.style.setProperty("--booth-output-ratio", ratio);
   cameraShell?.classList.add("has-photo");
   photoCaptured = true;
   return true;

@@ -24,6 +24,7 @@
       <div class="container">
         <div class="section-head">
           <h2>Photobooth Scoopify</h2>
+          <p class="tagline">Play Your Mood, Taste Your Scoop</p>
         </div>
         <div class="booth-mobile-steps" aria-label="Navigasi photobooth mobile">
           <button class="booth-step active" type="button" data-booth-step="frame">Frame</button>
@@ -82,8 +83,7 @@
                   <canvas id="cameraCanvas"></canvas>
                   <div class="booth-countdown" id="boothCountdown" hidden>3</div>
                   <div class="frame-overlay" id="frameOverlay">
-                    <div class="frame-title">SCOOPIFY</div>
-                    <div class="frame-tag">PLAY YOUR MOOD</div>
+                    <img class="frame-logo" src="assets/logo/scoopify.png" alt="Scoopify" />
                   </div>
                 </div>
 
@@ -92,6 +92,10 @@
                   <strong id="captureBtnText">Ambil Foto 1/1</strong>
                 </button>
                 <div class="booth-take-progress" id="boothTakeProgress" aria-label="Progress pengambilan foto"></div>
+                <div class="share-buttons booth-camera-actions">
+                  <button class="ghost" id="retakeBoothBtn" type="button">Retake</button>
+                  <button class="primary finish-action" id="finishBoothBtn" type="button">Finish</button>
+                </div>
 
                 <div class="booth-settings" aria-label="Setting kamera">
                   <label class="booth-toggle">
@@ -121,9 +125,7 @@
               </aside>
             </div>
 
-            <div class="share-buttons booth-action-row">
-              <button class="ghost" id="retakeBoothBtn" type="button">Retake</button>
-              <button class="primary finish-action" id="finishBoothBtn" type="button">Finish</button>
+            <div class="share-buttons booth-action-row booth-export-row">
               <button class="ghost booth-export" id="downloadFrameBtn" type="button" hidden>Download Hasil</button>
               <button class="ghost booth-export" id="shareBtn" type="button" hidden>Share</button>
             </div>
@@ -134,6 +136,7 @@
     </section>
   </div>
 
+  <script src="vendor/jsQR.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

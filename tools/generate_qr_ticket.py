@@ -4,6 +4,7 @@ import argparse
 import datetime as dt
 import os
 import random
+import secrets
 import string
 from pathlib import Path
 
@@ -290,8 +291,25 @@ def save_png(matrix, path, scale=14, border=4):
 
 def ticket_code():
     stamp = dt.datetime.now().strftime("%Y%m%d%H%M%S")
-    suffix = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(6))
+    suffix = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
     return f"SCOOPIFY-{stamp}-{suffix}"
+
+
+def ticket_code_batch(index):
+    suffix = secrets.token_hex(6).upper()
+    return f"SCOOPIFY-{index:03d}-{suffix}"
+
+
+def ticket_payload(url, token):
+    separator = "&" if "?" in url else "?"
+    return f"{url}{separator}ticket={token}"
+
+
+def save_ticket(url, token, out_dir):
+    payload = ticket_payload(url, token)
+    out_file = out_dir / f"{token}.png"
+    save_png(make_qr(payload), out_file)
+    return out_file, payload
 
 
 def main():
@@ -299,18 +317,33 @@ def main():
     parser.add_argument("--url", default="https://scoopify.local/photobooth.html", help="URL photobooth yang akan dibuka saat QR discan.")
     parser.add_argument("--token", default=None, help="Token tiket. Jika kosong, token otomatis dibuat.")
     parser.add_argument("--out", default="qr-tickets", help="Folder output PNG.")
+    parser.add_argument("--count", type=int, default=1, help="Jumlah tiket unik yang dibuat.")
     args = parser.parse_args()
 
-    token = args.token or ticket_code()
-    separator = "&" if "?" in args.url else "?"
-    payload = f"{args.url}{separator}ticket={token}"
+    if args.count < 1:
+        raise ValueError("--count minimal 1.")
+    if args.token and args.count > 1:
+        raise ValueError("--token hanya bisa dipakai untuk membuat 1 tiket.")
+
     out_dir = Path(args.out)
     out_dir.mkdir(parents=True, exist_ok=True)
-    out_file = out_dir / f"{token}.png"
-    save_png(make_qr(payload), out_file)
 
-    print(f"QR dibuat: {out_file}")
-    print(f"Payload: {payload}")
+    manifest = out_dir / "manifest.csv"
+    generated = []
+    for index in range(1, args.count + 1):
+        token = args.token or (ticket_code() if args.count == 1 else ticket_code_batch(index))
+        out_file, payload = save_ticket(args.url, token, out_dir)
+        generated.append((token, out_file, payload))
+
+    with manifest.open("w", encoding="utf-8") as file:
+        file.write("token,file,payload\n")
+        for token, out_file, payload in generated:
+            file.write(f"{token},{out_file.name},{payload}\n")
+
+    print(f"{len(generated)} QR dibuat di: {out_dir}")
+    print(f"Manifest: {manifest}")
+    if len(generated) == 1:
+        print(f"Payload: {generated[0][2]}")
 
 
 if __name__ == "__main__":
