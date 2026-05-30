@@ -9,6 +9,7 @@ import string
 from pathlib import Path
 
 from PIL import Image, ImageDraw
+import qrcode
 
 
 VERSION = 5
@@ -289,6 +290,19 @@ def save_png(matrix, path, scale=14, border=4):
     image.save(path)
 
 
+def save_standard_qr(payload, path):
+    qr = qrcode.QRCode(
+        version=None,
+        error_correction=qrcode.constants.ERROR_CORRECT_M,
+        box_size=14,
+        border=4,
+    )
+    qr.add_data(payload)
+    qr.make(fit=True)
+    image = qr.make_image(fill_color="black", back_color="white").convert("RGB")
+    image.save(path)
+
+
 def ticket_code():
     stamp = dt.datetime.now().strftime("%Y%m%d%H%M%S")
     suffix = "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
@@ -300,21 +314,24 @@ def ticket_code_batch(index):
     return f"SCOOPIFY-{index:03d}-{suffix}"
 
 
-def ticket_payload(url, token):
+def ticket_payload(url, token, mode="token"):
+    if mode == "token" or not url:
+        return token
     separator = "&" if "?" in url else "?"
     return f"{url}{separator}ticket={token}"
 
 
-def save_ticket(url, token, out_dir):
-    payload = ticket_payload(url, token)
+def save_ticket(url, token, out_dir, mode="token"):
+    payload = ticket_payload(url, token, mode)
     out_file = out_dir / f"{token}.png"
-    save_png(make_qr(payload), out_file)
+    save_standard_qr(payload, out_file)
     return out_file, payload
 
 
 def main():
     parser = argparse.ArgumentParser(description="Generate QR tiket mini game Scoopify.")
-    parser.add_argument("--url", default="https://scoopify.local/photobooth.html", help="URL photobooth yang akan dibuka saat QR discan.")
+    parser.add_argument("--url", default="", help="URL web yang akan dibuka saat QR discan jika --payload-mode=url.")
+    parser.add_argument("--payload-mode", choices=["token", "url"], default="token", help="Isi QR: token pendek untuk scanner app, atau URL lengkap dengan parameter ticket.")
     parser.add_argument("--token", default=None, help="Token tiket. Jika kosong, token otomatis dibuat.")
     parser.add_argument("--out", default="qr-tickets", help="Folder output PNG.")
     parser.add_argument("--count", type=int, default=1, help="Jumlah tiket unik yang dibuat.")
@@ -332,7 +349,7 @@ def main():
     generated = []
     for index in range(1, args.count + 1):
         token = args.token or (ticket_code() if args.count == 1 else ticket_code_batch(index))
-        out_file, payload = save_ticket(args.url, token, out_dir)
+        out_file, payload = save_ticket(args.url, token, out_dir, args.payload_mode)
         generated.append((token, out_file, payload))
 
     with manifest.open("w", encoding="utf-8") as file:
