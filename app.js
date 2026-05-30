@@ -262,6 +262,8 @@ const moodKnowledgeBase = {
 
 const photoboothUnlockKey = "scoopifyPhotoboothPremiumUnlocked";
 const usedGameTicketsKey = "scoopifyUsedGameTicketsV1";
+const gameTicketAttemptsKey = "scoopifyGameTicketAttemptsV1";
+const maxGameTriesPerTicket = 3;
 const gameRewardChances = [
   { type: "discount2000", chance: 0.06, title: "Potongan Rp2.000", note: "Langsung kurang bayar Rp2.000 di kasir." },
   { type: "discount1000", chance: 0.10, title: "Potongan Rp1.000", note: "Langsung kurang bayar Rp1.000 di kasir." },
@@ -297,9 +299,37 @@ function readUsedGameTickets() {
   }
 }
 
+function readGameTicketAttempts() {
+  try {
+    return JSON.parse(window.localStorage?.getItem(gameTicketAttemptsKey) || "{}");
+  } catch {
+    return {};
+  }
+}
+
+function getGameTicketAttempts(ticketToken) {
+  if (!ticketToken) return 0;
+  return Number(readGameTicketAttempts()[ticketToken] || 0);
+}
+
+function setGameTicketAttempts(ticketToken, nextAttempts) {
+  if (!ticketToken) return;
+  const attemptsByTicket = readGameTicketAttempts();
+  attemptsByTicket[ticketToken] = Math.max(0, Number(nextAttempts) || 0);
+  window.localStorage?.setItem(gameTicketAttemptsKey, JSON.stringify(attemptsByTicket));
+}
+
+function getCurrentTicketToken() {
+  return extractTicketToken(window.localStorage?.getItem("scoopifyLastQrTicket") || getTicketFromUrl());
+}
+
+function getRemainingGameTries(ticketToken = getCurrentTicketToken()) {
+  return Math.max(0, maxGameTriesPerTicket - getGameTicketAttempts(ticketToken));
+}
+
 function isGameTicketUsed(ticketToken) {
   if (!ticketToken) return false;
-  return readUsedGameTickets().includes(ticketToken);
+  return readUsedGameTickets().includes(ticketToken) || getRemainingGameTries(ticketToken) <= 0;
 }
 
 function markGameTicketUsed(ticketToken) {
@@ -360,7 +390,6 @@ const starsEl = document.getElementById("stars");
 const minutesEl = document.getElementById("minutes");
 const secondsEl = document.getElementById("seconds");
 const gameStatus = document.getElementById("gameStatus");
-const resetGameBtn = document.getElementById("resetGame");
 const skipGameBtn = document.getElementById("skipGameBtn");
 const gameGate = document.getElementById("gameGate");
 const gameGateTitle = document.getElementById("gameGateTitle");
@@ -1292,10 +1321,6 @@ function setGameGateContent(title, text, canStart) {
 }
 
 function syncGameModeLabels() {
-  if (resetGameBtn) {
-    resetGameBtn.textContent = "Reset Game";
-    resetGameBtn.disabled = !hasGameTicket();
-  }
   if (skipGameBtn) {
     skipGameBtn.textContent = "Lewati ke Photobooth";
     skipGameBtn.disabled = !hasGameTicket();
@@ -1318,6 +1343,7 @@ function updateGameGate() {
       "Scan tiket QR pada cup Scoopify untuk membuka mini game.",
       false
     );
+    if (startGameBtn) startGameBtn.textContent = "Mulai Game";
     return;
   }
 
@@ -1330,32 +1356,42 @@ function updateGameGate() {
         false
       );
     } else {
+      const remainingTries = getRemainingGameTries();
       setGameGateContent(
-        "Coba lagi",
-        "Reset game untuk mencoba lagi.",
-        false
+        remainingTries > 0 ? "Coba lagi" : "Kesempatan habis",
+        remainingTries > 0
+          ? `Masih ada ${remainingTries} kesempatan. Tekan Coba Lagi untuk mulai ulang.`
+          : "Tiket ini sudah habis untuk mini game. Photobooth tetap bisa dipakai.",
+        remainingTries > 0
       );
+      if (startGameBtn) startGameBtn.textContent = remainingTries > 0 ? "Coba Lagi" : "Kesempatan Habis";
     }
     return;
   }
 
   if (flowState.gameLocked) {
     gameGate.classList.remove("hidden");
+    const remainingTries = getRemainingGameTries();
     setGameGateContent(
-      "Waktu habis",
-      "Reset game untuk mencoba lagi.",
-      false
+      remainingTries > 0 ? "Coba lagi" : "Kesempatan habis",
+      remainingTries > 0
+        ? `Masih ada ${remainingTries} kesempatan. Tekan Coba Lagi untuk mulai ulang.`
+        : "Tiket ini sudah habis untuk mini game. Photobooth tetap bisa dipakai.",
+      remainingTries > 0
     );
+    if (startGameBtn) startGameBtn.textContent = remainingTries > 0 ? "Coba Lagi" : "Kesempatan Habis";
     return;
   }
 
   if (!flowState.gameStarted) {
     gameGate.classList.remove("hidden");
+    const remainingTries = getRemainingGameTries();
     setGameGateContent(
       "Siap main?",
-      "Cocokkan kartu dalam 30 detik. Nyawa kamu 3.",
-      true
+      `Cocokkan kartu dalam 30 detik. Kesempatan tiket ini: ${remainingTries}/${maxGameTriesPerTicket}.`,
+      remainingTries > 0
     );
+    if (startGameBtn) startGameBtn.textContent = remainingTries === maxGameTriesPerTicket ? "Mulai Game" : "Coba Lagi";
     return;
   }
 
@@ -1475,16 +1511,16 @@ function startOneQrGame() {
     return;
   }
 
-  const ticketToken = extractTicketToken(window.localStorage?.getItem("scoopifyLastQrTicket") || getTicketFromUrl());
+  const ticketToken = getCurrentTicketToken();
   if (isGameTicketUsed(ticketToken)) {
     flowState.qrScanned = false;
     updateGameGate();
     updateNavLinksState();
-    alert("QR ini sudah pernah dipakai untuk mini game. Photobooth tetap bisa digunakan.");
+    alert("Kesempatan mini game untuk QR ini sudah habis. Photobooth tetap bisa digunakan.");
     return;
   }
 
-  markGameTicketUsed(ticketToken);
+  setGameTicketAttempts(ticketToken, getGameTicketAttempts(ticketToken) + 1);
   resetGame();
   flowState.gameTokenUsed = true;
   flowState.gameStarted = true;
@@ -1492,7 +1528,8 @@ function startOneQrGame() {
   flowState.gameLocked = false;
   flowState.gameWon = false;
   updateGameGate();
-  if (gameStatus) gameStatus.textContent = "30 detik dimulai. Kamu punya 3 nyawa.";
+  const currentTry = getGameTicketAttempts(ticketToken);
+  if (gameStatus) gameStatus.textContent = `Ronde ${currentTry}/${maxGameTriesPerTicket}. 30 detik dimulai, nyawa 3.`;
   startTimer();
 }
 
@@ -1500,11 +1537,20 @@ function failGame(reason = "Waktu habis") {
   stopTimer();
   flowState.gameStarted = false;
   flowState.gameFinished = true;
-  flowState.gameLocked = true;
+  const ticketToken = getCurrentTicketToken();
+  const remainingTries = getRemainingGameTries(ticketToken);
+  flowState.gameLocked = remainingTries <= 0;
   flowState.gameWon = false;
   comparisonArray = [];
   document.querySelectorAll(".flipped").forEach((item) => item.classList.remove("flipped"));
-  if (gameStatus) gameStatus.textContent = `${reason}. Reset game untuk mencoba lagi.`;
+  if (remainingTries <= 0) {
+    markGameTicketUsed(ticketToken);
+  }
+  if (gameStatus) {
+    gameStatus.textContent = remainingTries > 0
+      ? `${reason}. Masih ada ${remainingTries} kesempatan.`
+      : `${reason}. Kesempatan mini game habis.`;
+  }
   if (skipGameBtn) skipGameBtn.disabled = !hasGameTicket();
   updateGameGate();
 }
@@ -1558,6 +1604,7 @@ function showWinMessage() {
   flowState.gameFinished = true;
   flowState.gameLocked = false;
   flowState.gameWon = true;
+  markGameTicketUsed(getCurrentTicketToken());
   const reward = pickGameReward();
   flowState.lastReward = reward;
   if (skipGameBtn) skipGameBtn.disabled = false;
@@ -1651,13 +1698,6 @@ if (memoryBoard) {
   syncGameModeLabels();
   memoryBoard.addEventListener("click", handleCardClick);
   updateGameGate();
-}
-
-if (resetGameBtn) {
-  resetGameBtn.addEventListener("click", () => {
-    resetGame();
-    updateGameGate();
-  });
 }
 
 startGameBtn?.addEventListener("click", startOneQrGame);
