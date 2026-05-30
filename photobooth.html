@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes" />
+  <title>Photobooth - Scoopify</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="theme-happy" data-page="photobooth">
+  <div class="app" id="app">
+    <nav class="desktop-nav">
+      <div class="nav-logo">
+        <img src="assets/logo/scoopify.png" alt="Scoopify" />
+      </div>
+      <div class="nav-links">
+        <a class="nav-link" href="index.html">Menu Utama</a>
+        <a class="nav-link" href="variants.html">Daftar Varian</a>
+        <a class="nav-link active" href="photobooth.html">Photobooth</a>
+        <a class="nav-link" href="chatbot.html">AI Chatbot</a>
+      </div>
+    </nav>
+
+    <section class="screen share photobooth-page" id="photobooth">
+      <div class="container">
+        <div class="section-head">
+          <h2>Photobooth Scoopify</h2>
+        </div>
+        <div class="booth-mobile-steps" aria-label="Navigasi photobooth mobile">
+          <button class="booth-step active" type="button" data-booth-step="frame">Frame</button>
+          <button class="booth-step" type="button" data-booth-step="camera">Kamera</button>
+          <button class="booth-step" type="button" data-booth-step="result">Hasil</button>
+        </div>
+        <div class="photobooth-shell">
+          <aside class="frame-sidebar" id="boothFrames" aria-label="Daftar frame photobooth">
+            <div class="frame-sidebar-head">
+              <span>Frame</span>
+              <small>Pilih gaya foto</small>
+            </div>
+            <button class="ghost small booth-scan-btn" id="scanBtn" type="button">Scan QR</button>
+            <p class="booth-lock-note" id="boothLockNote">Semua frame saat ini gratis.</p>
+            <div class="booth-frame-list">
+              <button class="booth-frame active free-frame" type="button" data-frame="basic" aria-label="Pilih frame gratis"></button>
+              <button class="booth-frame free-frame" type="button" data-frame="bubble" aria-label="Pilih frame gratis Bubble Pop"></button>
+              <button class="booth-frame free-frame" type="button" data-frame="heart" aria-label="Pilih frame gratis Heart Wink"></button>
+              <button class="booth-frame free-frame" type="button" data-frame="star" aria-label="Pilih frame gratis Star Rush"></button>
+              <button class="booth-frame free-frame" type="button" data-frame="retro" aria-label="Pilih frame gratis Retro Smile"></button>
+              <button class="booth-frame free-frame" type="button" data-frame="dream" aria-label="Pilih frame gratis Dream Cloud"></button>
+              <button class="booth-frame free-frame" type="button" data-frame="party" aria-label="Pilih frame gratis Party Splash"></button>
+            </div>
+          </aside>
+
+          <main class="booth-workspace">
+            <div class="share-preview" id="sharePreview">
+              <span>Scoopify Photobooth</span>
+              <small id="boothStatus">Pilih layout, buka kamera, lalu ambil foto.</small>
+            </div>
+
+            <div class="booth-layout-switcher" aria-label="Pilihan layout photobooth">
+              <button class="booth-layout active" type="button" data-layout="1">
+                <span>1</span>
+                <small>Foto</small>
+              </button>
+              <button class="booth-layout" type="button" data-layout="3">
+                <span>3</span>
+                <small>Foto</small>
+              </button>
+              <button class="booth-layout" type="button" data-layout="6">
+                <span>6</span>
+                <small>Foto</small>
+              </button>
+            </div>
+
+            <div class="booth-stage">
+              <div class="booth-camera-panel" id="boothCamera">
+                <div class="camera-panel-head">
+                  <span>Camera</span>
+                  <small id="boothProgressText">Foto 1 dari 1</small>
+                  <button class="camera-open-btn" id="openFilterBtn" type="button">Buka Kamera</button>
+                </div>
+                <div class="camera-shell">
+                  <video id="cameraVideo" playsinline autoplay muted></video>
+                  <canvas id="cameraCanvas"></canvas>
+                  <div class="booth-countdown" id="boothCountdown" hidden>3</div>
+                  <div class="frame-overlay" id="frameOverlay">
+                    <div class="frame-title">SCOOPIFY</div>
+                    <div class="frame-tag">PLAY YOUR MOOD</div>
+                  </div>
+                </div>
+
+                <button class="booth-shutter" id="captureBtn" type="button">
+                  <span class="shutter-dot"></span>
+                  <strong id="captureBtnText">Ambil Foto 1/1</strong>
+                </button>
+                <div class="booth-take-progress" id="boothTakeProgress" aria-label="Progress pengambilan foto"></div>
+
+                <div class="booth-settings" aria-label="Setting kamera">
+                  <label class="booth-toggle">
+                    <input id="mirrorToggle" type="checkbox" checked />
+                    <span>Mirror</span>
+                  </label>
+                  <label class="booth-slider">
+                    <span>Brightness</span>
+                    <input id="brightnessRange" type="range" min="70" max="140" value="100" />
+                    <output id="brightnessValue">100%</output>
+                  </label>
+                  <div class="booth-filter-controls" aria-label="Filter kamera">
+                    <button class="booth-filter active" type="button" data-filter="normal">Normal</button>
+                    <button class="booth-filter" type="button" data-filter="bnw">B&W</button>
+                    <button class="booth-filter" type="button" data-filter="nostalgia">Nostalgia</button>
+                    <button class="booth-filter" type="button" data-filter="rio">Rio</button>
+                  </div>
+                </div>
+              </div>
+
+              <aside class="shot-tray" id="boothResult" aria-label="Hasil foto sementara">
+                <div class="shot-tray-head">
+                  <span>Hasil sementara</span>
+                  <small id="shotCounter">0/1</small>
+                </div>
+                <div class="booth-shot-list" id="boothShotTray"></div>
+              </aside>
+            </div>
+
+            <div class="share-buttons booth-action-row">
+              <button class="ghost" id="retakeBoothBtn" type="button">Retake</button>
+              <button class="primary finish-action" id="finishBoothBtn" type="button">Finish</button>
+              <button class="ghost booth-export" id="downloadFrameBtn" type="button" hidden>Download Hasil</button>
+              <button class="ghost booth-export" id="shareBtn" type="button" hidden>Share</button>
+            </div>
+          </main>
+        </div>
+        <footer class="footer">Scoopify - Play Your Mood, Taste Your Scoop</footer>
+      </div>
+    </section>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

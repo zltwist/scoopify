@@ -1,71 +1,208 @@
-// Data mapping hasil AI
-const moodProfiles = {
-  relaxed: {
-    title: "YOU ARE FEELING RELAXED 🌙",
-    flavor: "Vanilla Lavender",
-    quote: "Take a slow breath and enjoy the calm.",
-    note: "Rasa lembut yang menenangkan tubuh dan pikiran.",
-    theme: "theme-relaxed",
-    image: "assets/menu/Vanilla.png",
-    description: "Vanilla dengan sentuhan lavender untuk suasana adem dan santai.",
-  },
-  excited: {
-    title: "YOU ARE FEELING EXCITED ✨",
-    flavor: "Strawberry Spark",
-    quote: "Let the sparkle lift your vibe even higher!",
-    note: "Manis cerah untuk mood yang lagi naik.",
+const flavorInventory = {
+  durian: true,
+  duren: true,
+  nangka: false,
+  vanila: true,
+  vanilla: true,
+  coklat: true,
+  stroberi: false,
+  taro: true,
+};
+
+const menuVariantCandidates = [
+  "Coklat + Vanila",
+  "Vanila + Taro",
+  "Coklat + Taro",
+  "Durian + Taro",
+  "Durian + Vanila",
+  "Vanila + Coklat",
+  "Taro + Coklat",
+  "Durian + Coklat",
+  "Durian",
+  "Vanila",
+  "Taro",
+  "Coklat",
+  "Taro + Duren",
+  "Taro + Vanila + Coklat",
+  "Taro + Vanila + Duren",
+  "Duren + Coklat + Vanila",
+  "Stroberi + Vanila",
+  "Stroberi + Coklat",
+  "Nangka + Vanila",
+  "Nangka + Durian",
+];
+
+const flavorSimilarity = {
+  stroberi: ["vanila", "coklat", "taro"],
+  nangka: ["durian", "vanila", "taro"],
+  durian: ["nangka", "taro", "coklat", "vanila"],
+  duren: ["nangka", "taro", "coklat", "vanila"],
+  vanila: ["taro", "coklat", "durian"],
+  vanilla: ["taro", "coklat", "durian"],
+  coklat: ["taro", "vanila", "durian"],
+  taro: ["vanila", "coklat", "durian"],
+};
+const flavorImages = {
+  durian: "assets/menu/Durian.png",
+  duren: "assets/menu/Durian.png",
+  nangka: "assets/menu/Nangka.png",
+  vanila: "assets/menu/Vanilla.png",
+  vanilla: "assets/menu/Vanilla.png",
+  coklat: "assets/menu/Coklat.png",
+  stroberi: "assets/menu/Stroberi.png",
+  taro: "assets/menu/Taro.svg",
+};
+
+const moodKnowledgeBase = {
+  jatuh_cinta: {
+    mood: "Jatuh Cinta",
+    nickname: "The Butterfly Effect",
+    vector: { energy: 5, emotional: 5, stress: 2, craving: 3 },
+    idealFlavor: "Stroberi + Vanila",
+    fallbackFlavor: "Vanila + Taro",
     theme: "theme-excited",
-    image: "assets/menu/Stroberi.png",
-    description: "Stroberi segar dengan vibes ceria, cocok untuk hari penuh energi.",
+    header: "Analisis selesai! Detak emosimu memancarkan frekuensi merah jambu. Kamu terdeteksi sedang Jatuh Cinta (The Butterfly Effect).",
+    rationale: "Lonjakan dopamin dan oksitosin membuat energi serta kebahagiaan berada di titik tinggi. Sistem membaca kebutuhan rasa romantis, manis, dan segar.",
+    bridge: "Karena pasokan stroberi sedang kosong, sistem mengalihkan formula ke alternatif aktif yang tetap creamy, manis, dan romantis.",
   },
-  burnout: {
-    title: "YOU ARE FEELING BURNOUT 🌧️",
-    flavor: "Chocolate Energy Boost",
-    quote: "Recharge gently, you are doing great.",
-    note: "Cokelat hangat untuk bantu recharge.",
-    theme: "theme-burnout",
-    image: "assets/menu/Coklat.png",
-    description: "Cokelat pekat yang menenangkan, pas untuk lelah yang butuh jeda.",
-  },
-  melancholy: {
-    title: "YOU ARE FEELING MELANCHOLY 💙",
-    flavor: "Durian Memories",
-    quote: "It is okay to feel it all, softly.",
-    note: "Rasa unik untuk mood mellow.",
-    theme: "theme-melancholy",
-    image: "assets/menu/Durian.png",
-    description: "Durian legit untuk menemani mood yang sedang sendu.",
-  },
-  nostalgic: {
-    title: "YOU ARE FEELING NOSTALGIC 🌞",
-    flavor: "Nangka Classic",
-    quote: "A sweet throwback to warm memories.",
-    note: "Rasa klasik yang mengingatkan masa kecil.",
-    theme: "theme-nostalgic",
-    image: "assets/menu/Nangka.png",
-    description: "Nangka manis tropis, pas untuk vibe nostalgia.",
-  },
-  happy: {
-    title: "YOU ARE FEELING HAPPY 😍",
-    flavor: "Strawberry Bliss",
-    quote: "Keep that smile shining!",
-    note: "Segar ceria untuk mood bahagia.",
+  bahagia: {
+    mood: "Bahagia / Senang",
+    nickname: "Sunshine On-The-Go",
+    vector: { energy: 4, emotional: 5, stress: 1, craving: 2 },
+    idealFlavor: "Coklat + Vanila",
+    fallbackFlavor: "Coklat + Taro",
     theme: "theme-happy",
-    image: "assets/menu/Stroberi.png",
-    description: "Stroberi lembut dengan rasa manis yang bikin mood makin cerah.",
+    header: "Hasil pemindaian getaran emosimu selesai! Kamu berada di fase Bahagia / Senang (Sunshine On-The-Go).",
+    rationale: "Emosi positif stabil dan rendah stres cocok dirayakan dengan kombinasi rasa legendaris yang creamy dan memuaskan.",
+  },
+  sedih_galau: {
+    mood: "Sedih / Galau",
+    nickname: "Cloudy with a Chance of Tears",
+    vector: { energy: 2, emotional: 2, stress: 3, craving: 1 },
+    idealFlavor: "Coklat + Taro",
+    fallbackFlavor: "Coklat + Vanila",
+    theme: "theme-galau",
+    header: "Hasil pemindaian getaran emosimu selesai! Sistem mendeteksi awan mendung sedang melintas di hatimu. Kamu berada di fase Sedih / Galau.",
+    rationale: "Saat serotonin menurun, tubuh cenderung mencari comfort food dengan rasa manis pekat untuk membantu memicu rasa nyaman.",
+  },
+  patah_hati: {
+    mood: "Patah Hati",
+    nickname: "The Heartbreak Club",
+    vector: { energy: 1, emotional: 1, stress: 4, craving: 1 },
+    idealFlavor: "Coklat",
+    fallbackFlavor: "Taro",
+    theme: "theme-burnout",
+    header: "Analisis selesai. Kamu berada di fase Patah Hati (The Heartbreak Club).",
+    rationale: "Energi turun dan stres emosional naik. Rasa coklat pekat dipilih sebagai comfort flavor yang bold dan menenangkan.",
+  },
+  bingung: {
+    mood: "Bingung / Overthinking",
+    nickname: "The Maze Runner",
+    vector: { energy: 3, emotional: 3, stress: 5, craving: 4 },
+    idealFlavor: "Durian + Taro",
+    fallbackFlavor: "Vanila + Taro",
+    theme: "theme-galau",
+    header: "Analisis selesai. Sistem mendeteksi pola Bingung / Overthinking (The Maze Runner).",
+    rationale: "Stres kognitif tinggi membutuhkan distraksi sensorik yang kompleks dan earthy untuk memutus pikiran yang berputar.",
+  },
+  rindu_nostalgia: {
+    mood: "Rindu / Nostalgia",
+    nickname: "Time Traveler",
+    vector: { energy: 3, emotional: 4, stress: 2, craving: 5 },
+    idealFlavor: "Nangka + Vanila",
+    fallbackFlavor: "Durian + Vanila",
+    theme: "theme-nostalgic",
+    header: "Analisis selesai. Kamu terdeteksi berada di fase Rindu / Nostalgia (Time Traveler).",
+    rationale: "Memori episodik sering cocok dengan rasa lokal yang kuat, autentik, dan familiar.",
+    bridge: "Karena nangka sedang sold out, AI mengalihkan rekomendasi ke Durian + Vanila yang sama-sama lokal, kuat, dan creamy.",
+  },
+  kecewa: {
+    mood: "Kecewa",
+    nickname: "The Bitter Truth",
+    vector: { energy: 2, emotional: 2, stress: 4, craving: 1 },
+    idealFlavor: "Taro + Coklat",
+    fallbackFlavor: "Vanila + Coklat",
+    theme: "theme-burnout",
+    header: "Analisis selesai. Sistem membaca mood Kecewa (The Bitter Truth).",
+    rationale: "Sedih dengan ketegangan internal membutuhkan rasa creamy padat dan manis-pahit sebagai soothing agent.",
+  },
+  grief: {
+    mood: "Grief / Berduka",
+    nickname: "The Midnight Rain",
+    vector: { energy: 1, emotional: 1, stress: 2, craving: 2 },
+    idealFlavor: "Vanila",
+    fallbackFlavor: "Taro",
+    theme: "theme-relaxed",
+    header: "Analisis selesai. Kamu berada di fase Grief / Berduka (The Midnight Rain).",
+    rationale: "Pada fase emotional numbness, indra perasa lebih aman menerima rasa yang murni, polos, lembut, dan netral.",
+  },
+  bittersweet: {
+    mood: "Senang tapi Sedih",
+    nickname: "The Rainy Sunset",
+    vector: { energy: 3, emotional: 3, stress: 3, craving: 3 },
+    idealFlavor: "Stroberi + Coklat",
+    fallbackFlavor: "Vanila + Coklat",
+    theme: "theme-melancholy",
+    header: "Analisis selesai. Sistem membaca emosi ambivalen: Senang tapi Sedih (The Rainy Sunset).",
+    rationale: "Dua kutub perasaan yang bertabrakan cocok dengan rasa kontras: segar, manis, dan pekat.",
+    bridge: "Karena stroberi sedang kosong, AI memilih Vanila + Coklat sebagai pengganti yang tetap memberi kontras lembut dan pekat.",
+  },
+  marah: {
+    mood: "Marah / Kesal",
+    nickname: "Volcanic Eruption",
+    vector: { energy: 5, emotional: 1, stress: 5, craving: 5 },
+    idealFlavor: "Durian + Coklat",
+    fallbackFlavor: "Durian",
+    theme: "theme-burnout",
+    header: "Analisis selesai. Sistem mendeteksi fase Marah / Kesal (Volcanic Eruption).",
+    rationale: "Amigdala yang over-stimulated butuh pengalihan rasa kuat, dominan, dan tajam untuk memusatkan ulang orientasi sensorik.",
+  },
+  cemas: {
+    mood: "Cemas / Gelisah",
+    nickname: "The Panic Room",
+    vector: { energy: 4, emotional: 2, stress: 5, craving: 2 },
+    idealFlavor: "Vanila + Taro",
+    fallbackFlavor: "Vanila",
+    theme: "theme-santai",
+    header: "Analisis selesai. Sistem membaca fase Cemas / Gelisah (The Panic Room).",
+    rationale: "Cemas berlebih cocok ditenangkan dengan rasa milky dan creamy-soft yang terasa aman di tubuh.",
+  },
+  bosan: {
+    mood: "Bosan / Jenuh",
+    nickname: "Stuck in Time",
+    vector: { energy: 2, emotional: 3, stress: 1, craving: 5 },
+    idealFlavor: "Nangka + Durian",
+    fallbackFlavor: "Durian + Taro",
+    theme: "theme-nostalgic",
+    header: "Analisis selesai. Kamu berada di fase Bosan / Jenuh (Stuck in Time).",
+    rationale: "Kurang stimulasi dopaminergik cocok dibangunkan dengan rasa tropis lokal yang tajam dan intens.",
+    bridge: "Karena nangka sedang kosong, AI mengalihkan ke Durian + Taro yang tetap unik, kuat, dan tersedia.",
   },
 };
 
-const gameDemoMode = true;
+const photoboothUnlockKey = "scoopifyPhotoboothPremiumUnlocked";
+const isPhotoboothPage = document.body?.dataset.page === "photobooth";
 
 function hasGameTicket() {
-  return gameDemoMode || flowState.qrScanned;
+  return flowState.qrScanned;
+}
+
+function getTicketFromUrl() {
+  return new URLSearchParams(window.location.search).get("ticket");
+}
+
+function hasPhotoboothPremiumAccess() {
+  return Boolean(getTicketFromUrl()) || window.localStorage?.getItem(photoboothUnlockKey) === "true";
+}
+
+if (getTicketFromUrl()) {
+  window.localStorage?.setItem(photoboothUnlockKey, "true");
 }
 
 // STATE UNTUK FLOW (Fleksibel)
 let flowState = {
   analyzed: false,      // Sudah analyze mood?
-  qrScanned: gameDemoMode, // Demo mode membuka game tanpa scan QR
+  qrScanned: Boolean(getTicketFromUrl()), // QR URL membuka game
   gameTokenUsed: false, // Satu QR hanya bisa mulai game satu kali
   gameStarted: false,
   gameFinished: false,
@@ -75,7 +212,7 @@ let flowState = {
 };
 
 // Urutan halaman
-const sectionOrder = ["welcome", "analyzer", "result", "flavor", "game", "reward"];
+const sectionOrder = ["welcome", "analyzer", "result", "game"];
 const publicMenuSections = ["welcome", "analyzer"];
 
 // DOM Elements
@@ -87,9 +224,14 @@ const resultFlavorName = document.getElementById("resultFlavorName");
 const resultMatch = document.getElementById("resultMatch");
 const resultNote = document.getElementById("resultNote");
 const matchFill = document.getElementById("matchFill");
-const detailImage = document.getElementById("detailImage");
-const detailFlavorName = document.getElementById("detailFlavorName");
-const detailDescription = document.getElementById("detailDescription");
+const resultVisual = document.getElementById("resultVisual") || resultImage?.closest(".result-visual");
+const resultCard = resultImage?.closest(".result-card");
+const orderBtn = document.getElementById("orderBtn");
+let resultStockStatus = null;
+let substitutionCard = null;
+let substitutionFlavorName = null;
+let substitutionNote = null;
+let substitutionActionBtn = null;
 
 // Game variables
 const memoryBoard = document.getElementById("memory-game");
@@ -108,20 +250,161 @@ const countdownEl = document.getElementById("countdown");
 
 // Slider configuration
 const sliderConfig = [
-  { key: "energy", input: "energyRange", value: "energyValue" },
-  { key: "stress", input: "stressRange", value: "stressValue" },
-  { key: "social", input: "socialRange", value: "socialValue" },
-  { key: "emotional", input: "emotionalRange", value: "emotionalValue" },
-  { key: "adventure", input: "adventureRange", value: "adventureValue" },
+  {
+    key: "energy",
+    input: "energyRange",
+    value: "energyValue",
+    labels: {
+      1: "🥱 Sangat Lemas",
+      2: "😪 Kurang Bertenaga",
+      3: "😐 Netral",
+      4: "🙂 Cukup Aktif",
+      5: "⚡ Hiperaktif",
+    },
+  },
+  {
+    key: "emotional",
+    input: "emotionalRange",
+    value: "emotionalValue",
+    labels: {
+      1: "😭 Sangat Buruk",
+      2: "🙁 Muram",
+      3: "😐 Datar",
+      4: "😊 Senang",
+      5: "💖 Euforia",
+    },
+  },
+  {
+    key: "stress",
+    input: "stressRange",
+    value: "stressValue",
+    labels: {
+      1: "🧘 Sangat Tenang",
+      2: "☕ Rileks",
+      3: "😐 Biasa Saja",
+      4: "😰 Gelisah",
+      5: "🤯 Overthinking",
+    },
+  },
+  {
+    key: "craving",
+    input: "adventureRange",
+    value: "adventureValue",
+    labels: {
+      1: "🍫 Bold Comforting",
+      2: "🥛 Creamy Milky",
+      3: "🥭 Acidic Fruity",
+      4: "🪵 Earthy Savory",
+      5: "👑 Pungent Intense",
+    },
+  },
 ];
 
 const sliders = sliderConfig.map((item) => ({
   key: item.key,
   input: document.getElementById(item.input),
   value: document.getElementById(item.value),
+  labels: item.labels,
 }));
 
 // ========== FUNGSI UTAMA ==========
+
+function normalizeHomeCopy() {
+  const startButton = document.querySelector('#welcome .cta-row button[data-target="analyzer"]');
+  const scanButton = document.getElementById("scanBtn");
+  if (startButton) startButton.textContent = "Mulai Cek Mood";
+  if (scanButton && !isPhotoboothPage) scanButton.textContent = "Scan QR";
+}
+
+function createResultElement(className, text = "") {
+  const element = document.createElement("p");
+  element.className = className;
+  element.textContent = text;
+  return element;
+}
+
+function configureLikertMoodUi() {
+  const socialInput = document.getElementById("socialRange");
+  socialInput?.closest(".range-row")?.remove();
+  const sectionCopy = document.querySelector("#analyzer .section-head p");
+  if (sectionCopy) {
+    sectionCopy.textContent = "Pilih emoticon yang paling menggambarkan kondisi kamu hari ini.";
+  }
+
+  const uiRows = [
+    { id: "energyRange", label: "Energy Level", hint: "🥱 😪 😐 🙂 ⚡" },
+    { id: "stressRange", label: "Stress / Anxiety Level", hint: "🧘 ☕ 😐 😰 🤯" },
+    { id: "emotionalRange", label: "Emotional Valence", hint: "😭 🙁 😐 😊 💖" },
+    { id: "adventureRange", label: "Craving Taste Profile", hint: "🍫 🥛 🥭 🪵 👑" },
+  ];
+
+  uiRows.forEach((item) => {
+    const input = document.getElementById(item.id);
+    const row = input?.closest(".range-row");
+    if (!input || !row) return;
+    input.min = "1";
+    input.max = "5";
+    input.step = "1";
+    input.value = "3";
+    input.hidden = true;
+    row.querySelector(".range-label").textContent = item.label;
+    row.querySelector(".range-emoji").textContent = item.hint;
+  });
+
+  sliders.forEach((slider) => {
+    const row = slider.input?.closest(".range-row");
+    if (!row || row.querySelector(".likert-options")) return;
+
+    const optionGroup = document.createElement("div");
+    optionGroup.className = "likert-options";
+    optionGroup.setAttribute("role", "radiogroup");
+    optionGroup.setAttribute("aria-label", row.querySelector(".range-label")?.textContent || slider.key);
+
+    Object.entries(slider.labels || {}).forEach(([value, label]) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "likert-option";
+      button.dataset.value = value;
+      button.setAttribute("role", "radio");
+      button.setAttribute("aria-label", label);
+      button.innerHTML = `<span>${label.split(" ")[0]}</span>`;
+      button.addEventListener("click", () => {
+        slider.input.value = value;
+        updateSliderValues();
+        applySliderPreview(slider);
+      });
+      optionGroup.appendChild(button);
+    });
+
+    row.appendChild(optionGroup);
+  });
+
+  resultStockStatus = resultFlavorName?.parentElement?.querySelector("#resultStockStatus");
+  if (!resultStockStatus && resultFlavorName) {
+    resultStockStatus = createResultElement("stock-status available", "AVAILABLE");
+    resultStockStatus.id = "resultStockStatus";
+    resultFlavorName.insertAdjacentElement("afterend", resultStockStatus);
+  }
+
+  substitutionCard = document.getElementById("substitutionCard");
+  if (!substitutionCard && resultNote) {
+    substitutionCard = document.createElement("div");
+    substitutionCard.className = "substitution-card";
+    substitutionCard.id = "substitutionCard";
+    substitutionCard.hidden = true;
+    substitutionCard.innerHTML = `
+      <p class="substitution-title">Rekomendasi Pengalihan AI</p>
+      <p class="flavor" id="substitutionFlavorName">Vanila + Taro</p>
+      <p class="note" id="substitutionNote">Alternatif stok aktif dengan profil rasa terdekat.</p>
+      <button class="primary substitution-action" id="substitutionActionBtn" type="button">Pesan Varian Alternatif Pilihan AI</button>
+    `;
+    resultNote.insertAdjacentElement("afterend", substitutionCard);
+  }
+  substitutionFlavorName = document.getElementById("substitutionFlavorName");
+  substitutionNote = document.getElementById("substitutionNote");
+  substitutionActionBtn = document.getElementById("substitutionActionBtn");
+
+}
 
 function readSliderValues() {
   const values = {};
@@ -134,28 +417,52 @@ function readSliderValues() {
 function updateSliderValues() {
   sliders.forEach((slider) => {
     if (slider.input && slider.value) {
-      slider.value.textContent = slider.input.value;
-      slider.input.style.setProperty("--range-progress", `${slider.input.value}%`);
+      const currentValue = Number(slider.input.value);
+      slider.value.textContent = `${currentValue} ${slider.labels?.[currentValue] || ""}`.trim();
+      slider.input.style.setProperty("--range-progress", `${((Number(slider.input.value) - 1) / 4) * 100}%`);
+      slider.input.closest(".range-row")?.querySelectorAll(".likert-option").forEach((button) => {
+        const isSelected = Number(button.dataset.value) === currentValue;
+        button.classList.toggle("active", isSelected);
+        button.setAttribute("aria-checked", String(isSelected));
+      });
     }
   });
 }
 
 function calculateMood(values) {
-  const { energy, stress, social, emotional, adventure } = values;
+  let bestKey = "bittersweet";
+  let bestDistance = Number.POSITIVE_INFINITY;
 
-  if (stress >= 70 && energy <= 35) return "burnout";
-  if (adventure >= 70 && energy >= 55) return "excited";
-  if (emotional >= 70 && social >= 60) return "happy";
-  if (emotional <= 30 && social <= 40) return "melancholy";
-  if (stress <= 35 && energy <= 45) return "relaxed";
-  if (social >= 70 && emotional >= 45) return "nostalgic";
-  if (emotional >= 60) return "happy";
-  return "relaxed";
+  Object.entries(moodKnowledgeBase).forEach(([key, profile]) => {
+    const distance = Math.sqrt(
+      (values.energy - profile.vector.energy) ** 2 +
+      (values.emotional - profile.vector.emotional) ** 2 +
+      (values.stress - profile.vector.stress) ** 2 +
+      (values.craving - profile.vector.craving) ** 2
+    );
+
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestKey = key;
+    }
+  });
+
+  return bestKey;
 }
 
-function calculateMatch(values) {
-  const balance = Math.round((values.energy + values.emotional + (100 - values.stress)) / 3);
-  return Math.min(98, Math.max(60, balance));
+function calculateMoodDistance(values, profile) {
+  return Math.sqrt(
+    (values.energy - profile.vector.energy) ** 2 +
+    (values.emotional - profile.vector.emotional) ** 2 +
+    (values.stress - profile.vector.stress) ** 2 +
+    (values.craving - profile.vector.craving) ** 2
+  );
+}
+
+function calculateMatch(values, profile = moodKnowledgeBase.bittersweet) {
+  const maxDistance = 8;
+  const distance = calculateMoodDistance(values, profile);
+  return Math.min(99, Math.max(55, Math.round(100 - (distance / maxDistance) * 100)));
 }
 
 function setBodyTheme(theme, extraClass = "") {
@@ -165,11 +472,106 @@ function setBodyTheme(theme, extraClass = "") {
     .join(" ");
 }
 
+function parseFlavorComponents(flavor) {
+  return flavor
+    .toLowerCase()
+    .split("+")
+    .map((item) => item.trim())
+    .map((item) => (item === "duren" ? "durian" : item))
+    .map((item) => (item === "vanilla" ? "vanila" : item))
+    .filter(Boolean);
+}
+
+function hasSoldOutFlavor(flavor) {
+  return parseFlavorComponents(flavor).some((item) => flavorInventory[item] === false);
+}
+
+function isFlavorAvailable(flavor) {
+  const components = parseFlavorComponents(flavor);
+  return Boolean(components.length) && components.every((item) => flavorInventory[item] !== false);
+}
+
+function scoreAlternativeFlavor(candidate, idealFlavor, fallbackFlavor) {
+  const candidateComponents = parseFlavorComponents(candidate);
+  const idealComponents = parseFlavorComponents(idealFlavor);
+  const fallbackComponents = parseFlavorComponents(fallbackFlavor);
+  let score = 0;
+
+  candidateComponents.forEach((component) => {
+    if (idealComponents.includes(component)) score += 8;
+    if (fallbackComponents.includes(component)) score += 5;
+    idealComponents.forEach((ideal) => {
+      if (flavorSimilarity[ideal]?.includes(component)) score += 3;
+    });
+    fallbackComponents.forEach((fallback) => {
+      if (flavorSimilarity[fallback]?.includes(component)) score += 2;
+    });
+  });
+
+  score -= Math.abs(candidateComponents.length - Math.max(1, fallbackComponents.length));
+  return score;
+}
+
+function findAvailableAlternative(idealFlavor, fallbackFlavor) {
+  const candidates = [fallbackFlavor, idealFlavor, ...menuVariantCandidates]
+    .filter(Boolean)
+    .filter((item, index, list) => list.indexOf(item) === index)
+    .filter(isFlavorAvailable);
+
+  return candidates.sort((a, b) => (
+    scoreAlternativeFlavor(b, idealFlavor, fallbackFlavor) - scoreAlternativeFlavor(a, idealFlavor, fallbackFlavor)
+  ))[0] || null;
+}
+
+function getFlavorImage(flavor, preferAvailable = true) {
+  const components = parseFlavorComponents(flavor);
+  const availableComponent = components.find((item) => flavorInventory[item] !== false);
+  const firstComponent = preferAvailable ? availableComponent || components[0] : components[0] || availableComponent;
+  return flavorImages[firstComponent] || flavorImages.vanila;
+}
+
+function buildRecommendation(profile) {
+  const soldOut = hasSoldOutFlavor(profile.idealFlavor);
+  const fallbackAvailable = isFlavorAvailable(profile.fallbackFlavor);
+  const resolvedFallback = fallbackAvailable
+    ? profile.fallbackFlavor
+    : findAvailableAlternative(profile.idealFlavor, profile.fallbackFlavor);
+  const selectedFlavor = soldOut ? resolvedFallback : profile.idealFlavor;
+  const hasAlternative = Boolean(selectedFlavor);
+  return {
+    mood: profile.mood,
+    nickname: profile.nickname,
+    title: profile.header,
+    quote: `${profile.mood} (${profile.nickname})`,
+    idealFlavor: profile.idealFlavor,
+    selectedFlavor,
+    fallbackFlavor: resolvedFallback || "Belum ada stok aktif",
+    hasAlternative,
+    soldOut,
+    status: soldOut ? "SOLD OUT / HABIS DI DEPO" : "AVAILABLE",
+    actionText: "Konfirmasi dan Pesan Sekarang",
+    substitutionActionText: "Pesan Varian Alternatif Pilihan AI",
+    image: getFlavorImage(selectedFlavor || profile.idealFlavor),
+    theme: profile.theme,
+    note: profile.rationale,
+    bridge: soldOut
+      ? fallbackAvailable
+        ? profile.bridge || "Karena salah satu komponen rasa ideal sedang kosong, sistem memilih cadangan stok aktif dengan profil terdekat."
+        : hasAlternative
+          ? `Cadangan utama juga sedang kosong, jadi AI memilih ${resolvedFallback} sebagai opsi paling dekat dari stok yang masih tersedia.`
+          : "Semua komponen stok aktif sedang kosong. Mohon update stok sebelum menerima pesanan."
+      : "",
+    description: soldOut
+      ? `${profile.rationale}\n\n${fallbackAvailable ? profile.bridge || "Karena salah satu komponen rasa ideal sedang kosong, sistem memilih cadangan stok aktif dengan profil terdekat." : hasAlternative ? `Cadangan utama juga sedang kosong, jadi AI memilih ${resolvedFallback} sebagai opsi paling dekat dari stok yang masih tersedia.` : "Semua komponen stok aktif sedang kosong. Mohon update stok sebelum menerima pesanan."}`
+      : profile.rationale,
+  };
+}
+
 function applySliderPreview(changedSlider) {
   if (!analyzeBtn) return;
   const values = readSliderValues();
   const moodKey = calculateMood(values);
-  const profile = moodProfiles[moodKey] || moodProfiles.relaxed;
+  const profile = moodKnowledgeBase[moodKey] || moodKnowledgeBase.bittersweet;
 
   setBodyTheme(profile.theme, "mood-preview");
 
@@ -192,30 +594,48 @@ function applySliderPreview(changedSlider) {
 
 function applyMoodResult(values) {
   const moodKey = calculateMood(values);
-  const profile = moodProfiles[moodKey] || moodProfiles.relaxed;
-  const match = calculateMatch(values);
+  const profile = moodKnowledgeBase[moodKey] || moodKnowledgeBase.bittersweet;
+  const recommendation = buildRecommendation(profile);
+  const match = calculateMatch(values, profile);
+  const distance = calculateMoodDistance(values, profile).toFixed(2);
 
-  if (moodTitle) moodTitle.textContent = profile.title;
-  if (moodQuote) moodQuote.textContent = profile.quote;
-  if (resultFlavorName) resultFlavorName.textContent = profile.flavor;
-  if (resultNote) resultNote.textContent = profile.note;
-  if (resultMatch) resultMatch.textContent = `Match: ${match}%`;
+  if (moodTitle) moodTitle.textContent = `${recommendation.mood} (${recommendation.nickname})`;
+  if (moodQuote) moodQuote.textContent = recommendation.title;
+  if (resultFlavorName) resultFlavorName.textContent = recommendation.idealFlavor;
+  if (resultStockStatus) {
+    resultStockStatus.textContent = recommendation.status;
+    resultStockStatus.classList.toggle("available", !recommendation.soldOut);
+    resultStockStatus.classList.toggle("sold-out", recommendation.soldOut);
+  }
+  resultCard?.classList.toggle("has-substitution", recommendation.soldOut);
+  if (resultVisual) resultVisual.classList.toggle("is-sold-out", recommendation.soldOut);
+  if (resultNote) resultNote.textContent = recommendation.note;
+  if (resultMatch) resultMatch.textContent = `${match}% match - distance ${distance}`;
   if (matchFill) matchFill.style.width = `${match}%`;
   if (resultImage) {
-    resultImage.src = profile.image;
-    resultImage.alt = profile.flavor;
+    resultImage.src = recommendation.soldOut
+      ? getFlavorImage(recommendation.idealFlavor, false)
+      : recommendation.image;
+    resultImage.alt = recommendation.soldOut ? recommendation.idealFlavor : recommendation.selectedFlavor;
   }
-  if (detailImage) {
-    detailImage.src = profile.image;
-    detailImage.alt = profile.flavor;
+  if (substitutionCard) substitutionCard.hidden = !recommendation.soldOut;
+  if (substitutionFlavorName) substitutionFlavorName.textContent = recommendation.fallbackFlavor;
+  if (substitutionNote) {
+    substitutionNote.textContent = recommendation.bridge || "Alternatif stok aktif dengan profil rasa terdekat dari knowledge base.";
   }
-  if (detailFlavorName) detailFlavorName.textContent = profile.flavor;
-  if (detailDescription) detailDescription.textContent = profile.description;
-
-  setBodyTheme(profile.theme);
+  if (substitutionActionBtn) {
+    substitutionActionBtn.hidden = !recommendation.soldOut || !recommendation.hasAlternative;
+    substitutionActionBtn.textContent = recommendation.substitutionActionText;
+  }
+  if (orderBtn) {
+    orderBtn.textContent = recommendation.actionText;
+    orderBtn.disabled = recommendation.soldOut;
+    orderBtn.classList.toggle("is-disabled", recommendation.soldOut);
+  }
+  setBodyTheme(recommendation.theme);
   
   // Simpan hasil mood
-  flowState.lastMoodResult = { moodKey, profile, match };
+  flowState.lastMoodResult = { moodKey, profile: recommendation, match };
 }
 
 // ========== SCROLL & NAVIGASI (FLEKSIBEL) ==========
@@ -247,8 +667,8 @@ function getMaxAllowedIndex() {
   if (flowState.gameWon) return sectionOrder.length - 1;
   // Setelah scan QR, akses sampai game
   if (hasGameTicket()) return sectionOrder.indexOf("game");
-  // Jika sudah analyze, bisa sampai flavor
-  if (flowState.analyzed) return sectionOrder.indexOf("flavor");
+  // Jika sudah analyze, bisa sampai result
+  if (flowState.analyzed) return sectionOrder.indexOf("result");
   // Belum apa-apa, cuma bisa welcome & analyzer
   return sectionOrder.indexOf("analyzer");
 }
@@ -264,23 +684,17 @@ function canNavigate(targetId) {
   // Result hanya jika sudah analyze
   if (targetId === "result") return flowState.analyzed;
   
-  // Flavor hanya jika sudah analyze
-  if (targetId === "flavor") return flowState.analyzed;
-  
   if (targetId === "game") return hasGameTicket();
-  if (targetId === "reward") return flowState.gameWon || hasGameTicket();
   
   return targetIndex <= maxAllowed;
 }
 
 function navigateWithRules(targetId) {
   if (!canNavigate(targetId)) {
-    if (!flowState.analyzed && (targetId === "result" || targetId === "flavor")) {
+    if (!flowState.analyzed && targetId === "result") {
       alert("✨ Selesaikan Mood Analyzer dulu ya! Geser slider dan klik 'Analyze Mood'.\n\nAtau scan QR untuk langsung main game!");
-    } else if (!hasGameTicket() && (targetId === "game" || targetId === "reward")) {
+    } else if (!hasGameTicket() && targetId === "game") {
       alert("📷 Scan tiket QR dulu! Klik tombol 'Scan QR' di halaman utama.\n\nTiket QR ada di cup es krim Scoopify kamu.");
-    } else if (targetId === "reward" && !hasGameTicket()) {
-      alert("Scan tiket QR dulu untuk membuka filter IG.");
     } else {
       alert("🚫 Belum bisa akses halaman ini. Ikuti alur yang benar ya!");
     }
@@ -294,9 +708,15 @@ function navigateWithRules(targetId) {
 
 let qrScannerActive = false;
 let currentStream = null;
+let qrScanFrameId = null;
 
 async function startQRScanner() {
   if (qrScannerActive) return;
+
+  if (!("BarcodeDetector" in window)) {
+    alert("Browser ini belum mendukung pemindaian QR langsung. Coba buka lewat Chrome/Edge terbaru.");
+    return;
+  }
   
   // Buat overlay scanner
   const overlay = document.createElement("div");
@@ -323,17 +743,27 @@ async function startQRScanner() {
     video.srcObject = stream;
     await video.play();
     qrScannerActive = true;
-    
-    // Simulasi scan QR (karena library QR code butuh external)
-    // Untuk demo, setelah 3 detik dianggap scan berhasil
-    const scanTimeout = setTimeout(() => {
-      if (qrScannerActive) {
-        handleQRSuccess();
-        stopQRScanner();
+
+    const detector = new BarcodeDetector({ formats: ["qr_code"] });
+    const scanLoop = async () => {
+      if (!qrScannerActive) return;
+      try {
+        if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+          const codes = await detector.detect(video);
+          const qrValue = codes?.[0]?.rawValue || "";
+          if (qrValue) {
+            handleQRSuccess(qrValue);
+            stopQRScanner();
+            return;
+          }
+        }
+      } catch (scanError) {
+        console.error("QR scan error:", scanError);
       }
-    }, 3000);
-    
-    window.__qrScanTimeout = scanTimeout;
+      qrScanFrameId = window.requestAnimationFrame(scanLoop);
+    };
+
+    scanLoop();
     
   } catch (error) {
     console.error("Camera error:", error);
@@ -347,8 +777,9 @@ async function startQRScanner() {
 }
 
 function stopQRScanner() {
-  if (window.__qrScanTimeout) {
-    clearTimeout(window.__qrScanTimeout);
+  if (qrScanFrameId) {
+    window.cancelAnimationFrame(qrScanFrameId);
+    qrScanFrameId = null;
   }
   if (currentStream) {
     currentStream.getTracks().forEach(track => track.stop());
@@ -359,17 +790,27 @@ function stopQRScanner() {
   qrScannerActive = false;
 }
 
-function handleQRSuccess() {
+function handleQRSuccess(ticketValue = "") {
   // Tiket QR berhasil dipindai.
   flowState.qrScanned = true;
+  if (ticketValue) {
+    window.localStorage?.setItem("scoopifyLastQrTicket", ticketValue);
+  }
+  window.localStorage?.setItem(photoboothUnlockKey, "true");
   flowState.gameTokenUsed = false;
   flowState.gameStarted = false;
   flowState.gameFinished = false;
   flowState.gameLocked = false;
   flowState.gameWon = false;
   resetGame();
+  syncGameModeLabels();
   updateGameGate();
-  alert("✅ Tiket QR berhasil di-scan! Kamu sekarang bisa mengakses Mini Game.\n\nSelesaikan game dalam 15 detik untuk membuka reward.");
+  updatePremiumFrameState();
+  if (isPhotoboothPage) {
+    alert("Frame lucu berhasil dibuka. Kamu sekarang bisa pakai semua frame photobooth.");
+    return;
+  }
+  alert("Tiket QR terbaca. Mini game sudah terbuka.");
   
   // Update tampilan tombol navigasi
   updateNavLinksState();
@@ -423,28 +864,19 @@ tryAgainBtn?.addEventListener("click", () => {
 });
 
 // Order / Back to Home button
-const orderBtn = document.getElementById("orderBtn");
 orderBtn?.addEventListener("click", () => {
   navigateWithRules("welcome");
 });
 
-// To Game button (di halaman flavor)
-const toGameBtn = document.getElementById("toGameBtn");
-toGameBtn?.addEventListener("click", () => {
-  if (!hasGameTicket()) {
-    alert("📷 Scan tiket QR dulu! Klik tombol 'Scan QR' di halaman utama.\n\nTiket QR ada di cup es krim Scoopify kamu.");
-    return;
+document.addEventListener("click", (event) => {
+  if (event.target?.id === "substitutionActionBtn") {
+    navigateWithRules("welcome");
   }
-  navigateWithRules("game");
 });
 
 // Skip Game button
 skipGameBtn?.addEventListener("click", () => {
-  if (!hasGameTicket()) {
-    alert("Scan tiket QR dulu untuk membuka filter IG.");
-    return;
-  }
-  navigateWithRules("reward");
+  window.location.href = "photobooth.html";
 });
 
 // Scan QR button (di halaman welcome) - BISA LANGSUNG, TANPA SYARAT!
@@ -456,7 +888,8 @@ scanBtn?.addEventListener("click", () => {
 
 // Navigasi buttons dengan data-target
 document.querySelectorAll("[data-target]").forEach(btn => {
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", (event) => {
+    event.preventDefault();
     const target = btn.dataset.target;
     navigateWithRules(target);
   });
@@ -496,16 +929,25 @@ window.addEventListener("scroll", () => {
 
 // Desktop nav visibility
 const desktopNav = document.querySelector(".desktop-nav");
+const appScrollRoot = document.querySelector(".app");
 let touchStartY = 0;
 let navRevealTimeout = null;
+let lastMobileScrollTop = 0;
 
 function revealMobileNav() {
   if (!desktopNav || window.innerWidth > 767) return;
+  desktopNav.classList.remove("mobile-hidden");
   desktopNav.classList.add("mobile-revealed");
   window.clearTimeout(navRevealTimeout);
   navRevealTimeout = window.setTimeout(() => {
     desktopNav.classList.remove("mobile-revealed");
   }, 2600);
+}
+
+function hideMobileNav() {
+  if (!desktopNav || window.innerWidth > 767) return;
+  desktopNav.classList.remove("mobile-revealed");
+  desktopNav.classList.add("mobile-hidden");
 }
 
 window.addEventListener("scroll", () => {
@@ -518,6 +960,28 @@ window.addEventListener("scroll", () => {
     }
   }
 });
+
+function handleMobileNavByScroll(scrollTop) {
+  if (!desktopNav || window.innerWidth > 767) return;
+  const goingDown = scrollTop > lastMobileScrollTop + 8;
+  const goingUp = scrollTop < lastMobileScrollTop - 8;
+
+  if (scrollTop <= 8 || goingUp) {
+    revealMobileNav();
+  } else if (goingDown) {
+    hideMobileNav();
+  }
+
+  lastMobileScrollTop = Math.max(0, scrollTop);
+}
+
+appScrollRoot?.addEventListener("scroll", () => {
+  handleMobileNavByScroll(appScrollRoot.scrollTop);
+}, { passive: true });
+
+window.addEventListener("scroll", () => {
+  handleMobileNavByScroll(window.scrollY);
+}, { passive: true });
 
 window.addEventListener("touchstart", (event) => {
   touchStartY = event.touches[0]?.clientY || 0;
@@ -532,14 +996,22 @@ window.addEventListener("touchend", (event) => {
 }, { passive: true });
 
 // ========== MINI GAME MEMORY CARD ==========
-const cardArray = ["vanilla", "vanilla", "stroberi", "stroberi", "coklat", "coklat", "durian", "durian", "nangka", "nangka"];
+const cardArray = [
+  "vanilla", "vanilla",
+  "taro", "taro",
+  "coklat", "coklat",
+  "durian", "durian",
+  "coklat-vanilla", "coklat-vanilla",
+  "taro-duren", "taro-duren",
+];
 let comparisonArray = [];
 let attempts = 0;
+let lives = 3;
 let clickCount = 0;
 let pairs = 0;
 let totalSeconds = 0;
 let timerId = null;
-const gameTimeLimit = 15;
+const gameTimeLimit = 30;
 
 function setGameGateContent(title, text, canStart) {
   if (gameGateTitle) gameGateTitle.textContent = title;
@@ -549,26 +1021,17 @@ function setGameGateContent(title, text, canStart) {
 
 function syncGameModeLabels() {
   if (resetGameBtn) {
-    resetGameBtn.textContent = gameDemoMode ? "Reset Demo" : "1x per Tiket";
-    resetGameBtn.disabled = !gameDemoMode;
+    resetGameBtn.textContent = "Reset Game";
+    resetGameBtn.disabled = !hasGameTicket();
   }
   if (skipGameBtn) {
-    skipGameBtn.textContent = "Lewati ke Filter IG";
+    skipGameBtn.textContent = "Lewati ke Photobooth";
     skipGameBtn.disabled = !hasGameTicket();
-  }
-
-  if (gameDemoMode) {
-    setGameGateContent(
-      "Demo Mode",
-      "Cocokkan semua pasangan kartu dalam 15 detik untuk membuka reward.",
-      true
-    );
-    return;
   }
 
   setGameGateContent(
     "Game terkunci",
-    "Scan tiket QR pada cup Scoopify untuk membuka mini game. Setiap tiket hanya punya satu kesempatan main.",
+    "Scan tiket QR pada cup Scoopify untuk membuka mini game.",
     false
   );
 }
@@ -576,21 +1039,11 @@ function syncGameModeLabels() {
 function updateGameGate() {
   if (!gameGate) return;
 
-  if (gameDemoMode && !flowState.gameStarted && !flowState.gameFinished) {
-    gameGate.classList.remove("hidden");
-    setGameGateContent(
-      "Demo Mode",
-      "Cocokkan semua pasangan kartu dalam 15 detik untuk membuka reward.",
-      true
-    );
-    return;
-  }
-
   if (!flowState.qrScanned) {
     gameGate.classList.remove("hidden");
     setGameGateContent(
       "Game terkunci",
-      "Scan tiket QR pada cup Scoopify untuk membuka mini game. Setiap tiket hanya punya satu kesempatan main.",
+      "Scan tiket QR pada cup Scoopify untuk membuka mini game.",
       false
     );
     return;
@@ -600,15 +1053,15 @@ function updateGameGate() {
     gameGate.classList.remove("hidden");
     if (flowState.gameWon) {
       setGameGateContent(
-        "Reward terbuka",
-        "Kamu berhasil menyelesaikan game. Lanjut ke halaman reward untuk klaim hadiah.",
+        "Topping terbuka",
+        "Kamu menang. Bebas pilih topping yang tersedia.",
         false
       );
     } else {
       setGameGateContent(
-        gameDemoMode ? "Waktu habis" : "Kesempatan QR sudah selesai",
-        gameDemoMode ? "Kamu belum menyelesaikan game dalam 15 detik. Reset demo untuk mencoba lagi." : "Tiket ini sudah dipakai. Scan tiket produk lain untuk membuka kesempatan game baru.",
-        gameDemoMode
+        "Coba lagi",
+        "Reset game untuk mencoba lagi.",
+        false
       );
     }
     return;
@@ -618,8 +1071,8 @@ function updateGameGate() {
     gameGate.classList.remove("hidden");
     setGameGateContent(
       "Waktu habis",
-      gameDemoMode ? "Kamu belum menyelesaikan game dalam 15 detik. Reset demo untuk mencoba lagi." : "Kamu belum menyelesaikan game dalam 15 detik. Scan tiket produk lain untuk mencoba lagi.",
-      gameDemoMode
+      "Reset game untuk mencoba lagi.",
+      false
     );
     return;
   }
@@ -628,7 +1081,7 @@ function updateGameGate() {
     gameGate.classList.remove("hidden");
     setGameGateContent(
       "Siap main?",
-      gameDemoMode ? "Cocokkan semua pasangan kartu dalam 15 detik." : "Cocokkan semua pasangan kartu dalam 15 detik. Tombol mulai hanya bisa dipakai satu kali untuk tiket ini.",
+      "Cocokkan kartu dalam 30 detik. Nyawa kamu 3.",
       true
     );
     return;
@@ -651,6 +1104,8 @@ function shuffle(array) {
 
 function updateStars() {
   if (!starsEl) return;
+  starsEl.textContent = Array.from({ length: 3 }, (_, index) => (index < lives ? "♥" : "♡")).join(" ");
+  return;
   if (attempts > 32) {
     starsEl.textContent = "☆ ☆ ☆";
   } else if (attempts >= 24) {
@@ -692,7 +1147,7 @@ function flipCard(element) {
 
 function recordAttempts() {
   attempts += 1;
-  if (attemptsEl) attemptsEl.textContent = attempts;
+  if (attemptsEl) attemptsEl.textContent = String(lives);
   updateStars();
 }
 
@@ -722,24 +1177,22 @@ function createBoard() {
 function resetGame() {
   comparisonArray = [];
   attempts = 0;
+  lives = 3;
   clickCount = 0;
   pairs = 0;
   totalSeconds = 0;
-  if (gameDemoMode) {
-    flowState.qrScanned = true;
-    flowState.gameTokenUsed = false;
-    flowState.gameStarted = false;
-    flowState.gameFinished = false;
-    flowState.gameLocked = false;
-    flowState.gameWon = false;
-  }
-  if (attemptsEl) attemptsEl.textContent = "0";
+  flowState.gameTokenUsed = false;
+  flowState.gameStarted = false;
+  flowState.gameFinished = false;
+  flowState.gameLocked = false;
+  flowState.gameWon = false;
+  if (attemptsEl) attemptsEl.textContent = String(lives);
   if (minutesEl) minutesEl.textContent = "00";
   if (secondsEl) secondsEl.textContent = "00";
   if (countdownEl) countdownEl.textContent = String(gameTimeLimit);
   if (skipGameBtn) skipGameBtn.disabled = !hasGameTicket();
   updateStars();
-  if (gameStatus) gameStatus.textContent = gameDemoMode ? "Demo siap. Tekan Mulai Game." : "Scan tiket QR, baca instruksi, lalu mulai game.";
+  if (gameStatus) gameStatus.textContent = hasGameTicket() ? "Game siap. Tekan Mulai Game." : "Scan tiket QR dulu untuk membuka game.";
   stopTimer();
   createBoard();
 }
@@ -750,23 +1203,18 @@ function startOneQrGame() {
     return;
   }
 
-  if (!gameDemoMode && (flowState.gameTokenUsed || flowState.gameFinished || flowState.gameLocked)) {
-    alert("Kesempatan untuk tiket ini sudah dipakai. Scan tiket produk lain untuk main lagi.");
-    return;
-  }
-
   resetGame();
-  flowState.gameTokenUsed = !gameDemoMode;
+  flowState.gameTokenUsed = true;
   flowState.gameStarted = true;
   flowState.gameFinished = false;
   flowState.gameLocked = false;
   flowState.gameWon = false;
   updateGameGate();
-  if (gameStatus) gameStatus.textContent = "15 detik dimulai. Cocokkan semua kartu!";
+  if (gameStatus) gameStatus.textContent = "30 detik dimulai. Kamu punya 3 nyawa.";
   startTimer();
 }
 
-function failGame() {
+function failGame(reason = "Waktu habis") {
   stopTimer();
   flowState.gameStarted = false;
   flowState.gameFinished = true;
@@ -774,7 +1222,7 @@ function failGame() {
   flowState.gameWon = false;
   comparisonArray = [];
   document.querySelectorAll(".flipped").forEach((item) => item.classList.remove("flipped"));
-  if (gameStatus) gameStatus.textContent = gameDemoMode ? "Waktu habis. Reset demo untuk mencoba lagi." : "Waktu habis. Kesempatan tiket ini gugur.";
+  if (gameStatus) gameStatus.textContent = `${reason}. Reset game untuk mencoba lagi.`;
   if (skipGameBtn) skipGameBtn.disabled = !hasGameTicket();
   updateGameGate();
 }
@@ -793,9 +1241,16 @@ function showWinMessage() {
     <div class="message-box">
       <h3>🎉 Congrats!</h3>
       <p>Kamu menemukan semua pasangan kartu.</p>
-      <p>Attempts: ${attempts}</p>
+      <p>Nyawa tersisa: ${lives}</p>
       <p>Time: ${minutesEl?.textContent || "00"}:${secondsEl?.textContent || "00"}</p>
       <p>🎁 Kamu mendapat TOPPING GRATIS!</p>
+      <button id="closeWin">OK</button>
+    </div>
+  `;
+  overlay.innerHTML = `
+    <div class="message-box">
+      <h3>Yeay, menang!</h3>
+      <p>Bebas pilih topping yang tersedia.</p>
       <button id="closeWin">OK</button>
     </div>
   `;
@@ -834,6 +1289,7 @@ function handleCardClick(event) {
     if (pairs === cardArray.length / 2) {
       stopTimer();
       if (gameStatus) gameStatus.textContent = "🎉 Kamu dapat reward topping tambahan!";
+      if (gameStatus) gameStatus.textContent = "Menang. Bebas pilih topping yang tersedia.";
       showWinMessage();
     }
     return;
@@ -841,8 +1297,16 @@ function handleCardClick(event) {
 
   setTimeout(() => {
     document.querySelectorAll(".flipped").forEach((item) => item.classList.remove("flipped"));
+    lives = Math.max(0, lives - 1);
+    if (attemptsEl) attemptsEl.textContent = String(lives);
+    updateStars();
     comparisonArray = [];
     clickCount = 0;
+    if (lives <= 0) {
+      failGame("Nyawa habis");
+      return;
+    }
+    if (gameStatus) gameStatus.textContent = `Belum cocok. Sisa nyawa ${lives}.`;
   }, 800);
 }
 
@@ -862,16 +1326,92 @@ if (resetGameBtn) {
 
 startGameBtn?.addEventListener("click", startOneQrGame);
 
-// ========== CAMERA FILTER DEMO ==========
+// ========== PHOTOBOOTH ==========
 const cameraVideo = document.getElementById("cameraVideo");
 const cameraCanvas = document.getElementById("cameraCanvas");
 const openFilterBtn = document.getElementById("openFilterBtn");
 const captureBtn = document.getElementById("captureBtn");
+const retakeBoothBtn = document.getElementById("retakeBoothBtn");
+const finishBoothBtn = document.getElementById("finishBoothBtn");
 const downloadFrameBtn = document.getElementById("downloadFrameBtn");
 const shareBtn = document.getElementById("shareBtn");
+const boothStatus = document.getElementById("boothStatus");
+const boothCountdown = document.getElementById("boothCountdown");
+const boothShotTray = document.getElementById("boothShotTray");
+const shotCounter = document.getElementById("shotCounter");
+const boothProgressText = document.getElementById("boothProgressText");
+const captureBtnText = document.getElementById("captureBtnText");
+const boothTakeProgress = document.getElementById("boothTakeProgress");
+const mirrorToggle = document.getElementById("mirrorToggle");
+const brightnessRange = document.getElementById("brightnessRange");
+const brightnessValue = document.getElementById("brightnessValue");
+const boothStepButtons = Array.from(document.querySelectorAll(".booth-step"));
+const boothFilterButtons = Array.from(document.querySelectorAll(".booth-filter"));
+const boothLayoutButtons = Array.from(document.querySelectorAll(".booth-layout"));
+const boothFrameButtons = Array.from(document.querySelectorAll(".booth-frame"));
 const cameraShell = cameraVideo?.closest(".camera-shell");
 let filterStream = null;
 let photoCaptured = false;
+let boothLayout = 1;
+let boothShots = [];
+let boothFrame = "basic";
+let boothMirror = true;
+let boothBrightness = 100;
+let boothFilter = "normal";
+let boothFinished = false;
+let boothCapturing = false;
+
+function setBoothMobileStep(nextStep) {
+  const step = ["frame", "camera", "result"].includes(nextStep) ? nextStep : "frame";
+  document.body.classList.remove("booth-step-frame", "booth-step-camera", "booth-step-result");
+  document.body.classList.add(`booth-step-${step}`);
+  boothStepButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.boothStep === step);
+  });
+}
+
+const boothFrameProfiles = {
+  basic: { label: "Clean Pop", bg: "#f7e8ff", accent: "#9d7cff", text: "#332457", premium: false },
+  bubble: { label: "Bubble Pop", bg: "#ddf7ff", accent: "#47a7c9", text: "#173849", premium: false },
+  heart: { label: "Heart Wink", bg: "#ffe1ec", accent: "#e85287", text: "#4a1026", premium: false },
+  star: { label: "Star Rush", bg: "#fff3b8", accent: "#e0a51f", text: "#3d2b05", premium: false },
+  retro: { label: "Retro Smile", bg: "#e7f0d2", accent: "#4e8a64", text: "#173a27", premium: false },
+  dream: { label: "Dream Cloud", bg: "#eee7ff", accent: "#7f62ce", text: "#2e2352", premium: false },
+  party: { label: "Party Splash", bg: "#ffe7c8", accent: "#eb6f48", text: "#4a2014", premium: false },
+};
+
+const boothFilterProfiles = {
+  normal: { label: "Normal", canvas: "" },
+  bnw: { label: "B&W", canvas: "grayscale(1) contrast(1.08)" },
+  nostalgia: { label: "Nostalgia", canvas: "sepia(0.55) contrast(1.08) saturate(0.82) brightness(1.04)" },
+  rio: { label: "Rio de Janeiro", canvas: "saturate(1.45) contrast(1.12) hue-rotate(-8deg) brightness(1.06)" },
+};
+
+function getCameraFilterValue() {
+  const colorFilter = boothFilterProfiles[boothFilter]?.canvas || "";
+  return [`brightness(${boothBrightness}%)`, colorFilter].filter(Boolean).join(" ");
+}
+
+function applyCameraPreviewSettings() {
+  if (!cameraVideo) return;
+  cameraVideo.style.transform = boothMirror ? "scaleX(-1)" : "none";
+  cameraVideo.style.filter = getCameraFilterValue();
+  if (brightnessValue) brightnessValue.textContent = `${boothBrightness}%`;
+}
+
+function setBoothFinished(nextFinished) {
+  boothFinished = Boolean(nextFinished);
+  document.querySelectorAll(".booth-export").forEach((button) => {
+    button.hidden = !boothFinished;
+  });
+  finishBoothBtn?.toggleAttribute("disabled", boothShots.length < boothLayout || boothFinished);
+  finishBoothBtn?.classList.toggle("is-disabled", boothShots.length < boothLayout || boothFinished);
+}
+
+function markBoothDirty() {
+  photoCaptured = false;
+  setBoothFinished(false);
+}
 
 async function openCameraFilter() {
   if (!cameraVideo) return;
@@ -887,18 +1427,193 @@ async function openCameraFilter() {
     });
     cameraVideo.srcObject = filterStream;
     await cameraVideo.play();
+    applyCameraPreviewSettings();
     cameraShell?.classList.remove("has-photo");
-    photoCaptured = false;
+    markBoothDirty();
+    updateBoothStatus();
   } catch (error) {
     console.error("Camera filter error:", error);
     alert("Tidak dapat membuka kamera. Pastikan izin kamera diberikan.");
   }
 }
 
-function captureFilteredPhoto() {
+function getFrameColors() {
+  return boothFrameProfiles[boothFrame] || boothFrameProfiles.basic;
+}
+
+function drawCoverImage(context, source, dx, dy, dw, dh, options = {}) {
+  const applyEffects = options.applyEffects !== false;
+  const applyMirror = options.applyMirror ?? (boothMirror && source === cameraVideo);
+  const sourceWidth = source.videoWidth || source.width;
+  const sourceHeight = source.videoHeight || source.height;
+  if (!sourceWidth || !sourceHeight) return;
+
+  const sourceRatio = sourceWidth / sourceHeight;
+  const targetRatio = dw / dh;
+  let sw = sourceWidth;
+  let sh = sourceHeight;
+  let sx = 0;
+  let sy = 0;
+
+  if (sourceRatio > targetRatio) {
+    sw = sh * targetRatio;
+    sx = (sourceWidth - sw) / 2;
+  } else {
+    sh = sw / targetRatio;
+    sy = (sourceHeight - sh) / 2;
+  }
+
+  context.save();
+  context.filter = applyEffects ? getCameraFilterValue() : "none";
+  if (applyMirror) {
+    context.translate(dx + dw, dy);
+    context.scale(-1, 1);
+    context.drawImage(source, sx, sy, sw, sh, 0, 0, dw, dh);
+  } else {
+    context.drawImage(source, sx, sy, sw, sh, dx, dy, dw, dh);
+  }
+  context.restore();
+}
+
+function drawBoothFrame(context, width, height) {
+  const colors = getFrameColors();
+  const inset = width * 0.031;
+  const topBand = height * 0.05;
+  const bottomBand = height * 0.066;
+
+  context.fillStyle = colors.bg;
+  context.fillRect(0, 0, width, height);
+  context.fillStyle = "rgba(255,255,255,0.18)";
+  context.fillRect(inset, inset, width - inset * 2, height - inset * 2);
+  context.fillStyle = colors.accent;
+  context.fillRect(0, 0, width, topBand);
+  context.fillRect(0, height - bottomBand, width, bottomBand);
+  context.fillStyle = colors.text;
+  context.textAlign = "center";
+  context.font = `700 ${Math.max(16, width * 0.05)}px Arial`;
+  context.fillText("SCOOPIFY PHOTOBOOTH", width / 2, topBand * 0.68);
+  context.font = `700 ${Math.max(14, width * 0.036)}px Arial`;
+  context.fillText("#PlayYourMood", width / 2, height - bottomBand * 0.38);
+}
+
+function getSlotRects(width, height, count) {
+  const margin = width * 0.059;
+  const header = height * 0.066;
+  const footer = height * 0.083;
+  const gap = width * 0.026;
+  const usableWidth = width - margin * 2;
+  const usableHeight = height - header - footer;
+
+  if (count === 1) {
+    const slotWidth = usableWidth;
+    const slotHeight = slotWidth * 0.75;
+    return [{
+      x: margin,
+      y: header + (usableHeight - slotHeight) / 2,
+      w: slotWidth,
+      h: slotHeight,
+    }];
+  }
+
+  if (count === 3) {
+    const slotWidth = Math.min(usableWidth, (usableHeight - gap * 2) / 2.25);
+    const slotHeight = slotWidth * 0.75;
+    const startX = margin + (usableWidth - slotWidth) / 2;
+    return Array.from({ length: 3 }, (_, index) => ({
+      x: startX,
+      y: header + index * (slotHeight + gap),
+      w: slotWidth,
+      h: slotHeight,
+    }));
+  }
+
+  const slotWidth = Math.min((usableWidth - gap) / 2, (usableHeight - gap * 2) / 2.25);
+  const slotHeight = slotWidth * 0.75;
+  const startX = margin + (usableWidth - (slotWidth * 2 + gap)) / 2;
+  return Array.from({ length: 6 }, (_, index) => ({
+    x: startX + (index % 2) * (slotWidth + gap),
+    y: header + Math.floor(index / 2) * (slotHeight + gap),
+    w: slotWidth,
+    h: slotHeight,
+  }));
+}
+
+function drawBoothComposition(context, width, height) {
+  drawBoothFrame(context, width, height);
+  const slots = getSlotRects(width, height, boothLayout);
+  const mat = Math.max(4, width * 0.011);
+
+  slots.forEach((slot, index) => {
+    context.save();
+    context.fillStyle = "#fff";
+    context.fillRect(slot.x - mat, slot.y - mat, slot.w + mat * 2, slot.h + mat * 2);
+    const shot = boothShots[index];
+    if (shot) {
+      drawCoverImage(context, shot, slot.x, slot.y, slot.w, slot.h);
+    } else {
+      context.fillStyle = "rgba(0,0,0,0.08)";
+      context.fillRect(slot.x, slot.y, slot.w, slot.h);
+      context.fillStyle = "rgba(0,0,0,0.42)";
+      context.font = `700 ${Math.max(14, width * 0.035)}px Arial`;
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+      context.fillText(`FOTO ${index + 1}`, slot.x + slot.w / 2, slot.y + slot.h / 2);
+    }
+    context.restore();
+  });
+}
+
+function renderShotTray() {
+  if (shotCounter) shotCounter.textContent = `${Math.min(boothShots.length, boothLayout)}/${boothLayout}`;
+  if (!boothShotTray) return;
+
+  boothShotTray.innerHTML = "";
+  const item = document.createElement("div");
+  item.className = "booth-frame-preview";
+  item.dataset.filled = String(boothShots.length > 0);
+
+  const previewCanvas = document.createElement("canvas");
+  previewCanvas.width = 360;
+  previewCanvas.height = 640;
+  previewCanvas.setAttribute("aria-label", "Preview sementara dengan frame aktif");
+  drawBoothComposition(previewCanvas.getContext("2d"), previewCanvas.width, previewCanvas.height);
+
+  item.appendChild(previewCanvas);
+  boothShotTray.appendChild(item);
+}
+
+function updateBoothTakeProgress(remaining = Math.max(0, boothLayout - boothShots.length)) {
+  const nextShot = Math.min(boothShots.length + 1, boothLayout);
+  const completed = Math.min(boothShots.length, boothLayout);
+
+  if (boothProgressText) {
+    boothProgressText.textContent = remaining
+      ? `Foto ${nextShot} dari ${boothLayout}`
+      : `Lengkap ${boothLayout}/${boothLayout}`;
+  }
+
+  if (captureBtnText) {
+    captureBtnText.textContent = remaining
+      ? `Ambil Foto ${nextShot}/${boothLayout}`
+      : `Foto Lengkap ${boothLayout}/${boothLayout}`;
+  }
+
+  if (boothTakeProgress) {
+    boothTakeProgress.innerHTML = "";
+    Array.from({ length: boothLayout }, (_, index) => {
+      const dot = document.createElement("span");
+      dot.className = "take-dot";
+      dot.classList.toggle("done", index < completed);
+      dot.classList.toggle("current", remaining > 0 && index === completed);
+      dot.setAttribute("aria-label", `Foto ${index + 1} ${index < completed ? "selesai" : "belum"}`);
+      boothTakeProgress.appendChild(dot);
+    });
+  }
+}
+
+function renderBoothCanvas() {
   if (!cameraVideo || !cameraCanvas) return false;
-  if (!cameraVideo.videoWidth || !cameraVideo.videoHeight) {
-    alert("Buka kamera dulu sebelum ambil foto.");
+  if (!cameraVideo.videoWidth || !cameraVideo.videoHeight || !boothShots.length) {
     return false;
   }
 
@@ -908,39 +1623,219 @@ function captureFilteredPhoto() {
   cameraCanvas.width = width;
   cameraCanvas.height = height;
 
-  const videoRatio = cameraVideo.videoWidth / cameraVideo.videoHeight;
-  const targetRatio = width / height;
-  let sourceWidth = cameraVideo.videoWidth;
-  let sourceHeight = cameraVideo.videoHeight;
-  let sourceX = 0;
-  let sourceY = 0;
-
-  if (videoRatio > targetRatio) {
-    sourceWidth = sourceHeight * targetRatio;
-    sourceX = (cameraVideo.videoWidth - sourceWidth) / 2;
-  } else {
-    sourceHeight = sourceWidth / targetRatio;
-    sourceY = (cameraVideo.videoHeight - sourceHeight) / 2;
-  }
-
-  context.drawImage(cameraVideo, sourceX, sourceY, sourceWidth, sourceHeight, 0, 0, width, height);
-
-  const gradient = context.createLinearGradient(0, 0, width, height);
-  gradient.addColorStop(0, "rgba(255, 107, 107, 0.28)");
-  gradient.addColorStop(0.52, "rgba(255, 214, 165, 0.18)");
-  gradient.addColorStop(1, "rgba(157, 124, 255, 0.28)");
-  context.fillStyle = gradient;
-  context.fillRect(0, 0, width, height);
-
-  const highlight = context.createRadialGradient(width * 0.22, height * 0.18, 0, width * 0.22, height * 0.18, width * 0.46);
-  highlight.addColorStop(0, "rgba(255, 255, 255, 0.22)");
-  highlight.addColorStop(1, "rgba(255, 255, 255, 0)");
-  context.fillStyle = highlight;
-  context.fillRect(0, 0, width, height);
+  drawBoothComposition(context, width, height);
 
   cameraShell?.classList.add("has-photo");
   photoCaptured = true;
   return true;
+}
+
+function captureFilteredPhoto() {
+  if (!cameraVideo || !cameraCanvas) return false;
+  if (!cameraVideo.videoWidth || !cameraVideo.videoHeight) {
+    alert("Buka kamera dulu sebelum ambil foto.");
+    return false;
+  }
+
+  const shotCanvas = document.createElement("canvas");
+  shotCanvas.width = 1200;
+  shotCanvas.height = 900;
+  const shotContext = shotCanvas.getContext("2d");
+  drawCoverImage(shotContext, cameraVideo, 0, 0, shotCanvas.width, shotCanvas.height, {
+    applyEffects: false,
+    applyMirror: boothMirror,
+  });
+  boothShots.push(shotCanvas);
+  if (boothShots.length > boothLayout) boothShots = boothShots.slice(-boothLayout);
+  renderBoothCanvas();
+  renderShotTray();
+  markBoothDirty();
+  if (boothShots.length < boothLayout) {
+    cameraShell?.classList.remove("has-photo");
+  }
+  if (boothShots.length >= boothLayout) {
+    if (boothLayout === 1) {
+      finishBooth();
+    } else {
+      finishBoothBtn?.removeAttribute("disabled");
+      finishBoothBtn?.classList.remove("is-disabled");
+    }
+    setBoothMobileStep("result");
+  }
+  updateBoothStatus();
+  return true;
+}
+
+function wait(ms) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+}
+
+async function runBoothCountdown() {
+  if (!boothCountdown) return;
+  boothCountdown.hidden = false;
+  for (const count of [3, 2, 1]) {
+    boothCountdown.textContent = String(count);
+    await wait(650);
+  }
+  boothCountdown.hidden = true;
+}
+
+async function captureBoothWithCountdown() {
+  if (boothCapturing) return;
+  if (!cameraVideo?.videoWidth || !cameraVideo?.videoHeight) {
+    alert("Buka kamera dulu sebelum ambil foto.");
+    return;
+  }
+  boothCapturing = true;
+  captureBtn?.setAttribute("disabled", "true");
+  try {
+    await runBoothCountdown();
+    captureFilteredPhoto();
+  } finally {
+    boothCapturing = false;
+    captureBtn?.removeAttribute("disabled");
+  }
+}
+
+function updateBoothStatus() {
+  if (!boothStatus) return;
+  const remaining = Math.max(0, boothLayout - boothShots.length);
+  updateBoothTakeProgress(remaining);
+  if (boothFinished) {
+    if (boothProgressText) boothProgressText.textContent = `Finish ${boothLayout}/${boothLayout}`;
+    if (captureBtnText) captureBtnText.textContent = `Finish ${boothLayout}/${boothLayout}`;
+    boothStatus.textContent = `Hasil ${boothLayout} foto sudah finish. Silakan download atau share.`;
+  } else {
+    boothStatus.textContent = remaining
+      ? `${boothShots.length}/${boothLayout} foto. Ambil ${remaining} foto lagi.`
+      : `Foto lengkap. Tekan Finish untuk membuka download dan share.`;
+  }
+  renderShotTray();
+}
+
+function resetBooth() {
+  boothShots = [];
+  markBoothDirty();
+  cameraShell?.classList.remove("has-photo");
+  renderShotTray();
+  updateBoothStatus();
+}
+
+function retakeLastBoothShot() {
+  if (!boothShots.length) {
+    resetBooth();
+    setBoothMobileStep("camera");
+    return;
+  }
+  boothShots.pop();
+  markBoothDirty();
+  if (boothShots.length) {
+    renderBoothCanvas();
+    if (boothShots.length < boothLayout) {
+      cameraShell?.classList.remove("has-photo");
+    }
+  } else {
+    cameraShell?.classList.remove("has-photo");
+  }
+  renderShotTray();
+  updateBoothStatus();
+  if (!boothShots.length) {
+    setBoothMobileStep("camera");
+  }
+}
+
+function setBoothLayout(nextLayout) {
+  boothLayout = Number(nextLayout) || 1;
+  boothShots = boothShots.slice(0, boothLayout);
+  markBoothDirty();
+  boothLayoutButtons.forEach((button) => {
+    button.classList.toggle("active", Number(button.dataset.layout) === boothLayout);
+  });
+  if (boothShots.length) {
+    renderBoothCanvas();
+    if (boothShots.length < boothLayout) {
+      cameraShell?.classList.remove("has-photo");
+    }
+  } else {
+    cameraShell?.classList.remove("has-photo");
+  }
+  renderShotTray();
+  updateBoothStatus();
+}
+
+function updatePremiumFrameState() {
+  const hasAccess = hasPhotoboothPremiumAccess();
+  const lockNote = document.getElementById("boothLockNote");
+
+  boothFrameButtons.forEach((button) => {
+    const profile = boothFrameProfiles[button.dataset.frame];
+    const locked = Boolean(profile?.premium) && !hasAccess;
+    button.classList.toggle("locked", locked);
+    button.setAttribute("aria-disabled", String(locked));
+    button.title = locked ? "Scan QR untuk membuka frame ini" : "";
+  });
+
+  if (lockNote) {
+    lockNote.textContent = hasAccess
+      ? "Frame premium siap kalau sudah ditambahkan."
+      : "Semua frame saat ini gratis.";
+    lockNote.classList.toggle("unlocked", true);
+  }
+
+  if (!hasAccess && boothFrameProfiles[boothFrame]?.premium) {
+    setBoothFrame("basic");
+  }
+}
+
+function setBoothFrame(nextFrame) {
+  const profile = boothFrameProfiles[nextFrame] || boothFrameProfiles.basic;
+  if (profile.premium && !hasPhotoboothPremiumAccess()) {
+    alert("Frame lucu hanya untuk pelanggan yang sudah beli dan scan QR.");
+    return;
+  }
+
+  boothFrame = boothFrameProfiles[nextFrame] ? nextFrame : "basic";
+  markBoothDirty();
+  boothFrameButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.frame === boothFrame);
+  });
+  if (boothShots.length) {
+    renderBoothCanvas();
+    if (boothShots.length < boothLayout) {
+      cameraShell?.classList.remove("has-photo");
+    }
+  }
+  updateBoothStatus();
+}
+
+function setBoothFilter(nextFilter) {
+  boothFilter = boothFilterProfiles[nextFilter] ? nextFilter : "normal";
+  boothFilterButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.filter === boothFilter);
+  });
+  applyCameraPreviewSettings();
+  if (boothShots.length) {
+    markBoothDirty();
+    renderBoothCanvas();
+    if (boothShots.length < boothLayout) {
+      cameraShell?.classList.remove("has-photo");
+    }
+    renderShotTray();
+    updateBoothStatus();
+  }
+}
+
+function finishBooth() {
+  if (boothShots.length < boothLayout) {
+    alert(`Ambil ${boothLayout - boothShots.length} foto lagi sebelum finish.`);
+    return;
+  }
+  renderBoothCanvas();
+  photoCaptured = true;
+  setBoothFinished(true);
+  updateBoothStatus();
 }
 
 function getPhotoBlob() {
@@ -954,23 +1849,31 @@ function getPhotoBlob() {
 }
 
 async function downloadFilteredPhoto() {
-  if (!photoCaptured && !captureFilteredPhoto()) return;
+  if (!boothFinished) {
+    alert("Tekan Finish dulu sebelum download.");
+    return;
+  }
+  if (!photoCaptured && !renderBoothCanvas()) return;
   const blob = await getPhotoBlob();
   if (!blob) return;
 
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "scoopify-gradient-filter.png";
+  link.download = `scoopify-photobooth-${boothFrame}-${boothLayout}-foto.png`;
   link.click();
   URL.revokeObjectURL(link.href);
 }
 
 async function shareFilteredPhoto() {
-  if (!photoCaptured && !captureFilteredPhoto()) return;
+  if (!boothFinished) {
+    alert("Tekan Finish dulu sebelum share.");
+    return;
+  }
+  if (!photoCaptured && !renderBoothCanvas()) return;
   const blob = await getPhotoBlob();
   if (!blob) return;
 
-  const file = new File([blob], "scoopify-gradient-filter.png", { type: "image/png" });
+  const file = new File([blob], `scoopify-photobooth-${boothFrame}-${boothLayout}-foto.png`, { type: "image/png" });
   if (navigator.canShare?.({ files: [file] })) {
     await navigator.share({
       files: [file],
@@ -985,9 +1888,38 @@ async function shareFilteredPhoto() {
 }
 
 openFilterBtn?.addEventListener("click", openCameraFilter);
-captureBtn?.addEventListener("click", captureFilteredPhoto);
+captureBtn?.addEventListener("click", captureBoothWithCountdown);
+retakeBoothBtn?.addEventListener("click", retakeLastBoothShot);
+finishBoothBtn?.addEventListener("click", finishBooth);
+boothLayoutButtons.forEach((button) => {
+  button.addEventListener("click", () => setBoothLayout(button.dataset.layout));
+});
+boothFrameButtons.forEach((button) => {
+  button.addEventListener("click", () => setBoothFrame(button.dataset.frame));
+});
+mirrorToggle?.addEventListener("change", () => {
+  boothMirror = mirrorToggle.checked;
+  applyCameraPreviewSettings();
+});
+brightnessRange?.addEventListener("input", () => {
+  boothBrightness = Number(brightnessRange.value) || 100;
+  applyCameraPreviewSettings();
+});
+boothFilterButtons.forEach((button) => {
+  button.addEventListener("click", () => setBoothFilter(button.dataset.filter));
+});
+boothStepButtons.forEach((button) => {
+  button.addEventListener("click", () => setBoothMobileStep(button.dataset.boothStep));
+});
 downloadFrameBtn?.addEventListener("click", downloadFilteredPhoto);
 shareBtn?.addEventListener("click", shareFilteredPhoto);
+setBoothLayout(1);
+updatePremiumFrameState();
+setBoothFrame("basic");
+applyCameraPreviewSettings();
+setBoothFilter("normal");
+setBoothFinished(false);
+setBoothMobileStep("frame");
 
 // ========== VARIANT CAROUSEL ==========
 const variantTrack = document.getElementById("variantTrack");
@@ -1093,6 +2025,8 @@ variantTrack?.addEventListener("scroll", () => {
 });
 
 // ========== INITIALIZE ==========
+normalizeHomeCopy();
+configureLikertMoodUi();
 updateSliderValues();
 if (analyzeBtn) {
   applyMoodResult(readSliderValues());

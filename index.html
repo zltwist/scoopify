@@ -16,6 +16,7 @@
       <div class="nav-links">
         <a class="nav-link active" href="index.html">Menu Utama</a>
         <a class="nav-link" href="variants.html">Daftar Varian</a>
+        <a class="nav-link" href="photobooth.html">Photobooth</a>
         <a class="nav-link" href="chatbot.html">AI Chatbot</a>
       </div>
     </nav>
@@ -29,13 +30,30 @@
         <div class="logo">
           <img src="assets/logo/scoopify.png" alt="Scoopify" />
         </div>
-        <p class="intro">AI rekomendasi rasa • Mini game demo • Filter IG • QR Code unik</p>
+        <p class="intro">Mood kamu dibaca AI, rasanya dipilih, lalu lanjut main dan foto-foto di photobooth.</p>
+        <div class="home-menu-grid" aria-label="Menu pengalaman Scoopify">
+          <a class="home-menu-card" href="#analyzer" data-target="analyzer">
+            <span>01</span>
+            <strong>AI Mood</strong>
+            <small>Cek mood, dapat rasa paling cocok.</small>
+          </a>
+          <a class="home-menu-card" href="variants.html">
+            <span>02</span>
+            <strong>Varian</strong>
+            <small>Lihat menu lucu dan stok hari ini.</small>
+          </a>
+          <a class="home-menu-card" href="photobooth.html">
+            <span>03</span>
+            <strong>Photobooth</strong>
+            <small>Pakai frame, download, lalu share.</small>
+          </a>
+        </div>
         <div class="cta-row">
-          <button class="primary" data-target="analyzer">✨ Start Experience</button>
+          <button class="primary" data-target="analyzer">Mulai Cek Mood</button>
           <button class="ghost" id="scanBtn">📷 Scan QR</button>
         </div>
-        <div class="swipe-hint mobile-only">Klik Start Experience untuk mulai</div>
-        <div class="swipe-hint desktop-only">Klik Start Experience untuk lanjut</div>
+        <div class="swipe-hint mobile-only">Klik Mulai Cek Mood untuk mulai</div>
+        <div class="swipe-hint desktop-only">Klik Mulai Cek Mood untuk lanjut</div>
       </div>
     </section>
 
@@ -107,7 +125,6 @@
               <p class="match" id="resultMatch">Match: 0%</p>
               <p class="note" id="resultNote">Kamu butuh rasa yang lembut dan calming.</p>
               <div class="cta-row">
-                <button class="primary" data-target="flavor">Lihat Detail Rasa</button>
                 <button class="primary" id="orderBtn" data-target="welcome">Back to Home</button>
                 <button class="ghost" id="tryAgainBtn" data-target="analyzer">Try Again</button>
               </div>
@@ -117,28 +134,6 @@
         <div class="swipe-hint mobile-only">Klik Try Again atau lanjut lewat hasil rekomendasi</div>
       </div>
     </section>
-
-    <!-- HALAMAN 4: FLAVOR DETAIL -->
-    <section class="screen" id="flavor">
-      <div class="container">
-        <div class="section-head">
-          <h2>🍧 Flavor Detail</h2>
-          <p>Detail rasa yang cocok dengan mood kamu.</p>
-        </div>
-        <div class="flavor-card">
-          <div class="result-visual">
-            <img id="detailImage" class="product-png" src="assets/menu/Vanilla.png" alt="Es krim" />
-          </div>
-          <div class="result-text">
-            <p class="flavor" id="detailFlavorName">Vanilla Lavender</p>
-            <p class="note" id="detailDescription">Rasa lembut dengan sentuhan floral untuk menenangkan mood.</p>
-            <button class="primary" id="toGameBtn" data-target="game">Play Mini Game</button>
-          </div>
-        </div>
-        <div class="swipe-hint mobile-only">Klik Play Mini Game untuk lanjut</div>
-      </div>
-    </section>
-
     <!-- HALAMAN 5: MINI GAME -->
     <section class="screen game" id="game">
       <div class="container">
@@ -149,12 +144,12 @@
         <div class="mini-game">
           <div class="mini-game-header">
             <h3>🧠 Memory Card Game</h3>
-            <button class="ghost small" id="resetGame">Reset Demo</button>
+            <button class="ghost small" id="resetGame">Reset Game</button>
           </div>
           <ul class="stats">
             <li id="stars">⭐ ⭐ ⭐</li>
             <li>
-              <p>Attempts</p>
+              <p>Nyawa</p>
               <p id="attempts">0</p>
             </li>
             <li>
@@ -163,54 +158,23 @@
             </li>
             <li>
               <p>Limit</p>
-              <p><span id="countdown">15</span>s</p>
+              <p><span id="countdown">30</span>s</p>
             </li>
           </ul>
           <div class="game-gate" id="gameGate">
-            <h3 id="gameGateTitle">Demo Mode</h3>
-            <p id="gameGateText">Cocokkan semua pasangan kartu dalam 15 detik untuk membuka reward.</p>
+            <h3 id="gameGateTitle">Tantangan Memory</h3>
+            <p id="gameGateText">Scan QR tiket dulu, lalu cocokkan kartu dalam 30 detik.</p>
             <button class="primary" id="startGameBtn">Mulai Game</button>
           </div>
           <div id="memory-game" class="memory-game"></div>
           <p class="game-status" id="gameStatus">Cocokkan kartu mood dengan rasa!</p>
           <div class="cta-row">
-            <button class="ghost" id="skipGameBtn" data-target="reward">Lewati ke Filter IG</button>
+            <button class="ghost" id="skipGameBtn" type="button">Buka Photobooth</button>
           </div>
         </div>
         <div class="swipe-hint mobile-only">Menang dulu untuk membuka reward & share</div>
       </div>
-    </section>
-
-    <!-- HALAMAN 6: REWARD + SHARE -->
-    <section class="screen share" id="reward">
-      <div class="container">
-        <div class="section-head">
-          <h2>🎁 Reward & Share</h2>
-          <p>Share momen kamu dengan frame IG Scoopify.</p>
-        </div>
-        <div class="game-layout">
-          <div class="share-card">
-            <div class="share-preview" id="sharePreview">
-              <span>🍦</span> Scoopify
-              <small>#PlayYourMood</small>
-            </div>
-            <div class="camera-shell">
-              <video id="cameraVideo" playsinline autoplay muted></video>
-              <canvas id="cameraCanvas"></canvas>
-              <div class="frame-overlay" id="frameOverlay"></div>
-            </div>
-            <div class="share-buttons">
-              <button class="primary" id="openFilterBtn">📸 Buka Kamera</button>
-              <button class="ghost" id="captureBtn">✨ Ambil Foto</button>
-              <button class="ghost" id="downloadFrameBtn">⬇️ Download Hasil</button>
-              <button class="ghost" id="shareBtn">📤 Share to Story</button>
-            </div>
-          </div>
-        </div>
-        <footer class="footer">✨ Scoopify • Play Your Mood, Taste Your Scoop ✨</footer>
-      </div>
-    </section>
-  </div>
+    </section></div>
 
   <script src="app.js"></script>
 </body>
