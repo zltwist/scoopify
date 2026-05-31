@@ -2297,7 +2297,7 @@ boothStepButtons.forEach((button) => {
 });
 downloadFrameBtn?.addEventListener("click", downloadFilteredPhoto);
 shareBtn?.addEventListener("click", shareFilteredPhoto);
-setBoothLayout(1);
+setBoothLayout(2);
 updatePremiumFrameState();
 setBoothFrame("basic");
 applyCameraPreviewSettings();
