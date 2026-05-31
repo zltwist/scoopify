@@ -1888,10 +1888,10 @@ function getBoothOutputSize(layout = boothLayout) {
 
 function getSlotRects(width, height, count) {
   if (count === 2) {
-    const slotWidth = width * 0.7;
+    const slotWidth = width * 0.66;
     const slotHeight = slotWidth * 0.75;
-    const startY = height * 0.132;
-    const gap = height * 0.056;
+    const startY = height * 0.12;
+    const gap = height * 0.054;
     return Array.from({ length: 2 }, (_, index) => ({
       x: (width - slotWidth) / 2,
       y: startY + index * (slotHeight + gap),

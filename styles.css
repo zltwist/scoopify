@@ -2555,7 +2555,7 @@ body[data-page="photobooth"] .ghost:hover {
 }
 
 .booth-frame-preview[data-layout="3"] {
-  width: min(100%, 190px);
+  width: min(100%, 300px);
 }
 
 .booth-frame-preview[data-layout="6"] {
