@@ -38,15 +38,24 @@
               <small>Pilih gaya foto</small>
             </div>
             <button class="ghost small booth-scan-btn" id="scanBtn" type="button">Scan QR</button>
-            <p class="booth-lock-note" id="boothLockNote">Semua frame saat ini gratis.</p>
-            <div class="booth-frame-list">
-              <button class="booth-frame active free-frame" type="button" data-frame="basic" aria-label="Pilih frame gratis"></button>
-              <button class="booth-frame free-frame" type="button" data-frame="bubble" aria-label="Pilih frame gratis Bubble Pop"></button>
-              <button class="booth-frame free-frame" type="button" data-frame="heart" aria-label="Pilih frame gratis Heart Wink"></button>
-              <button class="booth-frame free-frame" type="button" data-frame="star" aria-label="Pilih frame gratis Star Rush"></button>
-              <button class="booth-frame free-frame" type="button" data-frame="retro" aria-label="Pilih frame gratis Retro Smile"></button>
-              <button class="booth-frame free-frame" type="button" data-frame="dream" aria-label="Pilih frame gratis Dream Cloud"></button>
-              <button class="booth-frame free-frame" type="button" data-frame="party" aria-label="Pilih frame gratis Party Splash"></button>
+            <p class="booth-lock-note" id="boothLockNote">Frame premium belum ditambahkan.</p>
+            <div class="booth-frame-cabinets" aria-label="Pilihan frame photobooth">
+              <details class="frame-cabinet" open>
+                <summary>Free to Use</summary>
+                <div class="booth-frame-list">
+                  <button class="booth-frame active free-frame" type="button" data-frame="basic" aria-label="Pilih frame gratis"></button>
+                  <button class="booth-frame free-frame" type="button" data-frame="bubble" aria-label="Pilih frame gratis Bubble Pop"></button>
+                  <button class="booth-frame free-frame" type="button" data-frame="heart" aria-label="Pilih frame gratis Heart Wink"></button>
+                  <button class="booth-frame free-frame" type="button" data-frame="star" aria-label="Pilih frame gratis Star Rush"></button>
+                  <button class="booth-frame free-frame" type="button" data-frame="retro" aria-label="Pilih frame gratis Retro Smile"></button>
+                  <button class="booth-frame free-frame" type="button" data-frame="dream" aria-label="Pilih frame gratis Dream Cloud"></button>
+                  <button class="booth-frame free-frame" type="button" data-frame="party" aria-label="Pilih frame gratis Party Splash"></button>
+                </div>
+              </details>
+              <details class="frame-cabinet">
+                <summary>Premium Use</summary>
+                <div class="booth-frame-empty">Belum ada frame premium.</div>
+              </details>
             </div>
           </aside>
 
@@ -57,8 +66,8 @@
             </div>
 
             <div class="booth-layout-switcher" aria-label="Pilihan layout photobooth">
-              <button class="booth-layout active" type="button" data-layout="1">
-                <span>1</span>
+              <button class="booth-layout active" type="button" data-layout="2">
+                <span>2</span>
                 <small>Foto</small>
               </button>
               <button class="booth-layout" type="button" data-layout="3">

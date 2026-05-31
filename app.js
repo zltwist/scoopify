@@ -1732,7 +1732,7 @@ const boothFrameButtons = Array.from(document.querySelectorAll(".booth-frame"));
 const cameraShell = cameraVideo?.closest(".camera-shell");
 let filterStream = null;
 let photoCaptured = false;
-let boothLayout = 1;
+let boothLayout = 2;
 let boothShots = [];
 let boothFrame = "basic";
 let boothMirror = true;
@@ -1879,55 +1879,52 @@ function drawBoothFrame(context, width, height) {
 }
 
 function getBoothOutputSize(layout = boothLayout) {
-  if (layout === 1) {
-    return { width: 900, height: 1200, ratio: "3 / 4" };
+  if (layout === 6) {
+    return { width: 1080, height: 1560, ratio: "9 / 13" };
   }
 
-  if (layout === 3) {
-    return { width: 720, height: 2160, ratio: "2 / 6" };
-  }
-
-  return { width: 1080, height: 1920, ratio: "9 / 16" };
+  return { width: 1080, height: 1440, ratio: "3 / 4" };
 }
 
 function getSlotRects(width, height, count) {
-  const margin = width * 0.059;
-  const header = height * 0.066;
-  const footer = height * 0.083;
-  const gap = width * 0.026;
-  const usableWidth = width - margin * 2;
-  const usableHeight = height - header - footer;
-
-  if (count === 1) {
-    const slotWidth = usableWidth;
+  if (count === 2) {
+    const slotWidth = width * 0.7;
     const slotHeight = slotWidth * 0.75;
-    const slotY = header + (usableHeight - slotHeight) / 2 - usableHeight * 0.09;
-    return [{
-      x: margin,
-      y: slotY,
-      w: slotWidth,
-      h: slotHeight,
-    }];
-  }
-
-  if (count === 3) {
-    const slotWidth = Math.min(usableWidth, (usableHeight - gap * 2) / 2.25);
-    const slotHeight = slotWidth * 0.75;
-    const startX = margin + (usableWidth - slotWidth) / 2;
-    return Array.from({ length: 3 }, (_, index) => ({
-      x: startX,
-      y: header + index * (slotHeight + gap),
+    const startY = height * 0.132;
+    const gap = height * 0.056;
+    return Array.from({ length: 2 }, (_, index) => ({
+      x: (width - slotWidth) / 2,
+      y: startY + index * (slotHeight + gap),
       w: slotWidth,
       h: slotHeight,
     }));
   }
 
-  const slotWidth = Math.min((usableWidth - gap) / 2, (usableHeight - gap * 2) / 2.25);
+  if (count === 3) {
+    const topWidth = width * 0.76;
+    const topHeight = topWidth * 0.75;
+    const topX = (width - topWidth) / 2;
+    const topY = height * 0.13;
+    const gap = width * 0.05;
+    const smallWidth = (width * 0.82 - gap) / 2;
+    const smallHeight = smallWidth * 0.75;
+    const smallY = topY + topHeight + height * 0.045;
+    return [
+      { x: topX, y: topY, w: topWidth, h: topHeight },
+      { x: width * 0.09, y: smallY, w: smallWidth, h: smallHeight },
+      { x: width * 0.09 + smallWidth + gap, y: smallY, w: smallWidth, h: smallHeight },
+    ];
+  }
+
+  const margin = width * 0.065;
+  const gap = width * 0.035;
+  const slotWidth = (width - margin * 2 - gap) / 2;
   const slotHeight = slotWidth * 0.75;
-  const startX = margin + (usableWidth - (slotWidth * 2 + gap)) / 2;
+  const startY = height * 0.058;
+  const rowGap = height * 0.022;
   return Array.from({ length: 6 }, (_, index) => ({
-    x: startX + (index % 2) * (slotWidth + gap),
-    y: header + Math.floor(index / 2) * (slotHeight + gap),
+    x: margin + (index % 2) * (slotWidth + gap),
+    y: startY + Math.floor(index / 2) * (slotHeight + rowGap),
     w: slotWidth,
     h: slotHeight,
   }));
@@ -2170,9 +2167,7 @@ function updatePremiumFrameState() {
   });
 
   if (lockNote) {
-    lockNote.textContent = hasAccess
-      ? "Frame premium siap kalau sudah ditambahkan."
-      : "Semua frame saat ini gratis.";
+    lockNote.textContent = "Frame premium belum ditambahkan.";
     lockNote.classList.toggle("unlocked", true);
   }
 

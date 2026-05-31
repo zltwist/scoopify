@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1440" viewBox="0 0 1080 1440">
+  <rect width="1080" height="1440" fill="#ddf7ff"/>
+  <rect x="0" y="0" width="1080" height="95.04" fill="#47a7c9" opacity="0.55"/>
+  <rect x="0" y="1320.48" width="1080" height="119.52" fill="#47a7c9" opacity="0.55"/>
+  <g fill="#ffffff" stroke="#ff315f" stroke-width="8" stroke-dasharray="22 14">
+    <rect x="129.6" y="187.2" width="820.8" height="615.6"/>
+    <rect x="97.2" y="867.6" width="415.8" height="311.85"/>
+    <rect x="567" y="867.6" width="415.8" height="311.85"/>
+  </g>
+  <g fill="#ff315f" opacity="0.09">
+    <rect x="141.6" y="199.2" width="796.8" height="591.6"/>
+    <rect x="109.2" y="879.6" width="391.8" height="287.85"/>
+    <rect x="579" y="879.6" width="391.8" height="287.85"/>
+  </g>
+  <g text-anchor="middle" font-family="Arial, sans-serif" font-weight="800" fill="#ff315f">
+    <text x="540" y="495" font-size="38">AREA FOTO 1 - 4:3</text>
+    <text x="305.1" y="1023.53" font-size="24">FOTO 2</text>
+    <text x="774.9" y="1023.53" font-size="24">FOTO 3</text>
+  </g>
+  <text x="540" y="1372" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" font-weight="900" fill="#173849">TEMPLATE FREE 3 FOTO - 3:4 / 1080x1440</text>
+</svg>
