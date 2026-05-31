@@ -7,8 +7,8 @@ from dataclasses import asdict, dataclass
 from typing import Dict, List, Optional
 
 
-SOLD_OUT_FLAVORS = {"stroberi", "nangka"}
-ACTIVE_FLAVORS = {"durian", "vanila", "coklat", "taro"}
+SOLD_OUT_FLAVORS = {"stroberi", "nangka", "durian", "duren"}
+ACTIVE_FLAVORS = {"vanila", "coklat", "taro"}
 
 
 @dataclass(frozen=True)
@@ -112,14 +112,14 @@ MOOD_KNOWLEDGE_BASE: List[MoodRule] = [
         nickname="Time Traveler",
         vector={"energy": 3, "emotional": 4, "stress": 2, "craving": 5},
         ideal_flavor="Nangka + Vanila",
-        fallback_flavor="Durian + Vanila",
+        fallback_flavor="Vanila + Taro",
         rationale=(
             "Kondisi melankolis yang hangat cocok dengan rasa lokal yang eksotis, autentik, "
             "dan beraroma kuat."
         ),
         bridge=(
-            "Karena nangka sedang kosong, AI mengalihkan rekomendasi ke Durian + Vanila "
-            "yang sama-sama lokal, kuat, dan creamy."
+            "Karena nangka dan durian sedang kosong, AI mengalihkan rekomendasi ke Vanila + Taro "
+            "yang tetap creamy, lembut, dan tersedia."
         ),
     ),
     MoodRule(
@@ -168,10 +168,14 @@ MOOD_KNOWLEDGE_BASE: List[MoodRule] = [
         nickname="Volcanic Eruption",
         vector={"energy": 5, "emotional": 1, "stress": 5, "craving": 5},
         ideal_flavor="Durian + Coklat",
-        fallback_flavor="Durian",
+        fallback_flavor="Coklat + Taro",
         rationale=(
             "Amigdala yang over-stimulated membutuhkan pengalihan rasa yang kuat, dominan, "
             "dan tajam untuk memusatkan ulang orientasi sensorik."
+        ),
+        bridge=(
+            "Karena durian sedang kosong, AI mengalihkan ke Coklat + Taro yang tetap "
+            "tebal, comforting, dan tersedia."
         ),
     ),
     MoodRule(
@@ -192,14 +196,14 @@ MOOD_KNOWLEDGE_BASE: List[MoodRule] = [
         nickname="Stuck in Time",
         vector={"energy": 2, "emotional": 3, "stress": 1, "craving": 5},
         ideal_flavor="Nangka + Durian",
-        fallback_flavor="Durian + Taro",
+        fallback_flavor="Taro + Coklat",
         rationale=(
             "Kurang stimulasi dopaminergik cocok dibangunkan dengan rasa tropis lokal "
             "yang tajam dan intens."
         ),
         bridge=(
-            "Karena nangka sedang kosong, AI mengalihkan ke Durian + Taro yang tetap "
-            "unik, kuat, dan tersedia."
+            "Karena nangka dan durian sedang kosong, AI mengalihkan ke Taro + Coklat yang tetap "
+            "unik, tebal, dan tersedia."
         ),
     ),
 ]
