@@ -1751,7 +1751,161 @@ function setBoothMobileStep(nextStep) {
 }
 
 const boothFrameProfiles = {
-  basic: { label: "Free Frame", bg: "#f7e8ff", accent: "#9d7cff", text: "#332457", premium: false },
+  basic: {
+    label: "Free Frame",
+    bg: "#f7e8ff",
+    accent: "#9d7cff",
+    text: "#332457",
+    premium: false,
+    overlays: {
+      2: "assets/frame-free/free-frame-2.png",
+      3: "assets/frame-free/free-frame-3.png",
+      6: "assets/frame-free/free-frame-6.png",
+    },
+    slots: {
+      2: [
+        { x: 149, y: 277, w: 772, h: 538 },
+        { x: 148, y: 852, w: 771, h: 423 },
+      ],
+      3: [
+        { x: 150, y: 282, w: 777, h: 547 },
+        { x: 154, y: 867, w: 371, h: 432 },
+        { x: 557, y: 867, w: 376, h: 432 },
+      ],
+      6: [
+        { x: 136, y: 266, w: 371, h: 356 },
+        { x: 532, y: 266, w: 370, h: 356 },
+        { x: 136, y: 651, w: 371, h: 352 },
+        { x: 532, y: 651, w: 370, h: 352 },
+        { x: 136, y: 1032, w: 371, h: 345 },
+        { x: 531, y: 1032, w: 371, h: 345 },
+      ],
+    },
+  },
+  "cute-doodle-journal": {
+    label: "Cute Doodle Journal",
+    bg: "#fff1f7",
+    accent: "#ff7fb1",
+    text: "#3a2340",
+    premium: true,
+    overlays: {
+      2: "assets/frame-premium/2 frame/cute doodle journal.png",
+      3: "assets/frame-premium/3 frame/cute doodle journal.png",
+      6: "assets/frame-premium/6 frame/cute doodle journal.png",
+    },
+    slots: {
+      2: [
+        { x: 145, y: 258, w: 796, h: 497 },
+        { x: 145, y: 785, w: 796, h: 505 },
+      ],
+      3: [
+        { x: 162, y: 228, w: 745, h: 595 },
+        { x: 115, y: 861, w: 416, h: 450 },
+        { x: 565, y: 860, w: 394, h: 450 },
+      ],
+      6: [
+        { x: 104, y: 245, w: 429, h: 345 },
+        { x: 561, y: 245, w: 427, h: 346 },
+        { x: 106, y: 614, w: 427, h: 343 },
+        { x: 561, y: 615, w: 424, h: 343 },
+        { x: 104, y: 983, w: 428, h: 344 },
+        { x: 561, y: 983, w: 425, h: 344 },
+      ],
+    },
+  },
+  "low-poly": {
+    label: "Low Poly",
+    bg: "#eef2ff",
+    accent: "#6b7fd7",
+    text: "#202a57",
+    premium: true,
+    overlays: {
+      2: "assets/frame-premium/2 frame/low poly.png",
+      3: "assets/frame-premium/3 frame/low poly.png",
+      6: "assets/frame-premium/6 frame/low poly.png",
+    },
+    slots: {
+      2: [
+        { x: 175, y: 303, w: 717, h: 517 },
+        { x: 175, y: 845, w: 717, h: 426 },
+      ],
+      3: [
+        { x: 166, y: 289, w: 731, h: 535 },
+        { x: 168, y: 846, w: 354, h: 434 },
+        { x: 546, y: 846, w: 351, h: 434 },
+      ],
+      6: [
+        { x: 186, y: 298, w: 351, h: 361 },
+        { x: 555, y: 298, w: 349, h: 361 },
+        { x: 186, y: 676, w: 351, h: 356 },
+        { x: 555, y: 676, w: 349, h: 356 },
+        { x: 186, y: 1049, w: 351, h: 328 },
+        { x: 555, y: 1049, w: 349, h: 328 },
+      ],
+    },
+  },
+  "old-game": {
+    label: "Old Game",
+    bg: "#ecfff4",
+    accent: "#1e9b57",
+    text: "#173b29",
+    premium: true,
+    overlays: {
+      2: "assets/frame-premium/2 frame/old game.png",
+      3: "assets/frame-premium/3 frame/old game.png",
+      6: "assets/frame-premium/6 frame/old game.png",
+    },
+    slots: {
+      2: [
+        { x: 154, y: 213, w: 783, h: 494 },
+        { x: 154, y: 738, w: 788, h: 484 },
+      ],
+      3: [
+        { x: 152, y: 192, w: 777, h: 523 },
+        { x: 152, y: 753, w: 366, h: 387 },
+        { x: 560, y: 752, w: 369, h: 387 },
+      ],
+      6: [
+        { x: 133, y: 197, w: 389, h: 374 },
+        { x: 557, y: 196, w: 390, h: 375 },
+        { x: 133, y: 602, w: 389, h: 371 },
+        { x: 558, y: 602, w: 389, h: 371 },
+        { x: 133, y: 1003, w: 390, h: 370 },
+        { x: 558, y: 1003, w: 387, h: 370 },
+      ],
+    },
+  },
+  "windows-7": {
+    label: "Windows 7",
+    bg: "#ecf8ff",
+    accent: "#4b9de8",
+    text: "#173452",
+    premium: true,
+    overlays: {
+      2: "assets/frame-premium/2 frame/windows 7.png",
+      3: "assets/frame-premium/3 frame/windows 7.png",
+      6: "assets/frame-premium/6 frame/windows 7.png",
+    },
+    slots: {
+      2: [
+        { x: 138, y: 172, w: 786, h: 524 },
+        { x: 145, y: 736, w: 779, h: 428 },
+      ],
+      3: [
+        { x: 132, y: 138, w: 811, h: 619 },
+        { x: 132, y: 793, w: 387, h: 365 },
+        { x: 551, y: 793, w: 386, h: 365 },
+      ],
+      6: [
+        { x: 112, y: 141, w: 418, h: 383 },
+        { x: 545, y: 27, w: 502, h: 498 },
+        { x: 96, y: 542, w: 434, h: 381 },
+        { x: 546, y: 528, w: 503, h: 395 },
+        { x: 114, y: 940, w: 415, h: 383 },
+        { x: 546, y: 940, w: 418, h: 383 },
+      ],
+    },
+  },
 };
 
 const boothLogoImage = typeof Image !== "undefined" ? new Image() : null;
@@ -1763,15 +1917,22 @@ if (boothLogoImage) {
 }
 
 const boothFrameOverlayImages = {};
+function getBoothFrameKey(frame = boothFrame, layout = boothLayout) {
+  return `${frame}:${layout}`;
+}
+
 if (typeof Image !== "undefined") {
-  [2, 3, 6].forEach((layout) => {
-    const image = new Image();
-    image.src = `assets/frame-free/free-frame-${layout}.png`;
-    image.addEventListener("load", () => {
-      renderShotTray();
-      if (boothShots.length) renderBoothCanvas();
+  Object.entries(boothFrameProfiles).forEach(([frameKey, profile]) => {
+    Object.entries(profile.overlays || {}).forEach(([layout, path]) => {
+      const image = new Image();
+      image.src = path;
+      image.addEventListener("load", () => {
+        updateFrameButtonPreviews();
+        renderShotTray();
+        if (boothShots.length) renderBoothCanvas();
+      });
+      boothFrameOverlayImages[getBoothFrameKey(frameKey, Number(layout))] = image;
     });
-    boothFrameOverlayImages[layout] = image;
   });
 }
 
@@ -1842,6 +2003,14 @@ async function openCameraFilter() {
 
 function getFrameColors() {
   return boothFrameProfiles[boothFrame] || boothFrameProfiles.basic;
+}
+
+function getBoothFrameProfile(frame = boothFrame) {
+  return boothFrameProfiles[frame] || boothFrameProfiles.basic;
+}
+
+function getBoothFrameOverlay(frame = boothFrame, layout = boothLayout) {
+  return boothFrameOverlayImages[getBoothFrameKey(frame, layout)];
 }
 
 function drawRoundRect(context, x, y, width, height, radius) {
@@ -2053,10 +2222,30 @@ function getSlotRects(width, height, count) {
   }));
 }
 
+function getMappedSlotRects(width, height, count, frame = boothFrame) {
+  const profile = getBoothFrameProfile(frame);
+  const nativeSlots = profile.slots?.[count];
+  if (!nativeSlots?.length) return getSlotRects(width, height, count);
+
+  const overlay = getBoothFrameOverlay(frame, count);
+  const fallbackSize = getBoothOutputSize(count);
+  const nativeWidth = overlay?.naturalWidth || fallbackSize.width;
+  const nativeHeight = overlay?.naturalHeight || fallbackSize.height;
+  const scaleX = width / nativeWidth;
+  const scaleY = height / nativeHeight;
+
+  return nativeSlots.slice(0, count).map((slot) => ({
+    x: slot.x * scaleX,
+    y: slot.y * scaleY,
+    w: slot.w * scaleX,
+    h: slot.h * scaleY,
+  }));
+}
+
 function drawBoothComposition(context, width, height) {
   drawBoothFrame(context, width, height);
-  const slots = getSlotRects(width, height, boothLayout);
-  const mat = Math.max(4, width * 0.011);
+  const slots = getMappedSlotRects(width, height, boothLayout);
+  const mat = Math.max(2, width * 0.006);
 
   slots.forEach((slot, index) => {
     context.save();
@@ -2077,8 +2266,8 @@ function drawBoothComposition(context, width, height) {
     context.restore();
   });
 
-  const frameOverlay = boothFrameOverlayImages[boothLayout];
-  if (boothFrame === "basic" && frameOverlay?.complete && frameOverlay.naturalWidth) {
+  const frameOverlay = getBoothFrameOverlay();
+  if (frameOverlay?.complete && frameOverlay.naturalWidth) {
     context.drawImage(frameOverlay, 0, 0, width, height);
   }
 }
@@ -2272,6 +2461,7 @@ function setBoothLayout(nextLayout) {
   boothLayoutButtons.forEach((button) => {
     button.classList.toggle("active", Number(button.dataset.layout) === boothLayout);
   });
+  updateFrameButtonPreviews();
   if (boothShots.length) {
     renderBoothCanvas();
     cameraShell?.classList.remove("has-photo");
@@ -2280,6 +2470,20 @@ function setBoothLayout(nextLayout) {
   }
   renderShotTray();
   updateBoothStatus();
+}
+
+function updateFrameButtonPreviews() {
+  boothFrameButtons.forEach((button) => {
+    const profile = getBoothFrameProfile(button.dataset.frame);
+    const previewPath = profile.overlays?.[boothLayout];
+    button.classList.toggle("has-preview", Boolean(previewPath));
+    if (previewPath) {
+      button.style.setProperty("--frame-preview", `url("${previewPath}")`);
+      button.title = button.classList.contains("locked") ? "Scan QR untuk membuka frame ini" : profile.label;
+    } else {
+      button.style.removeProperty("--frame-preview");
+    }
+  });
 }
 
 function updatePremiumFrameState() {
@@ -2291,12 +2495,14 @@ function updatePremiumFrameState() {
     const locked = Boolean(profile?.premium) && !hasAccess;
     button.classList.toggle("locked", locked);
     button.setAttribute("aria-disabled", String(locked));
-    button.title = locked ? "Scan QR untuk membuka frame ini" : "";
+    if (locked) button.title = "Scan QR untuk membuka frame ini";
   });
 
   if (lockNote) {
-    lockNote.textContent = "Frame premium belum ditambahkan.";
-    lockNote.classList.toggle("unlocked", true);
+    lockNote.textContent = hasAccess
+      ? "Frame premium aktif."
+      : "Scan QR pembelian untuk membuka frame premium.";
+    lockNote.classList.toggle("unlocked", hasAccess);
   }
 
   if (!hasAccess && boothFrameProfiles[boothFrame]?.premium) {
@@ -2316,6 +2522,7 @@ function setBoothFrame(nextFrame) {
   boothFrameButtons.forEach((button) => {
     button.classList.toggle("active", button.dataset.frame === boothFrame);
   });
+  updateFrameButtonPreviews();
   if (boothShots.length) {
     renderBoothCanvas();
     cameraShell?.classList.remove("has-photo");

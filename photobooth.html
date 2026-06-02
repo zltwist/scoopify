@@ -38,7 +38,7 @@
               <small>Pilih gaya foto</small>
             </div>
             <button class="ghost small booth-scan-btn" id="scanBtn" type="button">Scan QR</button>
-            <p class="booth-lock-note" id="boothLockNote">Frame premium belum ditambahkan.</p>
+            <p class="booth-lock-note" id="boothLockNote">Scan QR pembelian untuk membuka frame premium.</p>
             <div class="booth-frame-cabinets" aria-label="Pilihan frame photobooth">
               <details class="frame-cabinet" open>
                 <summary>Free to Use</summary>
@@ -48,7 +48,12 @@
               </details>
               <details class="frame-cabinet">
                 <summary>Premium Use</summary>
-                <div class="booth-frame-empty">Belum ada frame premium.</div>
+                <div class="booth-frame-list">
+                  <button class="booth-frame premium-frame" type="button" data-frame="cute-doodle-journal" aria-label="Pilih frame premium cute doodle journal"></button>
+                  <button class="booth-frame premium-frame" type="button" data-frame="low-poly" aria-label="Pilih frame premium low poly"></button>
+                  <button class="booth-frame premium-frame" type="button" data-frame="old-game" aria-label="Pilih frame premium old game"></button>
+                  <button class="booth-frame premium-frame" type="button" data-frame="windows-7" aria-label="Pilih frame premium windows 7"></button>
+                </div>
               </details>
             </div>
           </aside>

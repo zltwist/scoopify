@@ -1923,6 +1923,15 @@ body[data-page="photobooth"] {
     linear-gradient(135deg, var(--frame-bg, #f7e8ff), rgba(255, 255, 255, 0.82));
 }
 
+.booth-frame.has-preview::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  display: block;
+  padding: 0;
+  background: var(--frame-preview) center / cover no-repeat, #fff;
+}
+
 .booth-frame::before {
   content: "";
   position: absolute;
@@ -1944,9 +1953,37 @@ body[data-page="photobooth"] {
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.16);
 }
 
+.booth-frame.has-preview::after {
+  inset: 0;
+  border: 0;
+  border-radius: 0;
+  background: linear-gradient(rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.03));
+  box-shadow: none;
+}
+
 .booth-frame[data-frame="basic"] {
   --frame-bg: #f7e8ff;
   --frame-accent: #9d7cff;
+}
+
+.booth-frame[data-frame="cute-doodle-journal"] {
+  --frame-bg: #fff1f7;
+  --frame-accent: #ff7fb1;
+}
+
+.booth-frame[data-frame="low-poly"] {
+  --frame-bg: #eef2ff;
+  --frame-accent: #6b7fd7;
+}
+
+.booth-frame[data-frame="old-game"] {
+  --frame-bg: #ecfff4;
+  --frame-accent: #1e9b57;
+}
+
+.booth-frame[data-frame="windows-7"] {
+  --frame-bg: #ecf8ff;
+  --frame-accent: #4b9de8;
 }
 
 .booth-frame.locked {
