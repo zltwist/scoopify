@@ -1,9 +1,11 @@
-# Frame Free Templates
+# Frame Free
 
-Folder ini untuk desain frame gratis. Area bergaris merah adalah posisi foto dari kamera, jadi bagian itu sebaiknya tetap transparan saat export frame final.
+Folder ini untuk satu pilihan frame gratis. Upload frame final sebagai PNG transparan di folder ini.
 
-- `template-2-foto-3x4.svg`: kanvas `1080x1440`, output 2 foto.
-- `template-3-foto-3x4.svg`: kanvas `1080x1440`, output 3 foto.
-- `template-6-foto-9x13.svg`: kanvas `1080x1560`, output 6 foto.
+Nama file yang akan dibaca otomatis oleh web:
 
-Export desain final sebagai PNG transparan dengan ukuran kanvas yang sama, lalu taruh di folder ini.
+- `free-frame-2.png` untuk layout 2 foto, ukuran `1080x1440`.
+- `free-frame-3.png` untuk layout 3 foto, ukuran `1080x1440`.
+- `free-frame-6.png` untuk layout 6 foto, ukuran `1080x1560`.
+
+Bagian area foto harus transparan supaya foto kamera tetap terlihat. Kalau PNG belum ada, web akan pakai frame default sederhana.

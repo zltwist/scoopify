@@ -1751,14 +1751,29 @@ function setBoothMobileStep(nextStep) {
 }
 
 const boothFrameProfiles = {
-  basic: { label: "Clean Pop", bg: "#f7e8ff", accent: "#9d7cff", text: "#332457", premium: false },
-  bubble: { label: "Bubble Pop", bg: "#ddf7ff", accent: "#47a7c9", text: "#173849", premium: false },
-  heart: { label: "Heart Wink", bg: "#ffe1ec", accent: "#e85287", text: "#4a1026", premium: false },
-  star: { label: "Star Rush", bg: "#fff3b8", accent: "#e0a51f", text: "#3d2b05", premium: false },
-  retro: { label: "Retro Smile", bg: "#e7f0d2", accent: "#4e8a64", text: "#173a27", premium: false },
-  dream: { label: "Dream Cloud", bg: "#eee7ff", accent: "#7f62ce", text: "#2e2352", premium: false },
-  party: { label: "Party Splash", bg: "#ffe7c8", accent: "#eb6f48", text: "#4a2014", premium: false },
+  basic: { label: "Free Frame", bg: "#f7e8ff", accent: "#9d7cff", text: "#332457", premium: false },
 };
+
+const boothLogoImage = typeof Image !== "undefined" ? new Image() : null;
+if (boothLogoImage) {
+  boothLogoImage.src = "assets/logo/scoopify.png";
+  boothLogoImage.addEventListener("load", () => {
+    renderShotTray();
+  });
+}
+
+const boothFrameOverlayImages = {};
+if (typeof Image !== "undefined") {
+  [2, 3, 6].forEach((layout) => {
+    const image = new Image();
+    image.src = `assets/frame-free/free-frame-${layout}.png`;
+    image.addEventListener("load", () => {
+      renderShotTray();
+      if (boothShots.length) renderBoothCanvas();
+    });
+    boothFrameOverlayImages[layout] = image;
+  });
+}
 
 const boothFilterProfiles = {
   normal: { label: "Normal", canvas: "" },
@@ -1829,6 +1844,106 @@ function getFrameColors() {
   return boothFrameProfiles[boothFrame] || boothFrameProfiles.basic;
 }
 
+function drawRoundRect(context, x, y, width, height, radius) {
+  const safeRadius = Math.min(radius, width / 2, height / 2);
+  context.beginPath();
+  context.moveTo(x + safeRadius, y);
+  context.lineTo(x + width - safeRadius, y);
+  context.quadraticCurveTo(x + width, y, x + width, y + safeRadius);
+  context.lineTo(x + width, y + height - safeRadius);
+  context.quadraticCurveTo(x + width, y + height, x + width - safeRadius, y + height);
+  context.lineTo(x + safeRadius, y + height);
+  context.quadraticCurveTo(x, y + height, x, y + height - safeRadius);
+  context.lineTo(x, y + safeRadius);
+  context.quadraticCurveTo(x, y, x + safeRadius, y);
+  context.closePath();
+}
+
+function drawBoothDecoration(context, width, height, colors, topBand, bottomBand) {
+  const accent = colors.accent;
+  const textColor = colors.text;
+  const bottomY = height - bottomBand;
+  const dotSize = Math.max(8, width * 0.014);
+  const sparkleSize = Math.max(16, width * 0.026);
+
+  context.save();
+  context.globalAlpha = 0.34;
+  context.fillStyle = "#ffffff";
+  [
+    [width * 0.08, topBand * 0.56, dotSize * 1.2],
+    [width * 0.14, topBand * 0.32, dotSize * 0.7],
+    [width * 0.88, topBand * 0.50, dotSize],
+    [width * 0.94, topBand * 0.28, dotSize * 0.62],
+    [width * 0.10, bottomY + bottomBand * 0.48, dotSize],
+    [width * 0.91, bottomY + bottomBand * 0.62, dotSize * 1.15],
+  ].forEach(([x, y, radius]) => {
+    context.beginPath();
+    context.arc(x, y, radius, 0, Math.PI * 2);
+    context.fill();
+  });
+
+  context.globalAlpha = 0.55;
+  context.strokeStyle = "#ffffff";
+  context.lineWidth = Math.max(3, width * 0.004);
+  [
+    [width * 0.05, height * 0.5],
+    [width * 0.95, height * 0.43],
+    [width * 0.12, height * 0.86],
+    [width * 0.88, height * 0.82],
+  ].forEach(([x, y]) => {
+    context.beginPath();
+    context.moveTo(x, y - sparkleSize);
+    context.lineTo(x + sparkleSize * 0.34, y - sparkleSize * 0.34);
+    context.lineTo(x + sparkleSize, y);
+    context.lineTo(x + sparkleSize * 0.34, y + sparkleSize * 0.34);
+    context.lineTo(x, y + sparkleSize);
+    context.lineTo(x - sparkleSize * 0.34, y + sparkleSize * 0.34);
+    context.lineTo(x - sparkleSize, y);
+    context.lineTo(x - sparkleSize * 0.34, y - sparkleSize * 0.34);
+    context.closePath();
+    context.stroke();
+  });
+  context.restore();
+
+  context.save();
+  context.globalAlpha = 0.96;
+  context.fillStyle = "rgba(255,255,255,0.74)";
+  drawRoundRect(context, width * 0.31, bottomY + bottomBand * 0.11, width * 0.38, bottomBand * 0.75, bottomBand * 0.28);
+  context.fill();
+
+  const logoMaxWidth = width * 0.24;
+  const logoMaxHeight = bottomBand * 0.34;
+  if (boothLogoImage?.complete && boothLogoImage.naturalWidth) {
+    const imageRatio = boothLogoImage.naturalWidth / boothLogoImage.naturalHeight;
+    let logoWidth = logoMaxWidth;
+    let logoHeight = logoWidth / imageRatio;
+    if (logoHeight > logoMaxHeight) {
+      logoHeight = logoMaxHeight;
+      logoWidth = logoHeight * imageRatio;
+    }
+    context.drawImage(
+      boothLogoImage,
+      (width - logoWidth) / 2,
+      bottomY + bottomBand * 0.18,
+      logoWidth,
+      logoHeight
+    );
+  } else {
+    context.fillStyle = accent;
+    context.font = `900 ${Math.max(18, width * 0.04)}px Arial`;
+    context.textAlign = "center";
+    context.textBaseline = "middle";
+    context.fillText("SCOOPIFY", width / 2, bottomY + bottomBand * 0.34);
+  }
+
+  context.fillStyle = textColor;
+  context.font = `800 ${Math.max(12, width * 0.019)}px Arial`;
+  context.textAlign = "center";
+  context.textBaseline = "middle";
+  context.fillText("PLAY YOUR MOOD, TASTE YOUR SCOOP", width / 2, bottomY + bottomBand * 0.68);
+  context.restore();
+}
+
 function drawCoverImage(context, source, dx, dy, dw, dh, options = {}) {
   const applyEffects = options.applyEffects !== false;
   const applyMirror = options.applyMirror ?? (boothMirror && source === cameraVideo);
@@ -1869,13 +1984,21 @@ function drawBoothFrame(context, width, height) {
   const topBand = height * 0.05;
   const bottomBand = height * 0.066;
 
-  context.fillStyle = colors.bg;
+  const frameGradient = context.createLinearGradient(0, 0, width, height);
+  frameGradient.addColorStop(0, colors.bg);
+  frameGradient.addColorStop(0.52, "#fff7fb");
+  frameGradient.addColorStop(1, colors.bg);
+  context.fillStyle = frameGradient;
   context.fillRect(0, 0, width, height);
   context.fillStyle = "rgba(255,255,255,0.18)";
   context.fillRect(inset, inset, width - inset * 2, height - inset * 2);
   context.fillStyle = colors.accent;
   context.fillRect(0, 0, width, topBand);
   context.fillRect(0, height - bottomBand, width, bottomBand);
+  context.fillStyle = "rgba(255,255,255,0.18)";
+  context.fillRect(0, topBand, width, Math.max(4, height * 0.006));
+  context.fillRect(0, height - bottomBand - Math.max(4, height * 0.006), width, Math.max(4, height * 0.006));
+  drawBoothDecoration(context, width, height, colors, topBand, bottomBand);
 }
 
 function getBoothOutputSize(layout = boothLayout) {
@@ -1953,6 +2076,11 @@ function drawBoothComposition(context, width, height) {
     }
     context.restore();
   });
+
+  const frameOverlay = boothFrameOverlayImages[boothLayout];
+  if (boothFrame === "basic" && frameOverlay?.complete && frameOverlay.naturalWidth) {
+    context.drawImage(frameOverlay, 0, 0, width, height);
+  }
 }
 
 function renderShotTray() {
@@ -2315,6 +2443,12 @@ let activeVariantIndex = 0;
 let lastVariantScrollLeft = 0;
 let variantScrollFrame = null;
 let isRestoringVariant = false;
+let isVariantProgrammaticScroll = false;
+let isVariantTouching = false;
+let variantTouchStartX = 0;
+let variantTouchStartY = 0;
+let variantTouchStartIndex = 0;
+let variantProgrammaticScrollTimeout = null;
 
 function setActiveVariant(index, applyTheme = false) {
   if (!variantCards.length) return;
@@ -2350,12 +2484,17 @@ function setActiveVariant(index, applyTheme = false) {
 function scrollVariantTo(index) {
   if (!variantTrack || !variantCards.length) return;
   const nextIndex = Math.max(0, Math.min(index, variantCards.length - 1));
+  isVariantProgrammaticScroll = true;
+  window.clearTimeout(variantProgrammaticScrollTimeout);
   variantCards[nextIndex].scrollIntoView({
     behavior: "smooth",
     inline: "center",
     block: "nearest",
   });
   setActiveVariant(nextIndex, true);
+  variantProgrammaticScrollTimeout = window.setTimeout(() => {
+    isVariantProgrammaticScroll = false;
+  }, 420);
 }
 
 function updateActiveVariantFromScroll() {
@@ -2390,6 +2529,31 @@ if (variantDots && variantCards.length) {
 
 variantPrev?.addEventListener("click", () => scrollVariantTo(activeVariantIndex - 1));
 variantNext?.addEventListener("click", () => scrollVariantTo(activeVariantIndex + 1));
+variantTrack?.addEventListener("touchstart", (event) => {
+  const touch = event.touches?.[0];
+  if (!touch) return;
+  isVariantTouching = true;
+  variantTouchStartX = touch.clientX;
+  variantTouchStartY = touch.clientY;
+  variantTouchStartIndex = activeVariantIndex;
+}, { passive: true });
+variantTrack?.addEventListener("touchend", (event) => {
+  if (!isVariantTouching) return;
+  const touch = event.changedTouches?.[0];
+  isVariantTouching = false;
+  if (!touch) return;
+
+  const deltaX = touch.clientX - variantTouchStartX;
+  const deltaY = touch.clientY - variantTouchStartY;
+  const isHorizontalSwipe = Math.abs(deltaX) > 52 && Math.abs(deltaX) > Math.abs(deltaY) * 1.2;
+
+  if (isHorizontalSwipe) {
+    scrollVariantTo(variantTouchStartIndex + (deltaX < 0 ? 1 : -1));
+    return;
+  }
+
+  scrollVariantTo(variantTouchStartIndex);
+}, { passive: true });
 variantTrack?.addEventListener("scroll", () => {
   if (isRestoringVariant) return;
 
@@ -2400,6 +2564,14 @@ variantTrack?.addEventListener("scroll", () => {
   variantTrack.classList.add("is-swiping", directionClass);
   variantTrack.classList.toggle("swipe-left", directionClass === "swipe-left");
   variantTrack.classList.toggle("swipe-right", directionClass === "swipe-right");
+
+  if (isVariantTouching || isVariantProgrammaticScroll) {
+    window.clearTimeout(window.__variantScrollTimeout);
+    window.__variantScrollTimeout = window.setTimeout(() => {
+      variantTrack.classList.remove("is-swiping", "swipe-left", "swipe-right");
+    }, 180);
+    return;
+  }
 
   if (!variantScrollFrame) {
     variantScrollFrame = window.requestAnimationFrame(() => {

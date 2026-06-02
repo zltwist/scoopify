@@ -1949,36 +1949,6 @@ body[data-page="photobooth"] {
   --frame-accent: #9d7cff;
 }
 
-.booth-frame[data-frame="bubble"] {
-  --frame-bg: #ddf7ff;
-  --frame-accent: #47a7c9;
-}
-
-.booth-frame[data-frame="heart"] {
-  --frame-bg: #ffe1ec;
-  --frame-accent: #e85287;
-}
-
-.booth-frame[data-frame="star"] {
-  --frame-bg: #fff3b8;
-  --frame-accent: #e0a51f;
-}
-
-.booth-frame[data-frame="retro"] {
-  --frame-bg: #e7f0d2;
-  --frame-accent: #4e8a64;
-}
-
-.booth-frame[data-frame="dream"] {
-  --frame-bg: #eee7ff;
-  --frame-accent: #7f62ce;
-}
-
-.booth-frame[data-frame="party"] {
-  --frame-bg: #ffe7c8;
-  --frame-accent: #eb6f48;
-}
-
 .booth-frame.locked {
   opacity: 0.56;
   border-style: dashed;
