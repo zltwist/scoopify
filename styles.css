@@ -3787,7 +3787,7 @@ body[data-page="photobooth"] .ghost:hover {
   }
 
   .chatbot-card {
-    padding: 8px 10px 26px;
+    padding: 8px 10px max(42px, calc(env(safe-area-inset-bottom) + 32px));
     border-radius: 0;
   }
 
@@ -3863,9 +3863,9 @@ body[data-page="photobooth"] .ghost:hover {
   .chatbot-prompts {
     flex-wrap: nowrap;
     overflow-x: auto;
-    margin-top: 12px;
-    margin-bottom: 16px;
-    padding-bottom: 4px;
+    margin-top: 8px;
+    margin-bottom: 7px;
+    padding-bottom: 2px;
     scrollbar-width: none;
   }
 
@@ -3879,7 +3879,7 @@ body[data-page="photobooth"] .ghost:hover {
     flex-direction: row;
     gap: 6px;
     padding: 6px;
-    margin-bottom: 18px;
+    margin-bottom: max(34px, calc(env(safe-area-inset-bottom) + 24px));
   }
 
   .chatbot-input-row > span {

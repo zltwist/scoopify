@@ -2791,7 +2791,7 @@ function summarizeChatMeta(payload) {
 
 async function sendChatbotMessage(message) {
   if (!message.trim() || !chatbotForm) return;
-  const apiUrl = chatbotForm.dataset.apiUrl || "http://127.0.0.1:8000/chat";
+  const apiUrl = getChatbotApiUrl();
   const displayMessage = message.trim();
   const historyForRequest = chatbotConversationHistory.slice(-8);
 
@@ -2807,7 +2807,10 @@ async function sendChatbotMessage(message) {
   try {
     const response = await fetch(apiUrl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "ngrok-skip-browser-warning": "true",
+      },
       body: JSON.stringify({
         message: displayMessage,
         history: historyForRequest,
@@ -2832,7 +2835,7 @@ async function sendChatbotMessage(message) {
     loadingBubble?.remove();
     appendChatBubble(
       "bot",
-      "Backend NLP belum aktif. Jalankan uvicorn nlp_backend.main:app --reload --host 127.0.0.1 --port 8000 dulu."
+      "Scoopify AI belum tersambung. Pastikan tunnel chatbot sedang aktif, lalu refresh halaman."
     );
     if (chatbotMode) chatbotMode.textContent = "Backend offline";
   } finally {
@@ -2842,6 +2845,34 @@ async function sendChatbotMessage(message) {
     }
     scrollChatbotToBottom();
   }
+}
+
+function getChatbotApiUrl() {
+  const defaultUrl = chatbotForm?.dataset.apiUrl || "http://127.0.0.1:8000/chat";
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const queryUrl = params.get("chatApi");
+    if (queryUrl) {
+      const normalizedUrl = normalizeChatbotApiUrl(queryUrl);
+      window.localStorage?.setItem("scoopifyChatbotApiUrl", normalizedUrl);
+      return normalizedUrl;
+    }
+
+    const globalUrl = window.SCOOPIFY_CHAT_API_URL;
+    if (globalUrl) return normalizeChatbotApiUrl(globalUrl);
+
+    const storedUrl = window.localStorage?.getItem("scoopifyChatbotApiUrl");
+    if (storedUrl) return normalizeChatbotApiUrl(storedUrl);
+  } catch (error) {
+    return defaultUrl;
+  }
+  return defaultUrl;
+}
+
+function normalizeChatbotApiUrl(url) {
+  const cleanUrl = String(url || "").trim().replace(/\/+$/, "");
+  if (!cleanUrl) return chatbotForm?.dataset.apiUrl || "http://127.0.0.1:8000/chat";
+  return cleanUrl.endsWith("/chat") ? cleanUrl : `${cleanUrl}/chat`;
 }
 
 chatbotForm?.addEventListener("submit", (event) => {
