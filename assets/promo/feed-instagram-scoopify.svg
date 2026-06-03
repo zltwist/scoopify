@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fff2b7"/>
+      <stop offset=".55" stop-color="#ffc2ef"/>
+      <stop offset="1" stop-color="#cfc9ff"/>
+    </linearGradient>
+    <style>
+      .title{font-family:"Luckiest Guy","Arial Black",sans-serif;font-size:86px;fill:#2b1f3a}
+      .body{font-family:"Arial",sans-serif;font-size:34px;font-weight:900;fill:#2b1f3a}
+      .small{font-family:"Arial",sans-serif;font-size:26px;font-weight:800;fill:#5f536c}
+    </style>
+  </defs>
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <circle cx="90" cy="100" r="105" fill="#fff" opacity=".24"/>
+  <circle cx="990" cy="980" r="135" fill="#fff" opacity=".22"/>
+  <image href="../logo/scoopify.png" x="250" y="10" width="580" height="326" preserveAspectRatio="xMidYMid meet"/>
+  <text x="540" y="330" text-anchor="middle" class="title">SCAN. PLAY. WIN.</text>
+  <text x="540" y="390" text-anchor="middle" class="body">Es krim Rp5.000 + mini game reward</text>
+
+  <g transform="translate(90 465)">
+    <rect x="0" y="0" width="900" height="250" rx="45" fill="#fff" opacity=".94"/>
+    <text x="60" y="80" class="body">1. Cek mood AI</text>
+    <text x="60" y="145" class="body">2. Dapat rekomendasi rasa</text>
+    <text x="60" y="210" class="body">3. Foto di photobooth</text>
+  </g>
+  <g transform="translate(90 760)">
+    <rect x="0" y="0" width="560" height="210" rx="45" fill="#2b1f3a"/>
+    <text x="280" y="75" text-anchor="middle" class="body" fill="#fff">Topping gratis</text>
+    <text x="280" y="130" text-anchor="middle" class="body" fill="#fff">Rp1.000 / Rp2.000 off</text>
+  </g>
+  <g transform="translate(715 750)">
+    <rect x="0" y="0" width="230" height="230" rx="28" fill="#fffdf5" stroke="#2b1f3a" stroke-width="8" stroke-dasharray="18 12"/>
+    <text x="115" y="105" text-anchor="middle" class="body">QR</text>
+    <text x="115" y="150" text-anchor="middle" class="small">WEB</text>
+  </g>
+</svg>

@@ -12,6 +12,7 @@ const flavorInventory = {
 const lastVariantThemeKey = "scoopifyLastVariantTheme";
 const lastVariantIndexKey = "scoopifyLastVariantIndex";
 const lastRecommendedFlavorKey = "scoopifyLastRecommendedFlavor";
+const partnerPromoDeadlineKey = "scoopifyPartnerPromoDeadline";
 
 const menuVariantCandidates = [
   "Coklat + Vanila",
@@ -678,6 +679,70 @@ const savedRecommendedFlavor = readLastRecommendedFlavor();
 if (savedVariantTheme) {
   setBodyTheme(savedVariantTheme);
 }
+
+function initScrollReveal() {
+  const revealItems = Array.from(document.querySelectorAll(".reveal-on-scroll"));
+  if (!revealItems.length) return;
+
+  if (!("IntersectionObserver" in window)) {
+    revealItems.forEach((item) => item.classList.add("is-visible"));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    });
+  }, {
+    threshold: 0.14,
+    rootMargin: "0px 0px -8% 0px",
+  });
+
+  revealItems.forEach((item) => observer.observe(item));
+}
+
+function initPartnerPage() {
+  if (document.body?.dataset.page !== "partner") return;
+
+  initScrollReveal();
+
+  const fallbackDurationMs = ((12 * 60 * 60) + (45 * 60) + 16) * 1000;
+  const hoursEl = document.getElementById("partnerHours");
+  const minutesEl = document.getElementById("partnerMinutes");
+  const secondsEl = document.getElementById("partnerSeconds");
+  if (!hoursEl || !minutesEl || !secondsEl) return;
+
+  let deadline = Number(window.localStorage?.getItem(partnerPromoDeadlineKey) || 0);
+  const now = Date.now();
+  if (!deadline || deadline <= now) {
+    deadline = now + fallbackDurationMs;
+    window.localStorage?.setItem(partnerPromoDeadlineKey, String(deadline));
+  }
+
+  const renderCountdown = () => {
+    const remaining = Math.max(0, deadline - Date.now());
+    const totalSecondsLeft = Math.floor(remaining / 1000);
+    const hours = Math.floor(totalSecondsLeft / 3600);
+    const minutes = Math.floor((totalSecondsLeft % 3600) / 60);
+    const seconds = totalSecondsLeft % 60;
+
+    hoursEl.textContent = String(hours).padStart(2, "0");
+    minutesEl.textContent = String(minutes).padStart(2, "0");
+    secondsEl.textContent = String(seconds).padStart(2, "0");
+
+    if (remaining <= 0) {
+      window.clearInterval(window.__partnerPromoTimer);
+    }
+  };
+
+  renderCountdown();
+  window.clearInterval(window.__partnerPromoTimer);
+  window.__partnerPromoTimer = window.setInterval(renderCountdown, 1000);
+}
+
+initPartnerPage();
 
 function parseFlavorComponents(flavor) {
   return flavor
@@ -2639,6 +2704,158 @@ applyCameraPreviewSettings();
 setBoothFilter("normal");
 setBoothFinished(false);
 setBoothMobileStep("frame");
+
+// ========== NLP CHATBOT ==========
+const chatbotForm = document.getElementById("chatbotForm");
+const chatbotInput = document.getElementById("chatbotInput");
+const chatbotThread = document.getElementById("chatbotThread");
+const chatbotMode = document.getElementById("chatbotMode");
+const chatbotSend = document.getElementById("chatbotSend");
+const chatbotHistoryKey = "scoopifyChatbotConversationHistory";
+let chatbotConversationHistory = readChatbotHistory();
+
+function readChatbotHistory() {
+  try {
+    const parsed = JSON.parse(window.sessionStorage?.getItem(chatbotHistoryKey) || "[]");
+    return Array.isArray(parsed) ? parsed.slice(-12) : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function writeChatbotHistory() {
+  try {
+    window.sessionStorage?.setItem(chatbotHistoryKey, JSON.stringify(chatbotConversationHistory.slice(-12)));
+  } catch (error) {
+    // History is optional; ignore storage failures.
+  }
+}
+
+function scrollChatbotToBottom(behavior = "smooth") {
+  if (!chatbotThread) return;
+  requestAnimationFrame(() => {
+    chatbotThread.scrollTo({
+      top: chatbotThread.scrollHeight,
+      behavior,
+    });
+  });
+}
+
+function appendChatBubble(role, message, meta = "") {
+  if (!chatbotThread) return;
+  const bubble = document.createElement("div");
+  bubble.className = `chatbot-bubble ${role === "user" ? "user" : "bot"}`;
+
+  const paragraph = document.createElement("p");
+  paragraph.textContent = message;
+
+  bubble.appendChild(paragraph);
+
+  if (meta) {
+    const small = document.createElement("small");
+    small.textContent = meta;
+    bubble.appendChild(small);
+  }
+
+  chatbotThread.appendChild(bubble);
+  scrollChatbotToBottom();
+}
+
+function summarizeChatMeta(payload) {
+  const products = payload?.entities?.products || [];
+  const actions = payload?.entities?.actions || [];
+  const contextTitles = (payload?.retrieved_context || []).map((item) => item.title).slice(0, 2);
+  const preprocessed = payload?.preprocessed_message && payload?.preprocessed_message !== payload?.original_message
+    ? `preprocess: ${payload.preprocessed_message}`
+    : "";
+  const mode = payload?.mode || "";
+  const llmStatus = payload?.llm_used
+    ? "LLM: Gemini aktif"
+    : mode === "local-rag-ner"
+      ? "NLP lokal: RAG + NER"
+      : mode === "local-ner"
+        ? "NLP lokal: NER"
+        : `LLM: fallback${payload?.llm_error ? ` (${payload.llm_error})` : ""}`;
+  const confidence = typeof payload?.confidence === "number"
+    ? `confidence: ${Math.round(payload.confidence * 100)}%`
+    : "";
+  return [
+    llmStatus,
+    preprocessed,
+    confidence,
+    products.length ? `NER produk: ${products.join(", ")}` : "",
+    actions.length ? `aksi: ${actions.join(", ")}` : "",
+    contextTitles.length ? `RAG: ${contextTitles.join(" + ")}` : "",
+  ].filter(Boolean).join(" | ");
+}
+
+async function sendChatbotMessage(message) {
+  if (!message.trim() || !chatbotForm) return;
+  const apiUrl = chatbotForm.dataset.apiUrl || "http://127.0.0.1:8000/chat";
+  const displayMessage = message.trim();
+  const historyForRequest = chatbotConversationHistory.slice(-8);
+
+  appendChatBubble("user", displayMessage);
+  chatbotConversationHistory.push({ role: "user", content: displayMessage });
+  chatbotConversationHistory = chatbotConversationHistory.slice(-12);
+  writeChatbotHistory();
+  chatbotInput.value = "";
+  chatbotSend?.setAttribute("disabled", "true");
+  appendChatBubble("bot", "Sedang membaca konteks Scoopify...");
+
+  const loadingBubble = chatbotThread?.lastElementChild;
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: displayMessage,
+        history: historyForRequest,
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const payload = await response.json();
+    loadingBubble?.remove();
+    chatbotConversationHistory.push({ role: "assistant", content: payload.answer || "" });
+    chatbotConversationHistory = chatbotConversationHistory.slice(-12);
+    writeChatbotHistory();
+    appendChatBubble("bot", payload.answer, summarizeChatMeta(payload));
+    scrollChatbotToBottom();
+    if (chatbotMode) {
+      chatbotMode.textContent = `${payload.llm_used ? "Gemini LLM aktif" : "Fallback RAG"} | ${payload.latency_ms} ms`;
+    }
+  } catch (error) {
+    loadingBubble?.remove();
+    appendChatBubble(
+      "bot",
+      "Backend NLP belum aktif. Jalankan uvicorn nlp_backend.main:app --reload --host 127.0.0.1 --port 8000 dulu."
+    );
+    if (chatbotMode) chatbotMode.textContent = "Backend offline";
+  } finally {
+    chatbotSend?.removeAttribute("disabled");
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      chatbotInput?.focus();
+    }
+    scrollChatbotToBottom();
+  }
+}
+
+chatbotForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  sendChatbotMessage(chatbotInput?.value || "");
+});
+
+document.querySelectorAll("[data-chat-prompt]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const prompt = button.dataset.chatPrompt || "";
+    if (chatbotInput) chatbotInput.value = prompt;
+    sendChatbotMessage(prompt);
+  });
+});
 
 // ========== VARIANT CAROUSEL ==========
 const variantTrack = document.getElementById("variantTrack");

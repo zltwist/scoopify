@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1920" viewBox="0 0 1080 1920">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#fff2b7"/>
+      <stop offset=".50" stop-color="#ffc2ef"/>
+      <stop offset="1" stop-color="#cfc9ff"/>
+    </linearGradient>
+    <style>
+      .title{font-family:"Luckiest Guy","Arial Black",sans-serif;font-size:104px;fill:#2b1f3a}
+      .body{font-family:"Arial",sans-serif;font-size:42px;font-weight:900;fill:#2b1f3a}
+      .small{font-family:"Arial",sans-serif;font-size:32px;font-weight:800;fill:#5f536c}
+    </style>
+  </defs>
+  <rect width="1080" height="1920" fill="url(#bg)"/>
+  <circle cx="980" cy="170" r="150" fill="#fff" opacity=".22"/>
+  <circle cx="110" cy="1680" r="180" fill="#fff" opacity=".22"/>
+  <image href="../logo/scoopify.png" x="190" y="80" width="700" height="394" preserveAspectRatio="xMidYMid meet"/>
+
+  <text x="540" y="560" text-anchor="middle" class="title">PLAY YOUR</text>
+  <text x="540" y="680" text-anchor="middle" class="title">MOOD</text>
+  <text x="540" y="800" text-anchor="middle" class="title">TASTE YOUR</text>
+  <text x="540" y="920" text-anchor="middle" class="title">SCOOP</text>
+  <text x="540" y="1010" text-anchor="middle" class="body">Semua varian Rp5.000</text>
+
+  <g transform="translate(130 1100)">
+    <rect x="0" y="0" width="820" height="330" rx="54" fill="#fff" opacity=".94"/>
+    <text x="410" y="95" text-anchor="middle" class="body">Scan QR di booth</text>
+    <text x="410" y="165" text-anchor="middle" class="small">Cek mood AI + main mini game</text>
+    <text x="410" y="235" text-anchor="middle" class="small">Bisa dapat topping gratis / diskon</text>
+  </g>
+
+  <g transform="translate(360 1510)">
+    <rect x="0" y="0" width="360" height="360" rx="45" fill="#fffdf5" stroke="#2b1f3a" stroke-width="10" stroke-dasharray="22 14"/>
+    <text x="180" y="165" text-anchor="middle" class="body">QR WEB</text>
+    <text x="180" y="225" text-anchor="middle" class="small">ganti di sini</text>
+  </g>
+</svg>

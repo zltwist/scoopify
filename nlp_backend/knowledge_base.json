@@ -1,0 +1,344 @@
+[
+  {
+    "id": "brand",
+    "title": "Identitas Scoopify",
+    "keywords": ["scoopify", "brand", "tagline", "produk", "booth"],
+    "content": "Scoopify adalah produk es krim interaktif dengan tagline Play Your Mood, Taste Your Scoop. Produk ini menggabungkan menu es krim, AI Mood Tracker, mini game reward, QR ticket, dan photobooth digital."
+  },
+  {
+    "id": "menu",
+    "title": "Menu dan Stok",
+    "keywords": ["menu", "rasa", "varian", "stok", "tersedia", "sold out", "produk"],
+    "content": "Varian master Scoopify adalah Vanila, Taro, Coklat, Durian, Stroberi, dan Nangka. Stok aktif saat ini adalah Vanila, Taro, dan Coklat. Durian, Stroberi, dan Nangka sedang sold out. Produk dapat dijual sebagai satu rasa atau kombinasi rasa sesuai stok."
+  },
+  {
+    "id": "price",
+    "title": "Harga Produk",
+    "keywords": ["harga", "price", "biaya", "rp", "rupiah", "bayar"],
+    "content": "Harga Scoopify saat ini adalah Rp5.000 per scoop untuk semua varian yang tersedia. Harga dapat berubah jika ada promo atau kebijakan booth pada hari acara."
+  },
+  {
+    "id": "promo",
+    "title": "Promo dan Reward",
+    "keywords": ["promo", "diskon", "reward", "hadiah", "potongan", "topping", "gratis"],
+    "content": "Promo interaktif Scoopify tersedia melalui mini game. Pelanggan yang menang berkesempatan mendapat topping gratis, potongan Rp1.000, atau potongan Rp2.000 sesuai sistem reward probabilistik."
+  },
+  {
+    "id": "ai_mood",
+    "title": "AI Mood Tracker",
+    "keywords": ["ai", "mood", "rekomendasi", "rasa", "emosi", "tracker"],
+    "content": "AI Mood Tracker memakai pendekatan Knowledge-Based Expert System. Sistem membaca parameter mood pengguna, mencocokkannya dengan knowledge base mood, lalu memilih rekomendasi rasa menggunakan Euclidean Distance. Jika rasa ideal sold out, sistem memberi alternatif yang stoknya tersedia."
+  },
+  {
+    "id": "photobooth",
+    "title": "Photobooth",
+    "keywords": ["photobooth", "foto", "frame", "kamera", "download", "share"],
+    "content": "Photobooth Scoopify dapat dipakai untuk mengambil foto dengan layout 2 foto, 3 foto, dan 6 foto. Pengguna dapat memilih frame gratis, membuka frame premium dengan QR pembelian, retake foto, finish, download, dan share hasil foto."
+  },
+  {
+    "id": "qr_ticket",
+    "title": "QR Ticket",
+    "keywords": ["qr", "ticket", "tiket", "scan", "akses", "kode"],
+    "content": "QR ticket digunakan sebagai akses digital pelanggan. QR dapat membuka mini game dan frame premium photobooth. Untuk mini game, tiket dibatasi sesuai aturan percobaan. Untuk photobooth, tiket tetap dapat digunakan untuk akses frame premium."
+  },
+  {
+    "id": "mini_game",
+    "title": "Mini Game Reward",
+    "keywords": ["game", "mini game", "reward", "hadiah", "diskon", "topping"],
+    "content": "Mini game Scoopify memakai kartu rasa 1 varian. Pengguna punya batas waktu 15 detik dan 3 kali percobaan berdasarkan tiket. Jika menang, pengguna dapat reward probabilistik seperti topping gratis, potongan Rp1.000, atau potongan Rp2.000."
+  },
+  {
+    "id": "faq_order",
+    "title": "Cara Pesan",
+    "keywords": ["pesan", "beli", "order", "cara", "bayar", "faq"],
+    "content": "Cara pesan Scoopify: pilih atau cek rekomendasi rasa melalui AI Mood Tracker, lihat menu dan stok, lakukan pembelian di booth, lalu scan QR ticket untuk membuka mini game dan photobooth premium."
+  },
+  {
+    "id": "location",
+    "title": "Lokasi Layanan",
+    "keywords": ["lokasi", "tempat", "booth", "alamat", "event", "acara"],
+    "content": "Scoopify dijalankan sebagai booth event atau pop-up booth. Lokasi detail mengikuti tempat acara dan perlu dikonfirmasi langsung kepada panitia atau penjaga booth."
+  },
+  {
+    "id": "faq_common",
+    "title": "Pertanyaan Umum Pelanggan",
+    "keywords": ["faq", "pertanyaan", "umum", "bantuan", "customer", "pelanggan"],
+    "content": "Pertanyaan umum pelanggan biasanya meliputi rasa yang tersedia, harga, cara scan QR ticket, cara main mini game, cara membuka frame premium photobooth, dan rekomendasi rasa dari AI Mood Tracker."
+  },
+  {
+    "id": "policy",
+    "title": "Kebijakan Informasi",
+    "keywords": ["kebijakan", "aturan", "habis", "alternatif", "stok", "layanan"],
+    "content": "Informasi stok dapat berubah sesuai kondisi booth. Jika rasa pilihan habis, pelanggan dapat memilih alternatif yang tersedia. Sistem menampilkan sold out untuk menjaga transparansi menu. QR ticket untuk mini game dibatasi sesuai aturan percobaan, sedangkan photobooth premium dapat digunakan selama tiket valid."
+  },
+  {
+    "id": "menu_detail",
+    "title": "Detail Menu dan Kombinasi Rasa",
+    "keywords": ["kombinasi", "mix", "campur", "dua rasa", "menu detail", "varian master", "pilihan rasa"],
+    "content": "Scoopify dapat disajikan sebagai satu rasa atau kombinasi rasa sesuai ketersediaan stok. Varian master yang dikenal sistem adalah Vanila, Taro, Coklat, Durian, Stroberi, dan Nangka. Jika pelanggan meminta rekomendasi, sistem dapat mengarahkan ke rasa yang sedang tersedia dan cocok dengan mood pengguna."
+  },
+  {
+    "id": "order_flow_detail",
+    "title": "Alur Pemesanan di Booth",
+    "keywords": ["alur", "langkah", "cara pesan", "order", "pembelian", "booth", "transaksi"],
+    "content": "Alur pemesanan Scoopify dimulai dari memilih rasa atau melihat rekomendasi AI Mood Tracker, lalu mengecek stok dan harga, kemudian melakukan pembelian di booth. Setelah transaksi selesai, pelanggan dapat menggunakan QR ticket untuk mengakses mini game dan photobooth premium sesuai ketentuan yang berlaku."
+  },
+  {
+    "id": "photobooth_guide",
+    "title": "Panduan Photobooth",
+    "keywords": ["panduan photobooth", "frame premium", "layout", "retake", "download", "share", "foto"],
+    "content": "Photobooth Scoopify menyediakan layout 2 foto, 3 foto, dan 6 foto. Pengguna dapat memilih frame gratis atau membuka frame premium melalui QR pembelian, lalu melakukan retake jika diperlukan sebelum menyimpan hasil foto dengan download atau share."
+  },
+  {
+    "id": "qr_ticket_guide",
+    "title": "Panduan QR Ticket",
+    "keywords": ["panduan qr", "scan qr", "tiket digital", "akses digital", "kode", "qr ticket"],
+    "content": "QR ticket berfungsi sebagai akses digital pelanggan ke fitur interaktif Scoopify. QR dapat dipakai untuk membuka mini game dan frame premium photobooth. Untuk mini game, sistem mengikuti batas percobaan yang berlaku, sedangkan photobooth premium bisa dibuka selama tiket masih valid."
+  },
+  {
+    "id": "mini_game_guide",
+    "title": "Aturan Mini Game",
+    "keywords": ["aturan mini game", "durasi", "15 detik", "percobaan", "reward", "hadiah", "topping"],
+    "content": "Mini game Scoopify menggunakan kartu rasa 1 varian dengan durasi 15 detik dan 3 kali percobaan sesuai tiket. Jika pelanggan menang, reward yang mungkin didapat adalah topping gratis, potongan Rp1.000, atau potongan Rp2.000."
+  },
+  {
+    "id": "ai_mood_guide",
+    "title": "Panduan AI Mood Tracker",
+    "keywords": ["panduan mood", "rekomendasi rasa", "euclidean distance", "knowledge based", "mood tracker", "emosi"],
+    "content": "AI Mood Tracker membaca parameter mood pengguna, mencocokkannya dengan knowledge base mood, lalu memilih rekomendasi rasa menggunakan Euclidean Distance. Jika rasa ideal sedang sold out, sistem memberi alternatif rasa lain yang tersedia agar rekomendasi tetap relevan."
+  },
+  {
+    "id": "faq_bounded",
+    "title": "FAQ dan Batasan Informasi",
+    "keywords": ["faq", "batasan", "informasi", "konfirmasi", "panitia", "petugas", "layanan"],
+    "content": "Sistem hanya menjawab berdasarkan data internal Scoopify yang tersedia di knowledge base. Untuk informasi yang sangat spesifik seperti detail lokasi event pada hari tertentu, ketersediaan stok real-time, atau kebijakan khusus booth, pelanggan tetap perlu konfirmasi ke petugas atau panitia acara."
+  },
+  {
+    "id": "ui_home_flow",
+    "title": "Flow Beranda dan Navigasi Utama",
+    "keywords": ["beranda", "home", "navigasi", "menu utama", "landing page", "halaman utama"],
+    "content": "Halaman utama Scoopify menampilkan identitas brand dan akses cepat ke fitur inti seperti chatbot, variants, photobooth, dan mini games. Navigasi dibuat agar pelanggan cepat pindah dari informasi produk ke fitur interaktif tanpa harus mencari menu terlalu jauh."
+  },
+  {
+    "id": "ui_chatbot_flow",
+    "title": "Flow Chatbot Pelanggan",
+    "keywords": ["chatbot", "asisten", "tanya jawab", "bantuan", "pertanyaan", "jawaban"],
+    "content": "Chatbot Scoopify dipakai untuk menjawab pertanyaan pelanggan seputar menu, harga, stok, promo, QR ticket, photobooth, mini game, dan AI Mood Tracker. Bila pertanyaan tidak bisa dijawab dari knowledge base, chatbot menyarankan pelanggan mengonfirmasi ke booth atau petugas."
+  },
+  {
+    "id": "ui_variants_flow",
+    "title": "Flow Variants dan Menu Rasa",
+    "keywords": ["variants", "varian", "rasa", "menu rasa", "pilih rasa", "pilihan menu"],
+    "content": "Halaman variants digunakan untuk melihat daftar rasa Scoopify dan kondisi stok yang tersedia. Varian utama yang dikenali sistem adalah Vanila, Taro, Coklat, Durian, Stroberi, dan Nangka. Pelanggan dapat memilih satu rasa atau kombinasi rasa mengikuti stok aktif."
+  },
+  {
+    "id": "ui_photobooth_flow",
+    "title": "Flow Photobooth",
+    "keywords": ["photobooth flow", "foto", "retake", "download", "share", "frame", "layout"],
+    "content": "Flow photobooth Scoopify dimulai dari memilih layout foto, mengambil gambar, melakukan retake bila perlu, lalu menyimpan hasil dengan download atau share. Layout yang tersedia adalah 2 foto, 3 foto, dan 6 foto."
+  },
+  {
+    "id": "ui_photobooth_premium",
+    "title": "Flow Frame Premium Photobooth",
+    "keywords": ["frame premium", "premium photobooth", "qr pembelian", "unlock frame", "frame gratis", "frame premium"],
+    "content": "Frame premium photobooth dibuka menggunakan QR pembelian atau tiket yang valid. Jika frame premium aktif, pelanggan dapat memilih frame tambahan setelah pemotretan tanpa mengganggu alur foto dasar."
+  },
+  {
+    "id": "ui_mini_game_reward",
+    "title": "Flow Reward Mini Game",
+    "keywords": ["mini game reward", "reward", "hadiah", "topping", "diskon", "potongan", "menang", "reward apa saja", "hadiahnya apa", "potongan rp1000", "potongan rp2000"],
+    "content": "Reward mini game Scoopify dibagi ke dalam beberapa hasil probabilistik. Pelanggan yang menang dapat memperoleh topping gratis, potongan Rp1.000, atau potongan Rp2.000. Reward ditampilkan setelah pemain menyelesaikan percobaan permainan dan bisa ditanyakan ulang jika pelanggan ingin tahu daftar hadiahnya."
+  },
+  {
+    "id": "faq_price_stock_detail",
+    "title": "FAQ Harga dan Stok",
+    "keywords": ["harga", "stok", "masih ada", "tersedia", "sold out", "harga berapa", "varian tersedia"],
+    "content": "Harga Scoopify saat ini adalah Rp5.000 per scoop. Stok aktif yang umum tersedia adalah Vanila, Taro, dan Coklat, sedangkan Durian, Stroberi, dan Nangka sedang sold out. Jika harga atau stok berubah saat event, pelanggan perlu mengikuti pengumuman di booth."
+  },
+  {
+    "id": "faq_payment",
+    "title": "FAQ Pembayaran",
+    "keywords": ["pembayaran", "bayar", "transaksi", "payment", "cash", "tunai", "debit", "qris", "qr payment", "metode bayar", "cara bayar"],
+    "content": "Pembayaran Scoopify mengikuti mekanisme booth atau event yang sedang berjalan. Setelah pembayaran selesai, pelanggan dapat melanjutkan ke akses fitur interaktif seperti QR ticket, mini game, dan photobooth premium jika memenuhi syarat yang berlaku."
+  },
+  {
+    "id": "faq_qr_access",
+    "title": "FAQ QR Ticket dan Akses",
+    "keywords": ["qr ticket", "scan qr", "akses", "tiket digital", "barcode", "kode qr"],
+    "content": "QR ticket dipakai sebagai akses digital pelanggan untuk fitur interaktif Scoopify. QR dapat membuka mini game dan photobooth premium selama tiket masih valid. Untuk mini game ada batas percobaan, sedangkan photobooth premium bisa dipakai sesuai ketentuan akses."
+  },
+  {
+    "id": "faq_location_detail",
+    "title": "FAQ Lokasi Booth",
+    "keywords": ["lokasi", "booth", "alamat", "event", "tempat", "detail lokasi"],
+    "content": "Scoopify beroperasi sebagai booth event atau pop-up booth, sehingga lokasi detail bergantung pada tempat acara. Jika pelanggan menanyakan lokasi yang sangat spesifik, sistem menyarankan konfirmasi ke panitia atau petugas booth."
+  },
+  {
+    "id": "faq_mood_recommendation",
+    "title": "FAQ Rekomendasi Rasa dari Mood",
+    "keywords": ["mood", "rekomendasi rasa", "saran rasa", "emosi", "tracker", "ai mood tracker"],
+    "content": "AI Mood Tracker membaca mood pengguna lalu mencocokkannya dengan knowledge base untuk memberi rekomendasi rasa. Jika rasa rekomendasi sedang tidak tersedia, sistem memberi alternatif yang masih ada di stok agar saran tetap relevan."
+  },
+  {
+    "id": "product_complete_description",
+    "title": "Deskripsi Lengkap Produk Scoopify",
+    "keywords": ["deskripsi produk", "produk scoopify", "fitur lengkap", "konsep produk", "ice cream interaktif", "pengalaman pelanggan"],
+    "content": "Scoopify adalah produk es krim interaktif yang dijual Rp5.000 per produk atau per pcs. Setiap pembelian mendapatkan QR code unik sebagai ticket digital untuk membuka pengalaman tambahan di website, yaitu mini game reward dan akses frame premium photobooth. Konsep utamanya adalah Play Your Mood, Taste Your Scoop: pelanggan tidak hanya membeli es krim, tetapi juga bermain, mendapatkan rekomendasi rasa, dan membuat foto digital yang bisa disimpan atau dibagikan."
+  },
+  {
+    "id": "qr_ticket_unique_detail",
+    "title": "QR Code Unik sebagai Ticket Digital",
+    "keywords": ["qr unik", "qr code unik", "ticket digital", "tiket unik", "scan ticket", "kode pembelian", "akses pembelian"],
+    "content": "Setiap produk Scoopify memiliki QR code unik yang berfungsi sebagai ticket digital. QR tersebut menjadi bukti akses pelanggan untuk mini game dan frame premium photobooth. Untuk mini game, QR ticket membatasi kesempatan bermain sesuai aturan. Untuk photobooth, QR ticket dipakai untuk membuka frame premium selama ticket valid."
+  },
+  {
+    "id": "mini_game_memory_complete",
+    "title": "Detail Mini Game Memory Game",
+    "keywords": ["memory game", "mini game", "kartu rasa", "6 gambar", "12 kartu", "3 kali percobaan", "15 detik", "reward roulette"],
+    "content": "Mini game Scoopify berbentuk memory game dengan kartu dari 6 gambar varian rasa berbeda. Kartu disusun menjadi 12 kartu berpasangan. Pemain diberi waktu 15 detik per percobaan dan maksimal 3 kali percobaan menggunakan QR ticket yang valid. Kesalahan membuka kartu tidak langsung mengurangi percobaan; percobaan berkurang ketika waktu habis atau ronde gagal. Jika menang, pelanggan masuk ke sistem reward probabilistik."
+  },
+  {
+    "id": "reward_probability_detail",
+    "title": "Detail Reward Mini Game",
+    "keywords": ["reward", "roulette", "probabilistik", "topping gratis", "2 topping", "diskon 1000", "diskon 2000", "potongan harga"],
+    "content": "Reward mini game Scoopify diberikan secara probabilistik setelah pemain menang. Reward yang mungkin muncul adalah topping gratis dengan pilihan bebas dari topping yang tersedia, potongan harga Rp1.000, atau potongan harga Rp2.000. Peluang diskon dibuat kecil agar tetap aman untuk operasional booth, sedangkan topping gratis menjadi reward utama yang paling sering muncul."
+  },
+  {
+    "id": "photobooth_complete_features",
+    "title": "Detail Fitur Photobooth Scoopify",
+    "keywords": ["photobooth lengkap", "frame gratis", "frame premium", "5 frame", "brightness", "filter", "share", "download", "retake", "kamera"],
+    "content": "Photobooth Scoopify menyediakan 5 frame: 1 frame gratis untuk semua pengunjung dan 4 frame premium yang dibuka dengan scan QR ticket pembelian. Fitur photobooth mencakup pengaturan kamera, mirror on/off, brightness, filter visual seperti normal, black and white, nostalgia, dan Rio de Janeiro, countdown sebelum foto, retake, finish, preview hasil sementara, download hasil, dan share hasil foto."
+  },
+  {
+    "id": "ai_mood_likert_detail",
+    "title": "Detail AI Mood Tracker dan Skala Likert",
+    "keywords": ["skala likert", "emoticon", "bingung pesan", "mood sekarang", "rekomendasi rasa", "knowledge based expert system"],
+    "content": "AI Mood Tracker membantu pelanggan yang bingung memilih rasa. Pengguna menjawab kondisi dirinya melalui pilihan emoticon berbasis skala Likert, seperti energi fisik, suasana hati, tingkat stres, dan keinginan sensorik rasa. Sistem kemudian membandingkan input pengguna dengan knowledge base mood menggunakan Euclidean Distance untuk menentukan rekomendasi rasa yang paling sesuai dengan kondisi saat itu."
+  },
+  {
+    "id": "variants_visual_menu_detail",
+    "title": "Detail Menu Varian dan Visual Produk",
+    "keywords": ["menu varian", "visual es krim", "gambar produk", "harga promo", "stok terbatas", "diskon", "lihat rasa"],
+    "content": "Halaman menu varian Scoopify digunakan untuk melihat pilihan rasa, harga, stok terbatas, kemungkinan promo atau diskon saat event, dan visual produk es krim. Visual produk membantu pelanggan membayangkan bentuk es krim sebelum membeli. Informasi stok dapat berubah saat booth berjalan sehingga pelanggan tetap perlu melihat status terbaru di booth."
+  },
+  {
+    "id": "partner_feature_plan",
+    "title": "Fitur Gabung Sebagai Mitra",
+    "keywords": ["mitra", "partner", "reseller", "bergabung", "gabung sebagai mitra", "5 kg", "whatsapp", "wa", "chat wa", "order mitra"],
+    "content": "Scoopify memiliki fitur Gabung Sebagai Mitra yang dapat diakses dari bubble tombol di kiri bawah halaman Daftar Varian. Halaman mitra menawarkan paket es krim 5 kg untuk reseller, UMKM, booth, event, kantin, coffee shop, atau mitra lokal. Tidak ada metode keranjang; setiap tombol Pesan langsung mengarah ke chat WhatsApp dengan format pesan otomatis sesuai varian yang dipilih."
+  },
+  {
+    "id": "partner_menu_catalog",
+    "title": "Katalog Menu Mitra 5 Kg",
+    "keywords": ["menu mitra", "paket 5 kg", "durian delight", "pandan cream", "chocolate heaven", "strawberry bliss", "fresh taro", "vanilla classic", "harga mitra"],
+    "content": "Katalog mitra Scoopify berisi varian 5 kg dengan harga Rp80.000 per paket: Durian Delight rating 4.9 label Bestseller, Pandan Cream rating 4.8 label Vegan, Chocolate Heaven rating 5.0 label Rich, Strawberry Bliss rating 4.7 label Fresh, Fresh Taro rating 4.9 label Limited, dan Vanilla Classic rating 4.6 label Classic. Setiap varian memakai foto dari folder assets/menu mitra dan memiliki tombol Pesan yang langsung membuka WhatsApp."
+  },
+  {
+    "id": "partner_opening_promo",
+    "title": "Promo Opening Mitra",
+    "keywords": ["opening promo", "beli 2 gratis 1", "ambil promo", "promo mitra", "countdown promo"],
+    "content": "Halaman mitra menampilkan Spesial Opening Promo berupa Beli 2 Gratis 1 untuk semua varian rasa klasik. Promo ditampilkan dengan countdown visual 12 Jam, 45 Menit, 16 Detik dan tombol Ambil Promo yang langsung mengarah ke WhatsApp."
+  },
+  {
+    "id": "partner_order_flow_detail",
+    "title": "Alur Order dan Bergabung Sebagai Mitra",
+    "keywords": ["alur mitra", "cara jadi mitra", "cara gabung mitra", "order mitra", "pesan paket 5 kg", "chat whatsapp mitra", "tanpa keranjang"],
+    "content": "Alur menjadi mitra Scoopify dimulai dari membuka halaman Mitra melalui tombol Gabung Sebagai Mitra di halaman Daftar Varian, memilih paket 5 kg atau promo, lalu menekan tombol Pesan atau Ambil Promo. Website tidak memakai keranjang untuk program mitra. Tombol tersebut langsung membuka WhatsApp admin dengan pesan otomatis. Setelah itu calon mitra mengonfirmasi varian, jumlah paket, alamat atau lokasi event, jadwal kebutuhan, metode pembayaran, dan detail pengiriman atau pengambilan."
+  },
+  {
+    "id": "partner_requirements_policy",
+    "title": "Ketentuan dan Kebutuhan Mitra",
+    "keywords": ["syarat mitra", "ketentuan mitra", "kebutuhan mitra", "reseller", "umkm", "kantin", "event", "pengiriman", "stok final", "produksi"],
+    "content": "Program mitra Scoopify ditujukan untuk reseller, UMKM, booth event, kantin, coffee shop, dan penjual lokal. Kebutuhan utama calon mitra adalah menentukan varian rasa, jumlah paket 5 kg, tanggal kebutuhan, lokasi, dan cara pembayaran. Stok, jadwal produksi, area layanan, pengiriman, dan promo final harus dikonfirmasi admin melalui WhatsApp karena dapat berubah mengikuti kapasitas produksi dan kondisi event."
+  },
+  {
+    "id": "partner_contact_info",
+    "title": "Kontak Kemitraan Scoopify",
+    "keywords": ["kontak mitra", "nomor wa", "whatsapp mitra", "admin mitra", "email mitra", "hubungi mitra", "lokasi mitra", "alamat mitra", "halo scoopify"],
+    "content": "Kontak kemitraan Scoopify tersedia melalui WhatsApp +62 812 3456 789 dan email halo@scoopify.id. Lokasi utama berada di Medan, Sumatera Utara, dengan area layanan mengikuti lokasi event dan ketersediaan produksi. Untuk order cepat, calon mitra disarankan memakai tombol Pesan di halaman Mitra karena tombol tersebut sudah membawa format pesan otomatis sesuai produk atau promo yang dipilih."
+  },
+  {
+    "id": "web_navigation_full_flow",
+    "title": "Alur Navigasi Website Scoopify",
+    "keywords": ["navigasi", "menu utama", "halaman utama", "ai chatbot", "variants", "photobooth", "mini game", "flow website", "alur website"],
+    "content": "Website Scoopify memiliki navigasi utama ke Menu Utama, Daftar Varian, Photobooth, dan AI Chatbot. Halaman utama berisi logo Scoopify, tagline Play Your Mood, Taste Your Scoop, CTA Mulai Cek Mood, tombol Scan QR, ringkasan AI Mood, Varian, dan Photobooth. Setelah AI Mood selesai, pengguna diarahkan ke hasil rekomendasi rasa. Mini game berada dalam flow halaman utama dan terkunci sampai pengguna scan QR ticket. Photobooth berada di halaman terpisah agar pengunjung umum bisa memakai frame gratis dan pelanggan dengan QR dapat membuka frame premium."
+  },
+  {
+    "id": "variant_catalog_complete_current",
+    "title": "Katalog Varian Lengkap Saat Ini",
+    "keywords": ["katalog varian", "daftar varian", "nama lucu", "nickname varian", "harga varian", "sold out varian", "stok varian"],
+    "content": "Daftar varian Scoopify di halaman variants: Vanilla nickname Soft Cloud harga Rp5.000 tersedia; Taro nickname Purple Puff harga Rp5.000 tersedia; Coklat nickname Choco Hug harga Rp5.000 tersedia; Duren nickname Drama King sold out; Vanilla Taro nickname Lilac Daydream harga Rp5.000 tersedia; Taro Coklat nickname Moody Munch harga Rp5.000 tersedia; Coklat Vanilla nickname Cozy Duo harga Rp5.000 tersedia; Duren Vanilla nickname Bold Sweetie sold out; Taro Duren nickname Tiny Daredevil sold out; Duren Coklat nickname Volcano Hug sold out; Vanilla Coklat nickname Classic Cuddle harga Rp5.000 tersedia; Taro Vanilla Coklat nickname Triple Trouble harga Rp5.000 tersedia; Taro Vanilla Duren nickname Sweet Chaos sold out; Duren Coklat Vanilla nickname Royal Scoop Squad sold out; Strawberry Spark nickname Pink Wink sold out; Nangka Classic nickname Golden Throwback sold out."
+  },
+  {
+    "id": "inventory_and_alternative_logic",
+    "title": "Logika Stok dan Alternatif Rasa",
+    "keywords": ["stok aktif", "stok kosong", "alternatif rasa", "substitusi", "sold out", "fallback rasa", "similarity rasa"],
+    "content": "Stok aktif sistem saat ini adalah Vanila, Vanilla, Taro, dan Coklat. Stok kosong atau sold out adalah Durian, Duren, Nangka, Stroberi, dan Strawberry. Jika rekomendasi AI mengandung rasa sold out, sistem tidak menghapus rasa ideal, tetapi menampilkan status sold out lalu mencari alternatif tersedia. Alternatif dipilih dari fallback mood dan kandidat menu dengan scoring kedekatan rasa. Contoh substitusi: rasa stroberi dapat dialihkan ke vanila, coklat, atau taro; durian dapat dialihkan ke taro, coklat, atau vanila; nangka dapat dialihkan ke vanila atau taro karena durian juga sold out."
+  },
+  {
+    "id": "ai_mood_current_input_detail",
+    "title": "Input AI Mood Tracker Aktual di Website",
+    "keywords": ["input mood", "emoticon mood", "likert", "energy level", "stress anxiety", "emotional valence", "craving taste profile"],
+    "content": "AI Mood Tracker di website memakai input emoticon skala Likert 1 sampai 5. Parameter yang digunakan adalah Energy Level dengan pilihan sangat lemas sampai sangat berenergi, Stress atau Anxiety Level dengan pilihan sangat tenang sampai overthinking, Emotional Valence dengan pilihan sangat buruk sampai euforia, dan Craving Taste Profile dengan pilihan bold comforting, creamy milky, acidic fruity, earthy savory, sampai pungent intense. Parameter Social Mood sempat ada di HTML lama, tetapi di UI aktual dihapus oleh JavaScript agar sesuai empat parameter utama."
+  },
+  {
+    "id": "ai_mood_profiles_complete",
+    "title": "Daftar Mood dan Rekomendasi AI",
+    "keywords": ["mood profile", "12 mood", "euclidean distance", "jatuh cinta", "bahagia", "galau", "patah hati", "overthinking", "cemas", "bosan"],
+    "content": "Knowledge base AI Mood berisi 12 mood: Jatuh Cinta atau The Butterfly Effect ideal Stroberi + Vanila fallback Vanila + Taro; Bahagia / Senang atau Sunshine On-The-Go ideal Coklat + Vanila fallback Coklat + Taro; Sedih / Galau atau Cloudy with a Chance of Tears ideal Coklat + Taro fallback Coklat + Vanila; Patah Hati atau The Heartbreak Club ideal Coklat fallback Taro; Bingung / Overthinking atau The Maze Runner ideal Durian + Taro fallback Vanila + Taro; Rindu / Nostalgia atau Time Traveler ideal Nangka + Vanila fallback Vanila + Taro; Kecewa atau The Bitter Truth ideal Taro + Coklat fallback Vanila + Coklat; Grief / Berduka atau The Midnight Rain ideal Vanila fallback Taro; Senang tapi Sedih atau The Rainy Sunset ideal Stroberi + Coklat fallback Vanila + Coklat; Marah / Kesal atau Volcanic Eruption ideal Durian + Coklat fallback Coklat + Taro; Cemas / Gelisah atau The Panic Room ideal Vanila + Taro fallback Vanila; Bosan / Jenuh atau Stuck in Time ideal Nangka + Durian fallback Taro + Coklat."
+  },
+  {
+    "id": "ai_mood_algorithm_detail",
+    "title": "Detail Algoritma AI Mood Tracker",
+    "keywords": ["algoritma mood", "euclidean distance", "match percentage", "distance", "knowledge based", "expert system", "rasional"],
+    "content": "AI Mood Tracker bekerja sebagai Knowledge-Based Expert System. Setiap mood mempunyai vektor target dengan nilai energy, emotional, stress, dan craving pada skala 1 sampai 5. Input pengguna dibandingkan ke semua vektor mood memakai Euclidean Distance. Mood dengan jarak paling kecil menjadi hasil terpilih. Persentase match dihitung dari jarak terhadap jarak maksimum, dibatasi agar tampil dalam rentang 55 sampai 99 persen. Hasil menampilkan mood, nickname, rasa ideal, status stok, distance, match percentage, alasan psikologis, dan pengalihan AI jika stok ideal sold out."
+  },
+  {
+    "id": "qr_scanner_technical_flow",
+    "title": "Detail QR Scanner dan Validasi Ticket",
+    "keywords": ["qr scanner", "jsQR", "BarcodeDetector", "ticket token", "localStorage", "scan qr", "validasi qr", "kamera qr"],
+    "content": "Scanner QR Scoopify menggunakan kamera browser. Sistem mencoba BarcodeDetector jika tersedia dan memakai jsQR sebagai fallback pembacaan QR dari frame video. Nilai QR diproses sebagai ticket token, bisa berasal dari URL parameter ticket atau isi QR langsung. Setelah QR berhasil dibaca, sistem menyimpan scoopifyLastQrTicket, membuka akses photobooth premium, dan membuka mini game bila ticket masih punya kesempatan. Jika QR sudah habis untuk mini game, pelanggan tetap boleh memakai photobooth premium dengan QR yang sama."
+  },
+  {
+    "id": "mini_game_state_and_rules_detail",
+    "title": "State dan Aturan Teknis Mini Game",
+    "keywords": ["aturan teknis mini game", "3 kesempatan", "ticket used", "localStorage", "salah tebak bebas", "waktu habis", "coba lagi", "kesempatan habis"],
+    "content": "Mini game Scoopify memakai 12 kartu dari 6 rasa: vanilla, taro, coklat, durian, stroberi, dan nangka. Setiap QR ticket mempunyai maksimal 3 percobaan. Satu percobaan dihitung ketika ronde game dimulai, bukan setiap salah membuka kartu. Salah tebak bebas selama waktu 15 detik masih berjalan. Jika waktu habis sebelum semua pasangan cocok, ronde gagal dan pemain bisa coba lagi selama masih ada sisa percobaan. Jika menang, ticket ditandai sudah digunakan untuk mini game sehingga reward hanya bisa diperoleh satu kali, tetapi photobooth tetap bisa digunakan."
+  },
+  {
+    "id": "reward_probability_exact",
+    "title": "Peluang Reward Mini Game",
+    "keywords": ["peluang reward", "chance reward", "probabilitas", "91 persen", "6 persen", "3 persen", "roulette reward"],
+    "content": "Peluang reward mini game: Potongan Rp2.000 memiliki peluang 3 persen, Potongan Rp1.000 memiliki peluang 6 persen, dan Topping Gratis memiliki peluang 91 persen. Saat menang, sistem menampilkan roulette berisi Rp1.000, Topping, dan Rp2.000, lalu setelah sekitar 1,2 detik menampilkan reward final. Catatan reward: Potongan Rp2.000 langsung mengurangi bayar Rp2.000 di kasir, Potongan Rp1.000 langsung mengurangi bayar Rp1.000 di kasir, dan Topping Gratis berarti bebas pilih topping yang tersedia."
+  },
+  {
+    "id": "photobooth_layout_and_frame_detail",
+    "title": "Detail Layout dan Frame Photobooth",
+    "keywords": ["layout photobooth", "2 foto", "3 foto", "6 foto", "free frame", "premium frame", "cute doodle journal", "low poly", "old game", "windows 7"],
+    "content": "Photobooth Scoopify memiliki layout 2 foto, 3 foto, dan 6 foto. Frame gratis bernama Free Frame atau basic tersedia untuk semua pengguna. Frame premium dibuka dengan QR ticket dan terdiri dari Cute Doodle Journal, Low Poly, Old Game, dan Windows 7. Setiap frame punya file overlay PNG berbeda untuk layout 2, 3, dan 6 foto, serta slot mapping khusus agar foto ditempel di bawah overlay frame dengan posisi yang sesuai desain."
+  },
+  {
+    "id": "photobooth_camera_controls_detail",
+    "title": "Detail Kontrol Kamera Photobooth",
+    "keywords": ["kontrol kamera", "buka kamera", "ambil foto", "countdown", "retake", "finish", "hasil sementara", "shot tray", "mirror", "brightness", "filter"],
+    "content": "Alur kamera photobooth: pengguna memilih frame dan layout, menekan Buka Kamera, lalu menekan Ambil Foto. Saat mengambil foto, sistem menjalankan countdown 3, 2, 1. Hasil masuk ke Hasil Sementara atau shot tray di sisi kanan. Pengguna dapat retake untuk mengulang, finish setelah jumlah foto sesuai layout, lalu tombol Download Hasil dan Share muncul. Pengaturan kamera meliputi Mirror on/off, Brightness 70 sampai 140 persen, dan filter Normal, B&W, Nostalgia, serta Rio de Janeiro."
+  },
+  {
+    "id": "photobooth_output_and_share_detail",
+    "title": "Output Download dan Share Photobooth",
+    "keywords": ["download hasil", "share hasil", "file foto", "navigator share", "png", "hasil photobooth", "finish dulu"],
+    "content": "Download dan Share photobooth hanya aktif setelah pengguna menekan Finish. Jika Download ditekan sebelum Finish, sistem meminta pengguna menekan Finish dulu. Hasil disimpan sebagai file PNG dengan nama seperti scoopify-photobooth-frame-layout-foto.png. Share memakai navigator.share jika browser mendukung berbagi file; jika tidak mendukung, sistem otomatis download hasil dan memberi tahu pengguna bahwa share langsung belum didukung browser."
+  },
+  {
+    "id": "chatbot_frontend_backend_detail",
+    "title": "Detail Implementasi Chatbot Frontend dan Backend",
+    "keywords": ["chatbot implementation", "fetch api", "fastapi", "endpoint chat", "metadata chatbot", "latency", "fallback rag", "gemini aktif"],
+    "content": "Chatbot frontend berada di chatbot.html dan app.js. Form chat mengirim pesan ke endpoint http://127.0.0.1:8000/chat dengan Fetch API. Bubble chat menampilkan jawaban dan metadata seperti status LLM, hasil preprocessing, confidence, NER produk, aksi, dan judul konteks RAG. Backend berada di nlp_backend/main.py memakai FastAPI dengan endpoint POST /chat. Jika Gemini berhasil, status menampilkan Gemini LLM aktif; jika tidak, sistem memakai fallback RAG lokal."
+  },
+  {
+    "id": "chatbot_preprocessing_detail",
+    "title": "Detail Text Preprocessing Chatbot",
+    "keywords": ["text preprocessing", "normalisasi teks", "typo correction", "huruf berulang", "fuzzy matching", "lowercase", "clean text"],
+    "content": "Sebelum NER dan RAG, chatbot melakukan text preprocessing. Tahapnya meliputi lowercase, menghapus karakter non alfanumerik kecuali plus, merapikan spasi, mengurangi huruf berulang, koreksi typo melalui kamus, dan fuzzy matching ke vocabulary domain Scoopify. Contoh: phoyobootth dapat dinormalisasi ke photobooth, qrcode ke qr, grattis ke gratis, hargaga ke harga, brighnes ke brightness, rb ke ribu, dan gmn atau gimana ke bagaimana."
+  }
+]

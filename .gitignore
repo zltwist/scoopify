@@ -1,2 +1,5 @@
 ticket/
 print/
+.env
+__pycache__/
+*.pyc

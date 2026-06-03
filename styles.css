@@ -1291,6 +1291,52 @@ body {
   filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.12));
 }
 
+.partner-bubble {
+  position: fixed;
+  left: 22px;
+  bottom: 24px;
+  z-index: 40;
+  min-width: 168px;
+  min-height: 64px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.86), rgba(255, 255, 255, 0.5)),
+    rgba(255, 255, 255, 0.62);
+  color: #2a1c38;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 18px 42px rgba(43, 28, 56, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.84);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+  text-decoration: none;
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  animation: homeEnter 0.5s ease 0.42s both;
+}
+
+.partner-bubble span {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 11px;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+}
+
+.partner-bubble strong {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.partner-bubble:hover {
+  transform: translateY(-3px);
+  background: #fff;
+}
+
 @keyframes variantArrowLeftEnter {
   from {
     opacity: 0;
@@ -1324,17 +1370,691 @@ body {
   }
 }
 
-/* Chatbot */
-.chatbot-card {
-  max-width: 720px;
+/* Partner Page */
+body[data-page="partner"] {
+  --partner-text: color-mix(in srgb, var(--text-strong) 72%, #2a1c38);
+  --partner-muted: color-mix(in srgb, var(--muted) 72%, #5f536b);
+  --partner-accent: var(--accent);
+  --partner-card: rgba(255, 255, 255, 0.58);
+  --partner-card-strong: rgba(255, 255, 255, 0.72);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body[data-page="partner"] .desktop-nav,
+body[data-page="partner"] .nav-link,
+body[data-page="chatbot"] .desktop-nav,
+body[data-page="chatbot"] .nav-link {
+  font-family: "Luckiest Guy", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body[data-page="partner"] .app {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.partner-page {
+  width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
-  border-radius: 28px;
+  padding: 96px 0 44px;
+}
+
+.partner-hero {
+  min-height: calc(100vh - 120px);
+  display: grid;
+  grid-template-columns: minmax(0, 1.02fr) minmax(320px, 0.98fr);
+  gap: 34px;
+  align-items: center;
+}
+
+.partner-kicker,
+.partner-section-head span,
+.partner-story-copy > span {
+  display: inline-flex;
+  width: fit-content;
+  border-radius: 999px;
+  padding: 7px 12px;
+  background: var(--partner-card);
+  color: var(--partner-accent);
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  font-size: 12px;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.partner-hero h1 {
+  margin: 16px 0 14px;
+  color: var(--partner-text);
+  font-family: "Luckiest Guy", system-ui, sans-serif;
+  font-size: clamp(54px, 9vw, 118px);
+  line-height: 0.9;
+}
+
+.partner-hero p,
+.partner-section-head h2,
+.partner-story-copy p,
+.partner-product-card p {
+  color: rgba(42, 28, 56, 0.76);
+  color: var(--partner-muted);
+  font-size: 16px;
+  font-weight: 750;
+  line-height: 1.55;
+}
+
+.partner-hero-copy {
+  animation: homeEnter 0.55s ease both;
+}
+
+.partner-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.partner-down {
+  display: inline-flex;
+  margin-top: 24px;
+  color: var(--partner-text);
+  font-size: 13px;
+  font-weight: 950;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.partner-down::after {
+  content: "";
+  width: 8px;
+  height: 8px;
+  margin: 3px 0 0 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.partner-hero-visual {
+  min-height: 520px;
+  border-radius: 30px;
   padding: 18px;
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.64)),
-    rgba(255, 255, 255, 0.72);
+    linear-gradient(135deg, rgba(255, 255, 255, 0.76), rgba(255, 255, 255, 0.34)),
+    var(--partner-card);
+  border: 1px solid rgba(255, 255, 255, 0.76);
+  box-shadow: 0 28px 62px rgba(43, 28, 56, 0.18);
+  animation: homeEnter 0.6s ease 0.1s both;
+}
+
+.partner-hero-visual img,
+.partner-story-image img,
+.partner-product-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.partner-hero-visual img {
+  border-radius: 22px;
+}
+
+.partner-promo {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 18px;
+  margin: 12px 0 64px;
+  padding: 18px;
+  border-radius: 24px;
+  background: var(--partner-card);
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  box-shadow: 0 18px 42px rgba(43, 28, 56, 0.12);
+  animation: homeEnter 0.55s ease 0.16s both;
+}
+
+.partner-promo span {
+  display: block;
+  color: var(--partner-accent);
+  font-size: 14px;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.partner-promo p {
+  margin-top: 4px;
+  color: var(--partner-text);
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.partner-countdown {
+  display: grid;
+  grid-template-columns: auto auto auto auto auto auto auto auto auto;
+  align-items: end;
+  gap: 6px;
+  padding: 10px 14px;
+  border-radius: 18px;
+  background: rgba(42, 28, 56, 0.08);
+  color: var(--partner-text);
+}
+
+.partner-countdown strong {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.partner-countdown span,
+.partner-countdown b {
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.partner-menu,
+.partner-story {
+  padding: 54px 0;
+}
+
+.partner-section-head {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 22px;
+  margin-bottom: 18px;
+  animation: homeEnter 0.5s ease both;
+}
+
+.partner-section-head h2 {
+  max-width: 520px;
+  margin: 0;
+  text-align: right;
+}
+
+.partner-filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+  animation: homeEnter 0.5s ease 0.08s both;
+}
+
+.partner-filter-row span {
+  border-radius: 999px;
+  padding: 8px 13px;
+  background: rgba(255, 255, 255, 0.58);
+  color: var(--partner-text);
+  border: 1px solid rgba(255, 255, 255, 0.84);
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.partner-product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.partner-product-card {
+  position: relative;
+  min-height: 410px;
+  padding: 12px;
+  border-radius: 24px;
+  background: var(--partner-card-strong);
   border: 1px solid rgba(255, 255, 255, 0.86);
-  box-shadow: 0 18px 46px rgba(53, 36, 77, 0.16);
+  box-shadow: 0 18px 42px rgba(43, 28, 56, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  animation: homeEnter 0.52s ease both;
+}
+
+.partner-product-card:nth-child(1) { animation-delay: 0.08s; }
+.partner-product-card:nth-child(2) { animation-delay: 0.14s; }
+.partner-product-card:nth-child(3) { animation-delay: 0.2s; }
+.partner-product-card:nth-child(4) { animation-delay: 0.26s; }
+.partner-product-card:nth-child(5) { animation-delay: 0.32s; }
+.partner-product-card:nth-child(6) { animation-delay: 0.38s; }
+
+.partner-product-card img {
+  height: 190px;
+  border-radius: 18px;
+}
+
+.partner-badge {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  border-radius: 999px;
+  padding: 7px 10px;
+  background: #fff;
+  color: var(--partner-accent);
+  box-shadow: 0 8px 18px rgba(43, 28, 56, 0.12);
+  font-size: 11px;
+  font-weight: 950;
+  text-transform: uppercase;
+}
+
+.partner-product-card h3 {
+  color: var(--partner-text);
+  font-family: "Luckiest Guy", system-ui, sans-serif;
+  font-size: 26px;
+  line-height: 1;
+}
+
+.partner-rating {
+  color: var(--partner-accent) !important;
+  font-size: 13px !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+}
+
+.partner-product-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: auto;
+}
+
+.partner-product-foot strong {
+  color: var(--partner-text);
+  font-size: 16px;
+  font-weight: 950;
+}
+
+.partner-product-foot a {
+  min-width: 82px;
+  min-height: 38px;
+  border-radius: 999px;
+  background: var(--partner-accent);
+  color: #fff;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 950;
+}
+
+.partner-story {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.9fr) minmax(0, 1.1fr);
+  gap: 28px;
+  align-items: center;
+}
+
+.partner-story-image {
+  min-height: 420px;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 24px 56px rgba(43, 28, 56, 0.14);
+  animation: homeEnter 0.55s ease 0.08s both;
+}
+
+.partner-story-copy {
+  padding: 28px;
+  border-radius: 28px;
+  background: var(--partner-card);
+  border: 1px solid rgba(255, 255, 255, 0.82);
+  animation: homeEnter 0.55s ease 0.16s both;
+}
+
+.partner-story-copy h2 {
+  margin: 14px 0 10px;
+  color: var(--partner-text);
+  font-family: "Luckiest Guy", system-ui, sans-serif;
+  font-size: clamp(34px, 5vw, 56px);
+  line-height: 1;
+}
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(24px) scale(0.985);
+  transition:
+    opacity 0.58s ease,
+    transform 0.58s cubic-bezier(0.2, 0.8, 0.2, 1);
+  animation: none !important;
+  will-change: opacity, transform;
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.partner-product-card.reveal-on-scroll:nth-child(1) { transition-delay: 0.04s; }
+.partner-product-card.reveal-on-scroll:nth-child(2) { transition-delay: 0.08s; }
+.partner-product-card.reveal-on-scroll:nth-child(3) { transition-delay: 0.12s; }
+.partner-product-card.reveal-on-scroll:nth-child(4) { transition-delay: 0.04s; }
+.partner-product-card.reveal-on-scroll:nth-child(5) { transition-delay: 0.08s; }
+.partner-product-card.reveal-on-scroll:nth-child(6) { transition-delay: 0.12s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.partner-values {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.partner-values div {
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.42);
+}
+
+.partner-values strong {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--partner-text);
+  font-size: 14px;
+  font-weight: 950;
+}
+
+.partner-values p {
+  font-size: 13px;
+}
+
+.partner-footer {
+  width: 100%;
+  margin-top: 42px;
+  padding: 30px 0 32px;
+  border-top: 1px solid rgba(42, 28, 56, 0.16);
+}
+
+.partner-footer-inner {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+}
+
+.partner-footer h2 {
+  margin: 0;
+  color: var(--partner-text);
+  font-family: "Luckiest Guy", system-ui, sans-serif;
+  font-size: clamp(30px, 4vw, 46px);
+  line-height: 1;
+}
+
+.partner-footer p {
+  margin: 8px 0 0;
+  color: var(--partner-muted);
+  font-size: 14px;
+  font-weight: 800;
+  line-height: 1.55;
+}
+
+.partner-footer a,
+.partner-footer strong {
+  color: var(--partner-text);
+  font-weight: 950;
+  text-decoration: none;
+}
+
+.partner-footer-text {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  margin-top: 14px;
+}
+
+.partner-footer-text p {
+  margin-top: 0;
+}
+
+@media (max-width: 900px) {
+  .partner-page {
+    width: min(100% - 24px, 760px);
+    padding-top: 92px;
+  }
+
+  .partner-hero,
+  .partner-story {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-hero {
+    min-height: auto;
+    padding-top: 12px;
+  }
+
+  .partner-hero-visual {
+    min-height: 360px;
+  }
+
+  .partner-promo {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-countdown {
+    width: fit-content;
+  }
+
+  .partner-section-head {
+    display: block;
+  }
+
+  .partner-section-head h2 {
+    max-width: none;
+    margin-top: 10px;
+    text-align: left;
+  }
+
+  .partner-product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+@media (max-width: 520px) {
+  .partner-bubble {
+    display: none;
+  }
+
+  .partner-bubble span {
+    font-size: 10px;
+  }
+
+  .partner-bubble strong {
+    font-size: 14px;
+  }
+
+  .partner-page {
+    width: calc(100% - 20px);
+    padding-top: 86px;
+    padding-bottom: 28px;
+  }
+
+  .partner-hero h1 {
+    font-size: 58px;
+  }
+
+  .partner-hero p,
+  .partner-section-head h2,
+  .partner-story-copy p,
+  .partner-product-card p {
+    font-size: 14px;
+  }
+
+  .partner-hero-actions {
+    gap: 8px;
+  }
+
+  .partner-hero-actions .primary,
+  .partner-hero-actions .ghost {
+    flex: 1 1 145px;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+
+  .partner-hero-visual {
+    min-height: 300px;
+    border-radius: 22px;
+    padding: 10px;
+  }
+
+  .partner-hero-visual img {
+    border-radius: 16px;
+  }
+
+  .partner-promo {
+    margin: 22px 0 36px;
+    padding: 14px;
+    border-radius: 20px;
+  }
+
+  .partner-promo p {
+    font-size: 15px;
+  }
+
+  .partner-countdown {
+    grid-template-columns: auto auto auto auto auto auto auto auto auto;
+    gap: 4px;
+    padding: 8px 10px;
+  }
+
+  .partner-countdown strong {
+    font-size: 22px;
+  }
+
+  .partner-menu,
+  .partner-story {
+    padding: 32px 0;
+  }
+
+  .partner-filter-row {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .partner-filter-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .partner-product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-product-card {
+    min-height: 0;
+  }
+
+  .partner-product-card img {
+    height: 210px;
+  }
+
+  .partner-story-image {
+    min-height: 300px;
+  }
+
+  .partner-story-copy {
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  .partner-values {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-footer {
+    padding: 24px 0 26px;
+  }
+
+  .partner-footer-inner {
+    width: calc(100% - 20px);
+  }
+
+  .partner-footer-text {
+    display: block;
+  }
+
+  .partner-footer-text p + p {
+    margin-top: 8px;
+  }
+}
+
+/* Chatbot */
+body[data-page="chatbot"] {
+  --chat-text: #2a1c38;
+  --chat-muted: #5f536b;
+  --chat-soft: rgba(42, 28, 56, 0.68);
+  --chat-bot-bg: rgba(255, 255, 255, 0.94);
+  --chat-user-bg: #737faf;
+  --chat-user-text: #ffffff;
+  --chat-chip-bg: rgba(255, 255, 255, 0.74);
+  --chat-input-bg: rgba(255, 255, 255, 0.93);
+  overflow: hidden;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+body[data-page="chatbot"] .app {
+  height: 100vh;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.chatbot-page {
+  align-items: stretch;
+  padding: 70px 0 0;
+  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.chatbot-shell {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: calc(100vh - 70px);
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.chatbot-page .section-head {
+  width: min(1040px, 100%);
+  margin: 0 auto;
+  text-align: left;
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.chatbot-page .section-head h2 {
+  margin-bottom: 0;
+  font-size: clamp(32px, 5vw, 56px);
+}
+
+.chatbot-page .section-head p {
+  max-width: 540px;
+  text-align: right;
+  line-height: 1.35;
+}
+
+.chatbot-card {
+  width: 100%;
+  max-width: none;
+  min-height: 0;
+  flex: 1;
+  margin: 0;
+  border-radius: 0;
+  padding: 12px clamp(12px, 3vw, 34px) 18px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
 }
 
 .chatbot-coming-soon {
@@ -1351,16 +2071,26 @@ body {
 }
 
 .chatbot-panel-head {
-  min-height: 70px;
-  border-radius: 22px;
-  padding: 14px 16px;
-  background: linear-gradient(135deg, #ff8fc8, #ffd166);
-  color: #fff;
+  width: min(820px, 100%);
+  min-height: 48px;
+  margin: 0 auto;
+  border-radius: 999px;
+  padding: 8px 12px 8px 16px;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.48), rgba(255, 255, 255, 0.18)),
+    rgba(255, 255, 255, 0.18);
+  color: var(--chat-text);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 14px;
-  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 14px 34px rgba(43, 28, 56, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72),
+    inset 0 -10px 18px rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px) saturate(1.25);
+  -webkit-backdrop-filter: blur(18px) saturate(1.25);
 }
 
 .chatbot-panel-head span,
@@ -1371,58 +2101,98 @@ body {
 
 .chatbot-panel-head span {
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 950;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  opacity: 0.86;
+  color: var(--chat-muted);
 }
 
 .chatbot-panel-head strong {
-  font-size: clamp(20px, 4vw, 30px);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: clamp(17px, 2vw, 20px);
+  font-weight: 900;
   line-height: 1;
 }
 
 .chatbot-panel-head small {
   flex: 0 0 auto;
   border-radius: 999px;
-  padding: 8px 11px;
-  background: rgba(255, 255, 255, 0.26);
+  padding: 7px 10px;
+  background: rgba(255, 255, 255, 0.34);
+  color: var(--chat-text);
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 900;
 }
 
 .chatbot-thread {
   display: grid;
   gap: 12px;
-  padding: 18px 2px 14px;
+  flex: 1;
+  min-height: 0;
+  width: min(820px, 100%);
+  margin: 0 auto;
+  padding: 10px 28px 28px 4px;
+  max-height: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  align-content: start;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(42, 28, 56, 0.36) rgba(255, 255, 255, 0.18);
+}
+
+.chatbot-thread::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chatbot-thread::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 999px;
+}
+
+.chatbot-thread::-webkit-scrollbar-thumb {
+  background: rgba(42, 28, 56, 0.34);
+  border-radius: 999px;
+}
+
+.chatbot-thread::-webkit-scrollbar-thumb:hover {
+  background: rgba(42, 28, 56, 0.46);
+}
+
+.chatbot-thread::-webkit-scrollbar-button {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .chatbot-bubble {
-  max-width: 82%;
-  border-radius: 22px;
-  padding: 14px 16px;
-  box-shadow: var(--shadow-sm);
+  max-width: min(76%, 640px);
+  border-radius: 20px;
+  padding: 12px 14px;
+  box-shadow: none;
 }
 
 .chatbot-bubble.bot {
   justify-self: start;
-  background: #fff;
-  color: #2a1c38;
-  border-bottom-left-radius: 8px;
+  background: var(--chat-bot-bg);
+  color: var(--chat-text);
+  border-bottom-left-radius: 6px;
+  border: 1px solid rgba(73, 63, 87, 0.08);
 }
 
 .chatbot-bubble.user {
   justify-self: end;
-  background: #737faf;
-  color: #fff;
-  border-bottom-right-radius: 8px;
+  background: var(--chat-user-bg);
+  color: var(--chat-user-text);
+  border-bottom-right-radius: 6px;
+  margin-right: 8px;
 }
 
 .chatbot-bubble span {
   display: block;
-  color: var(--accent);
+  color: var(--chat-muted);
   margin-bottom: 6px;
   font-size: 13px;
 }
@@ -1432,45 +2202,107 @@ body {
   line-height: 1.45;
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 650;
+}
+
+.chatbot-bubble small {
+  display: block;
+  margin-top: 8px;
+  color: var(--chat-soft);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.chatbot-bubble.user small {
+  color: rgba(255, 255, 255, 0.76);
 }
 
 .chatbot-prompts {
   display: flex;
   gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
+  flex-wrap: nowrap;
+  flex: 0 0 auto;
+  width: min(820px, 100%);
+  margin: 10px auto 14px;
+  padding: 0 2px 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
 }
 
-.chatbot-prompts span {
+.chatbot-prompts::-webkit-scrollbar {
+  display: none;
+}
+
+.chatbot-prompts button {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
   border-radius: 999px;
   padding: 8px 11px;
-  background: rgba(255, 255, 255, 0.72);
-  color: #493f57;
+  background: var(--chat-chip-bg);
+  color: var(--chat-text);
   border: 1px solid rgba(255, 255, 255, 0.86);
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 12px;
   font-weight: 900;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.chatbot-prompts button:hover {
+  transform: translateY(-1px);
+  background: #fff;
 }
 
 .chatbot-input-row {
+  position: relative;
+  z-index: 5;
+  flex: 0 0 auto;
+  width: min(820px, 100%);
+  margin: 0 auto 18px;
   display: flex;
   align-items: center;
   gap: 10px;
   border-radius: 999px;
   padding: 8px;
-  background: rgba(255, 255, 255, 0.78);
+  background: var(--chat-input-bg);
   border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 12px 28px rgba(43, 28, 56, 0.1);
 }
 
 .chatbot-input-row > span {
   flex: 1;
   min-width: 0;
-  color: #6b6075;
+  color: var(--chat-muted);
   padding-left: 12px;
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 13px;
   font-weight: 800;
+}
+
+.chatbot-input-row input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--chat-text);
+  padding: 0 8px 0 12px;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.chatbot-input-row input::placeholder {
+  color: var(--chat-muted);
+}
+
+.chatbot-input-row .primary {
+  background: var(--chat-user-bg);
+  color: var(--chat-user-text);
 }
 
 .chatbot-input-row .primary {
@@ -2955,37 +3787,118 @@ body[data-page="photobooth"] .ghost:hover {
   }
 
   .chatbot-card {
-    padding: 12px;
-    border-radius: 22px;
+    padding: 8px 10px 26px;
+    border-radius: 0;
+  }
+
+  .chatbot-page {
+    padding: 72px 0 0;
+    min-height: 100vh;
+    height: 100vh;
+  }
+
+  .chatbot-shell {
+    height: calc(100vh - 72px);
+    min-height: 0;
+    gap: 0;
+  }
+
+  .chatbot-page .section-head {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 0;
+  }
+
+  .chatbot-page .section-head h2 {
+    font-size: 30px;
+    margin-bottom: 4px;
+  }
+
+  .chatbot-page .section-head p {
+    max-width: none;
+    text-align: left;
+    font-size: 13px;
+    line-height: 1.35;
+  }
+
+  .chatbot-thread {
+    min-height: 0;
+    padding-right: 20px;
+    padding-bottom: 30px;
   }
 
   .chatbot-panel-head {
-    align-items: flex-start;
-    flex-direction: column;
-    border-radius: 18px;
+    min-height: 42px;
+    align-items: center;
+    flex-direction: row;
+    border-radius: 999px;
+    padding: 7px 9px 7px 12px;
   }
 
   .chatbot-panel-head small {
-    align-self: flex-start;
+    align-self: center;
+    max-width: 46%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 10px;
   }
 
   .chatbot-bubble {
-    max-width: 92%;
+    max-width: 88%;
+    padding: 11px 12px;
+    border-radius: 16px;
+  }
+
+  .chatbot-bubble.user {
+    margin-right: 4px;
+  }
+
+  .chatbot-bubble p {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .chatbot-prompts {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-top: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+
+  .chatbot-prompts::-webkit-scrollbar {
+    display: none;
   }
 
   .chatbot-input-row {
-    border-radius: 18px;
-    align-items: stretch;
-    flex-direction: column;
+    border-radius: 999px;
+    align-items: center;
+    flex-direction: row;
+    gap: 6px;
+    padding: 6px;
+    margin-bottom: 18px;
   }
 
   .chatbot-input-row > span {
     padding: 8px 10px 2px;
   }
 
+  .chatbot-input-row input {
+    width: auto;
+    min-height: 40px;
+    padding: 0 8px 0 12px;
+    font-size: 13px;
+  }
+
   .chatbot-input-row .primary {
-    width: 100%;
+    width: auto;
+    min-height: 40px;
+    padding: 9px 13px;
     justify-content: center;
+    font-size: 12px;
   }
 
   .welcome .cta-row {
@@ -3161,8 +4074,27 @@ body[data-page="photobooth"] .ghost:hover {
     scroll-snap-type: none;
   }
 
+  body[data-page="chatbot"] .app {
+    height: 100vh;
+    min-height: 0;
+    overflow: hidden;
+    scroll-snap-type: none;
+  }
+
   body[data-page="photobooth"] .screen {
     scroll-snap-align: none;
+  }
+
+  body[data-page="chatbot"] .screen {
+    scroll-snap-align: none;
+  }
+
+  body[data-page="chatbot"] .chatbot-page {
+    padding-top: 66px;
+  }
+
+  body[data-page="chatbot"] .chatbot-shell {
+    height: calc(100vh - 66px);
   }
 
   .flow-locked .app {

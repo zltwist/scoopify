@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3000mm" height="1000mm" viewBox="0 0 6000 2000">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#fff3b4"/>
+      <stop offset="0.5" stop-color="#ffbced"/>
+      <stop offset="1" stop-color="#c9c8ff"/>
+    </linearGradient>
+    <style>
+      .title{font-family:"Luckiest Guy","Arial Black",sans-serif;font-size:250px;fill:#2b1f3a}
+      .sub{font-family:"Arial",sans-serif;font-size:76px;font-weight:900;fill:#5f536c}
+      .body{font-family:"Arial",sans-serif;font-size:88px;font-weight:900;fill:#2b1f3a}
+      .small{font-family:"Arial",sans-serif;font-size:54px;font-weight:800;fill:#5f536c}
+    </style>
+  </defs>
+  <rect width="6000" height="2000" fill="url(#bg)"/>
+  <circle cx="640" cy="320" r="230" fill="#fff" opacity=".22"/>
+  <circle cx="5450" cy="1670" r="310" fill="#fff" opacity=".22"/>
+  <image href="../logo/scoopify.png" x="2100" y="70" width="1800" height="1012" preserveAspectRatio="xMidYMid meet"/>
+
+  <text x="3000" y="965" text-anchor="middle" class="title">PLAY YOUR MOOD, TASTE YOUR SCOOP</text>
+  <text x="3000" y="1115" text-anchor="middle" class="sub">AI mood tracker - mini game reward - photobooth</text>
+
+  <g transform="translate(280 1240)">
+    <rect x="0" y="0" width="1320" height="500" rx="70" fill="#fff" opacity=".94"/>
+    <text x="120" y="150" class="body">Rp5.000</text>
+    <text x="120" y="250" class="small">Semua varian aktif</text>
+    <text x="120" y="350" class="small">Vanila / Coklat / Taro</text>
+  </g>
+  <g transform="translate(1780 1240)">
+    <rect x="0" y="0" width="1700" height="500" rx="70" fill="#fff" opacity=".94"/>
+    <text x="120" y="150" class="body">Scan - Play - Win</text>
+    <text x="120" y="260" class="small">Topping gratis / Rp1.000 off / Rp2.000 off</text>
+    <text x="120" y="365" class="small">1 tiket untuk 1 kesempatan game</text>
+  </g>
+  <g transform="translate(4040 1190)">
+    <rect x="0" y="0" width="560" height="560" rx="44" fill="#fffdf5" stroke="#2b1f3a" stroke-width="14" stroke-dasharray="30 18"/>
+    <text x="280" y="275" text-anchor="middle" class="body">QR</text>
+    <text x="280" y="370" text-anchor="middle" class="small">WEB</text>
+  </g>
+  <g transform="translate(4680 1240)">
+    <rect x="0" y="0" width="1040" height="500" rx="70" fill="#2b1f3a"/>
+    <text x="520" y="185" text-anchor="middle" class="body" fill="#fff">DATANG KE</text>
+    <text x="520" y="310" text-anchor="middle" class="body" fill="#fff">BOOTH KAMI</text>
+  </g>
+</svg>

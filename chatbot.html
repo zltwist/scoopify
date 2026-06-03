@@ -6,7 +6,7 @@
   <title>AI Chatbot - Scoopify</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body class="theme-vanilla">
+<body class="theme-vanilla" data-page="chatbot">
   <div class="app" id="app">
     <nav class="desktop-nav">
       <div class="nav-logo">
@@ -20,33 +20,38 @@
       </div>
     </nav>
 
-    <section class="screen chatbot" id="chatbot">
-      <div class="container">
-        <div class="section-head">
-          <h2>Scoopify AI Chat</h2>
-          <p>Segera hadir.</p>
-        </div>
-
-        <div class="chatbot-card chatbot-coming-soon">
+    <section class="screen chatbot chatbot-page" id="chatbot">
+      <div class="chatbot-shell">
+        <div class="chatbot-card">
           <div class="chatbot-panel-head">
             <div>
               <span>Scoopify Assistant</span>
-              <strong>Segera Hadir</strong>
+              <strong>Scoopify AI</strong>
             </div>
-            <small>Coming Soon</small>
+            <small id="chatbotMode">LLM + RAG + NER</small>
           </div>
 
-          <div class="chatbot-thread" aria-label="Status chatbot Scoopify">
+          <div class="chatbot-thread" id="chatbotThread" aria-label="Percakapan chatbot Scoopify">
             <div class="chatbot-bubble bot">
-              <span>Scoopify AI</span>
-              <p>Fitur chat AI sedang disiapkan. Untuk sekarang, pakai AI Mood Tracker dulu buat pilih rasa.</p>
+              <p>Halo, aku bisa bantu soal menu, harga, stok, AI Mood Tracker, mini game, QR ticket, photobooth, dan kemitraan Scoopify.</p>
             </div>
           </div>
 
-          <div class="chatbot-input-row" aria-label="Chatbot belum aktif">
-            <span>Chatbot belum aktif.</span>
-            <a class="primary nav-button-link" href="index.html#analyzer">Coba AI Mood</a>
+          <div class="chatbot-prompts" aria-label="Contoh pertanyaan">
+            <button type="button" data-chat-prompt="Harga coklat berapa dan masih ada?">Harga coklat?</button>
+            <button type="button" data-chat-prompt="Rasa apa saja yang tersedia sekarang?">Stok rasa</button>
+            <button type="button" data-chat-prompt="Cara pesan Scoopify gimana?">Cara pesan</button>
+            <button type="button" data-chat-prompt="Gimana cara scan QR ticket?">Scan QR</button>
+            <button type="button" data-chat-prompt="Aturan mini game Scoopify gimana?">Mini game</button>
+            <button type="button" data-chat-prompt="Gimana cara pakai photobooth premium?">Photobooth</button>
+            <button type="button" data-chat-prompt="AI Mood Tracker itu cara kerjanya gimana?">AI Mood</button>
+            <button type="button" data-chat-prompt="Cara jadi mitra Scoopify gimana?">Jadi mitra</button>
           </div>
+
+          <form class="chatbot-input-row" id="chatbotForm" data-api-url="http://127.0.0.1:8000/chat">
+            <input id="chatbotInput" type="text" autocomplete="off" placeholder="Tanya soal Scoopify..." aria-label="Pesan untuk chatbot" />
+            <button class="primary" id="chatbotSend" type="submit">Kirim</button>
+          </form>
         </div>
       </div>
     </section>

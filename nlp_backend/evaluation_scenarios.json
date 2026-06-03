@@ -1,0 +1,166 @@
+[
+  {
+    "id": "EVAL-001",
+    "question": "Harga coklat berapa dan masih ada?",
+    "expected_entities": {
+      "products": ["coklat"],
+      "actions": ["ask_price"]
+    },
+    "expected_context": ["Harga Produk", "Menu dan Stok"],
+    "evaluation_focus": "Ketepatan harga dan stok"
+  },
+  {
+    "id": "EVAL-002",
+    "question": "Promo apa yang bisa didapat kalau menang mini game?",
+    "expected_entities": {
+      "products": ["promo", "mini game"],
+      "actions": ["ask_promo", "play_game"]
+    },
+    "expected_context": ["Promo dan Reward", "Mini Game Reward"],
+    "evaluation_focus": "Relevansi jawaban promo dan reward"
+  },
+  {
+    "id": "EVAL-003",
+    "question": "Cara pakai photobooth premium gimana?",
+    "expected_entities": {
+      "products": ["photobooth"],
+      "actions": ["use_photobooth"]
+    },
+    "expected_context": ["Photobooth", "QR Ticket"],
+    "evaluation_focus": "Kejelasan instruksi photobooth"
+  },
+  {
+    "id": "EVAL-004",
+    "question": "Lokasi booth Scoopify di mana?",
+    "expected_entities": {
+      "products": ["scoopify"],
+      "actions": ["ask_location"]
+    },
+    "expected_context": ["Lokasi Layanan"],
+    "evaluation_focus": "Kemampuan menjawab lokasi tanpa halusinasi"
+  },
+  {
+    "id": "EVAL-005",
+    "question": "AI Mood Tracker itu cara kerjanya gimana?",
+    "expected_entities": {
+      "products": ["ai mood tracker"],
+      "actions": ["ask_ai_mood"]
+    },
+    "expected_context": ["AI Mood Tracker"],
+    "evaluation_focus": "Penjelasan konsep AI Mood Tracker"
+  },
+  {
+    "id": "EVAL-006",
+    "question": "hargaa coklaat brpa stoknyaa massih adaa?",
+    "expected_entities": {
+      "products": ["coklat"],
+      "actions": ["ask_price", "check_stock"]
+    },
+    "expected_context": ["Harga Produk", "Menu dan Stok"],
+    "evaluation_focus": "Text preprocessing untuk typo dan huruf berulang"
+  },
+  {
+    "id": "EVAL-007",
+    "question": "ccocbbaa aku naanya tttettaangg sessyattu yyaangg kurang tetpatat",
+    "expected_entities": {
+      "products": [],
+      "actions": []
+    },
+    "expected_context": [],
+    "evaluation_focus": "Klarifikasi saat input terlalu noisy dan intent tidak jelas"
+  },
+  {
+    "id": "EVAL-008",
+    "question": "qr code unik itu buat apa setelah beli eskrim 5 rb?",
+    "expected_entities": {
+      "products": ["qr ticket"],
+      "actions": ["scan_qr", "ask_price"]
+    },
+    "expected_context": ["QR Code Unik sebagai Ticket Digital", "Harga Produk"],
+    "evaluation_focus": "Pemahaman QR ticket unik dan harga produk"
+  },
+  {
+    "id": "EVAL-009",
+    "question": "phoyobootth ada frame grattis dan premium berapa?",
+    "expected_entities": {
+      "products": ["photobooth"],
+      "actions": ["use_photobooth"]
+    },
+    "expected_context": ["Detail Fitur Photobooth Scoopify"],
+    "evaluation_focus": "Preprocessing typo photobooth dan detail frame"
+  },
+  {
+    "id": "EVAL-010",
+    "question": "mini game memory game waktunya berapa detik dan rewardnya apa?",
+    "expected_entities": {
+      "products": ["mini game", "reward"],
+      "actions": ["play_game", "ask_duration", "ask_promo"]
+    },
+    "expected_context": ["Detail Mini Game Memory Game", "Detail Reward Mini Game"],
+    "evaluation_focus": "Aturan memory game dan reward probabilistik"
+  },
+  {
+    "id": "EVAL-011",
+    "question": "kalau mau jadi mitra 5kg nanti caranya gimana?",
+    "expected_entities": {
+      "products": ["mitra"],
+      "actions": ["ask_partner"]
+    },
+    "expected_context": ["Rencana Fitur Bergabung Jadi Mitra"],
+    "evaluation_focus": "Rencana fitur mitra, cart, dan WhatsApp"
+  },
+  {
+    "id": "EVAL-012",
+    "question": "frame premium photobooth ada apa aja dan layout 6 foto gimana?",
+    "expected_entities": {
+      "products": ["photobooth"],
+      "actions": ["ask_frame", "ask_photo_layout", "use_photobooth"],
+      "frames": ["frame premium"],
+      "layouts": ["6 foto"]
+    },
+    "expected_context": ["Detail Layout dan Frame Photobooth", "Photobooth"],
+    "evaluation_focus": "NER frame premium dan layout photobooth"
+  },
+  {
+    "id": "EVAL-013",
+    "question": "filter rio sama brightness itu di photobooth buat apa?",
+    "expected_entities": {
+      "products": ["photobooth", "rio"],
+      "actions": ["ask_camera_setting", "use_photobooth"],
+      "filters": ["rio"]
+    },
+    "expected_context": ["Detail Kontrol Kamera Photobooth", "Detail Fitur Photobooth Scoopify"],
+    "evaluation_focus": "NER filter kamera dan kontrol photobooth"
+  },
+  {
+    "id": "EVAL-014",
+    "question": "peluang reward diskon 2 ribu berapa persen?",
+    "expected_entities": {
+      "products": ["reward"],
+      "actions": ["ask_promo", "ask_reward_probability", "play_game"],
+      "rewards": ["diskon 2 ribu"]
+    },
+    "expected_context": ["Peluang Reward Mini Game", "Promo dan Reward"],
+    "evaluation_focus": "RAG peluang reward probabilistik"
+  },
+  {
+    "id": "EVAL-015",
+    "question": "chatbot ini pakai RAG NER LLM di mana?",
+    "expected_entities": {
+      "products": [],
+      "actions": ["ask_chatbot_system"]
+    },
+    "expected_context": ["Detail Implementasi Chatbot Frontend dan Backend", "Detail Text Preprocessing Chatbot"],
+    "evaluation_focus": "Penjelasan arsitektur NLP chatbot"
+  },
+  {
+    "id": "EVAL-016",
+    "question": "mood overthinking direkomendasikan rasa apa?",
+    "expected_entities": {
+      "products": [],
+      "actions": ["ask_ai_mood", "ask_mood_profile", "ask_variant"]
+    },
+    "expected_context": ["AI Mood Tracker", "Daftar Mood dan Rekomendasi AI"],
+    "evaluation_focus": "RAG profil mood spesifik dan fallback rasa"
+  }
+]
